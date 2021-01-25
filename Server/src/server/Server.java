@@ -5,6 +5,11 @@
  */
 package server;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +22,9 @@ import javafx.stage.Stage;
  */
 public class Server extends Application {
     
+    ServerSocket serverSocket;
+    Socket s;
+    
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
@@ -25,8 +33,20 @@ public class Server extends Application {
         
         stage.setScene(scene);
         stage.show();
+        runServer();
     }
 
+    public void runServer(){
+        try {
+            serverSocket = new ServerSocket(5005);
+            while(true){
+                s = serverSocket.accept();
+                new PlayerHandler(s);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * @param args the command line arguments
      */
