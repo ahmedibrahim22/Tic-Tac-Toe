@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,8 +20,6 @@ import model.Player;
 /**
  *
  * @author Ahmed_Maher
- *
- * @author Ibrahim_Magdy
  * 
  */
 public class Database {

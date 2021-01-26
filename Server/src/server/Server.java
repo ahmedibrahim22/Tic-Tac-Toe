@@ -5,60 +5,67 @@
  */
 package server;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import Helper_Package.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import static com.oracle.jrockit.jfr.ContentType.Class;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.ParseException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jdk.nashorn.internal.parser.JSONParser;
 
-import javafx.application.Application;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 
 /**
  *
- * @author Ahmed Ibrahim
+ * @author Noura Houssien
  */
-public class Server extends Application {
-    
-    ServerSocket serverSocket;
-    Socket s;
-    
-    @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
-        runServer();
+public class Server {
+    private final int port;
+    private ServerSocket sSocket;
+    Server(int port)
+    {
+       this.port=port;
     }
-
-    public void runServer(){
+    public ServerSocket getServerSocket()
+    {
+        return this.sSocket;
+    }
+    public void startConnection()
+    {
+        
+        System.out.println("server running...");
         try {
-            serverSocket = new ServerSocket(5005);
-            while(true){
-                s = serverSocket.accept();
-                new PlayerHandler(s);
+            sSocket=new ServerSocket(port);
+            while (true) {                
+                Socket socket= sSocket.accept();
+                System.out.println("New client connected ");
+                //class server thread to create new thread with each new client
+                new ServerThread(socket).start();
             }
+           
         } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error while create new server socket");
+            ex.getMessage();
+        }
+        finally{
+            try {
+                sSocket.close();
+                 System.out.println("closing sever sockeet");
+                
+            } catch (IOException ex) {
+                System.out.println("Error while closing sever socket");
+                ex.getMessage();
+            }
         }
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-    
-        launch(args);
-    }
-    
 }

@@ -5,31 +5,62 @@
  */
 package server;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 /**
+ * FXML Controller class
  *
- * @author Ahmed Ibrahim
+ * @author FOX
  */
 public class FXMLDocumentController implements Initializable {
-    
+
     @FXML
-    private Label label;
-    
+    private TableView<?> tableView;
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
-    
+    private TableColumn<?, ?> userName;
+    @FXML
+    private TableColumn<?, ?> score;
+    @FXML
+    private TableColumn<?, ?> status;
+    @FXML
+    private Button turnONBtn;
+    @FXML
+    private Button turnOFFBtn;
+
+    Server myServer;
+    /**
+     * Initializes the controller class.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    
+    @FXML
+    private void startServerConnection(ActionEvent event) {
+            myServer=new Server(3333);
+            myServer.startConnection();
+            
+    }
+
+    @FXML
+    private void stopServerConnection(ActionEvent event) {
+         try {
+            myServer.getServerSocket().close();
+        } catch (IOException ex) {
+            System.out.println("Cannot close the server");
+            ex.getMessage();
+        }
+    }
+
     
 }
