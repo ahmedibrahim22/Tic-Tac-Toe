@@ -11,6 +11,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+
+import model.Player;
+
 /**
  *
  * @author Ahmed_Maher
@@ -25,88 +31,63 @@ public class Database {
     static String username="maher";
     static String password="password1234";
     
-    
+    //this function created to connect to the database
     public static void dbConnect() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-        try{
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-        }
-        catch(ClassNotFoundException e){
-            System.out.println("Where is your JDBC Driver ?");
-            e.printStackTrace();
-            throw e;
-        }
-            System.out.println("JDBC Registerd");
-            
-        try{
-           con= DriverManager.getConnection(url, username, password); 
-            System.out.println("Connection Success");
-
-        }
-        catch(SQLException e){
-            System.out.println("Connection Field Check output" + e);
-            throw e;
-
-        }
-
-        
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        con= DriverManager.getConnection(url, username, password); 
     }
     
-     public static void dbDisconnect() throws  SQLException {
-        try{
-            if(con != null && !con.isClosed()){
-                con.close();
-            }
-        }
-        catch(Exception e){
-            throw e;
-        }
+    
+    //this function created to disconnect to the database
+    public static void dbDisconnect() throws  SQLException {
+        con.close();
     }
      
-    
-   
- 
 
-    
-    public static int register(String[] arr) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-      
-        dbConnect();
-        PreparedStatement statement;
-        statement = con.prepareStatement("insert into Player(`username`,`email`,`password`)values(?,?,?)");
-        statement.setString(1, arr[0]);
-        statement.setString(2, arr[1]);
-        statement.setString(3, arr[2]);
-        int status = statement.executeUpdate();
-        if(status ==1){
-            dbDisconnect();
-            return 1;
+    //this function take array of strings that represent player data and save this data into the database
+    public static int register(String[] arr) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {    
+        int success_register=1;
+        String email=arr[1];
+        int email_exist=valiateEmail(email);
+        if(email_exist==0){
+            PreparedStatement statement;
+            statement = con.prepareStatement("insert into Player(`username`,`email`,`password`)values(?,?,?)");
+            statement.setString(1, arr[0]);
+            statement.setString(2, arr[1]);
+            statement.setString(3, arr[2]);
+            statement.executeUpdate();
         }
         else{
-            return 0;
+            success_register= 0;
         }
-
+        return success_register;
     }      
     
-    // this function takes the game id and the states as an array[9] of integgers and save the game in the database
-    public static void saveGame(int gameId, int[] maze) throws SQLException, IndexOutOfBoundsException{
+    // this function takes the game id , player id and the states as an array[9] of strings and save the game in the database
+    public static void saveGame(int gameId,int playerId ,String[] maze) throws SQLException, IndexOutOfBoundsException, IllegalAccessException{
         PreparedStatement statement;
-        statement = con.prepareStatement("insert into game_info values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        statement = con.prepareStatement("insert into game_info (`game_id`,`value1`,`value2`,`value3`,"
+                + "`value4`,`value5`,`value6`,`value7`,`value8`,`value9`,`player_id`)"
+                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)");
         statement.setInt(1, gameId);
-        for(int i = 2; i < 10; i++){
-            statement.setInt(i, maze[i - 2]);
+        for(int i = 2; i <= 10; i++){
+            statement.setString(i, maze[i - 2]);
         }
+        statement.setInt(11, playerId);
+        statement.executeUpdate();
     }
     
-    //this function take a paused game id and return the game states in as an array[9] of integers 
-    public static int[] loadGame(int gameId) throws SQLException, IndexOutOfBoundsException{
-        int[] maze = new int[9];
+    //this function take a paused game id and return the game states in as an array[9] of strings 
+    public static String[] loadGame(int gameId, int player_id) throws SQLException, IndexOutOfBoundsException{
+        String[] maze = new String[9];
         PreparedStatement statement;
-        statement = con.prepareStatement("select * from game_info where game_id = ?");
+        statement = con.prepareStatement("select * from game_info where game_id = ? and player_id= ?");
         statement.setInt(1, gameId);
+        statement.setInt(2, player_id);
         ResultSet rs = statement.executeQuery();
         if(rs.next()){
-            for(int i = 0; i < 10; i++){
-                maze[i] = rs.getInt(i + 2);
+            for(int i=0;i<9;i++){
+                maze[i]=rs.getString("value"+(i+1));
             }
         }
         return maze;
@@ -114,27 +95,28 @@ public class Database {
     
     //this function takes player id and return result set with all ids of his paused games 
     public static ResultSet loadAllPlayerSavedGames(int playerId) throws SQLException, IndexOutOfBoundsException{
-        int[] maze = new int[9];
         PreparedStatement statement;
-        statement = con.prepareStatement("select * from game_info gf " +
-                "inner join game g on g.id = gf.game_id " +
-                "where g.player1_id = ? or player2_id = ?");
-        statement.setInt(1, playerId);
+        statement = con.prepareStatement("select * from game_info where player_id= ?");
         statement.setInt(1, playerId);
         return statement.executeQuery();
     }
     
-    //to now the player status
-    public static int getPlayerStatus(int playerId) throws SQLException{
+    //this function take player id and return the status of this player
+    public static int getPlayerStatus(int playerId) throws SQLException,IndexOutOfBoundsException{
         PreparedStatement statement;
         statement = con.prepareStatement("Select player_status from player where id = ?");
         statement.setInt(1, playerId);
         ResultSet rs = statement.executeQuery();
-        return rs.getInt("player_status");
+        int status=0;
+        if(rs.next()){
+            status = rs.getInt("player_status");
+        }
+        
+        return status;
     }
     
-    //to update player score
-    public static void getPlayerStatus(int playerId, int value) throws SQLException{
+    //this function take player id and score value and update in the database the score of this player by increase it with the new value
+    public static void updatePlayerScore(int playerId, int value) throws SQLException {
         PreparedStatement statement;
         statement = con.prepareStatement("update player " +
                 "set player_points = (player_points + ? )" + 
@@ -144,16 +126,62 @@ public class Database {
         statement.executeUpdate();
     }
     
-    //to update player score
-//    public static void isUserNameAvailable(int playerId, int value) throws SQLException{
-//        PreparedStatement statement;
-//        statement = con.prepareStatement("update player " +
-//                "set player_points = (player_points + ? )" + 
-//                "where id = ?");
-//        statement.setInt(1, value);
-//        statement.setInt(2, playerId);
-//        statement.executeUpdate();
-//    }
+    //this function return all players in the database in observable list to put it in table view in GUI
+    public static ObservableList<Player> getPlayers() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        ObservableList<Player> players = FXCollections.observableArrayList();
+        Statement stmt = con.createStatement();
+        String queryString = new String("select * from player");
+        ResultSet rs = stmt.executeQuery(queryString);
+        while (rs.next()) {
+           int id = rs.getInt(1);
+           String name= rs.getString(2);
+           String email= rs.getString(3);
+           String password= rs.getString(4);
+           int points = rs.getInt(5);
+           int status = rs.getInt(6);
+           Player p = new Player(id,name,email,password,points);
+           p.setClassify(points);
+           p.setStatus(status);
+           players.add(p);
+        }  
+        return players;
+    }    
+    //this function created to add game between two players in data base
+    public static void addPlayersGame(int player1Id , int player2Id ,int winnerId) throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("insert into Game(`player1_id`,`player2_id`,`winner_id`,`status`)values(?,?,?,?)");
+        statement.setInt(1, player1Id);
+        statement.setInt(2, player2Id);
+        statement.setInt(3, winnerId);        
+        statement.setInt(4, 1);
+        statement.executeUpdate();
+    }
+    // this function is created to change the status of player
+     public static void updatePlayerStatus(int playerId, int statusValue) throws SQLException {
+        PreparedStatement statement;
+        statement = con.prepareStatement("update player set player_status= ? where id = ? ");
+               
+        statement.setInt(1, statusValue);
+        statement.setInt(2, playerId);
+        statement.executeUpdate();
+    }
+    
+     // this function is created to validate email email must be unique for each user
+    public static int valiateEmail(String email)throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("select * from player where BINARY email = ? ");
+        statement.setString(1, email);
+        ResultSet rs = statement.executeQuery();
+        int size =0;
+        if (rs != null) 
+        {
+          rs.last();    
+          size = rs.getRow();
+          
+        } 
+        return size;
+    }
+ 
     
 }
 
