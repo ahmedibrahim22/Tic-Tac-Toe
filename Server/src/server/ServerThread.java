@@ -22,7 +22,7 @@ import java.text.ParseException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Database;
+import Database.Database;
 
 /**
  *
