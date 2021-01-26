@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="605.0" prefWidth="994.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.loginController">
+   <children>
+      <ImageView fitHeight="620.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@backgroung2.png" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="620.0" opacity="0.22" stroke="BLACK" strokeType="INSIDE" width="1021.0" />
+      <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="331.0" layoutY="225.0" size="35" wrappingWidth="28.000004559755325" />
+      <Label layoutX="101.0" layoutY="14.0" prefHeight="104.0" prefWidth="869.0" styleClass="buttonXO" text="Welcome to Tic Tac Toe Game" textAlignment="RIGHT">
+         <font>
+            <Font name="Bodoni MT Bold" size="65.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="0.719047619047619" endY="0.19999999999999996">
+               <stops>
+                  <Stop color="#0abbf0" />
+                  <Stop color="#f7f7f7" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+      </Label>
+      <Label fx:id="errorMsg" layoutX="427.0" layoutY="162.0" prefHeight="38.0" prefWidth="159.0" text="Wrong Credintials!" textAlignment="CENTER" textFill="#fb0505">
+         <font>
+            <Font name="Bodoni MT Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="loginusername" layoutX="370.0" layoutY="199.0" prefHeight="31.0" prefWidth="276.0" promptText="User name" style="-fx-border-color: #E22C2B;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </TextField>
+      <Label layoutX="84.0" layoutY="382.0" prefHeight="74.0" prefWidth="229.0" styleClass="buttonXO" text="Don't Have an account?" textAlignment="RIGHT">
+         <font>
+            <Font name="Bodoni MT" size="21.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="0.719047619047619" endY="0.19999999999999996">
+               <stops>
+                  <Stop color="#0abbf0" />
+                  <Stop color="#f7f7f7" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </textFill>
+      </Label>
+      <PasswordField fx:id="loginpassword" layoutX="370.0" layoutY="270.0" prefHeight="31.0" prefWidth="276.0" promptText="Password" style="-fx-border-color: #E22C2B;" />
+      <FontAwesomeIconView fill="WHITE" glyphName="LOCK" layoutX="332.0" layoutY="298.0" size="35" wrappingWidth="28.000004559755325" />
+      <Button fx:id="login" layoutX="430.0" layoutY="327.0" mnemonicParsing="false" onAction="#login" prefHeight="107.0" prefWidth="152.0" style="-fx-background-color: rgba(142, 213, 87, 0.0);;">
+         <graphic>
+            <ImageView fitHeight="101.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@login.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="signup" layoutX="113.0" layoutY="447.0" mnemonicParsing="false" onAction="#signup" prefHeight="107.0" prefWidth="152.0" style="-fx-background-color: rgba(142, 213, 87, 0.0);;">
+         <graphic>
+            <ImageView fitHeight="101.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@register.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Text fx:id="checkpassword" disable="true" fill="#d31f1f" layoutX="364.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter Your Password" visible="false" />
+      <Text fx:id="checkusername" disable="true" fill="#d31f1f" layoutX="371.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter Your User Name" visible="false" wrappingWidth="159.490234375" />
+   </children>
+</AnchorPane>
