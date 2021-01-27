@@ -179,6 +179,21 @@ public class Database {
         } 
         return size;
     }
+    
+    
+     //this function take player userName and return the status of this player
+    public static int getPlayerStatus(String playerUsername) throws SQLException,IndexOutOfBoundsException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("Select player_status from player where username = ?");
+        statement.setString(1, playerUsername);
+        ResultSet rs = statement.executeQuery();
+        int status=0;
+        if(rs.next()){
+            status = rs.getInt("player_status");
+        }
+        
+        return status;
+    }
  
     
 }

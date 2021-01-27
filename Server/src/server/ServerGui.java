@@ -5,6 +5,7 @@
  */
 package server;
 
+import Database.Database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -41,7 +42,8 @@ public class ServerGui extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-    
+
+ 
         launch(args);
     }
     
