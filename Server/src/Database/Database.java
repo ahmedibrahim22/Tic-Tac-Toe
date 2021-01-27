@@ -41,13 +41,29 @@ public class Database {
         con.close();
     }
      
+    
+    public static int login(String username , String password) throws SQLException{
+        
+        PreparedStatement statement;
+        statement = con.prepareStatement("Select id from player where username = ? and password = ?");
+        statement.setString(1, username);
+        statement.setString(2, password);
+
+        ResultSet rs = statement.executeQuery();
+        int id=-1;
+        if(rs.next()){
+            id = rs.getInt("id");
+        }
+        
+        return id;
+    }   
 
     //this function take array of strings that represent player data and save this data into the database
     public static int register(String[] arr) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {    
         int success_register=1;
-        String email=arr[1];
-        int email_exist=valiateEmail(email);
-        if(email_exist==0){
+        int email_exist=valiateEmail(arr[1]);
+        int userName_exist=valiateUsername(arr[0]);
+        if(email_exist==0 && userName_exist ==0){
             PreparedStatement statement;
             statement = con.prepareStatement("insert into Player(`username`,`email`,`password`)values(?,?,?)");
             statement.setString(1, arr[0]);
@@ -164,11 +180,28 @@ public class Database {
         statement.executeUpdate();
     }
     
-     // this function is created to validate email email must be unique for each user
+    // this function is created to validate email email must be unique for each user
     public static int valiateEmail(String email)throws SQLException{
         PreparedStatement statement;
         statement = con.prepareStatement("select * from player where BINARY email = ? ");
         statement.setString(1, email);
+        ResultSet rs = statement.executeQuery();
+        int size =0;
+        if (rs != null) 
+        {
+          rs.last();    
+          size = rs.getRow();
+          
+        } 
+        return size;
+    }
+    
+    
+     // this function is created to validate username username must be unique for each user
+    public static int valiateUsername(String userName)throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("select * from player where BINARY username = ? ");
+        statement.setString(1, userName);
         ResultSet rs = statement.executeQuery();
         int size =0;
         if (rs != null) 
@@ -194,7 +227,29 @@ public class Database {
         
         return status;
     }
- 
+    
+  // this function is created to change the status of player here tale playerUser name as a parameter
+     public static void updatePlayerStatus(String  playerUsername, int statusValue) throws SQLException {
+        PreparedStatement statement;
+        statement = con.prepareStatement("update player set player_status= ? where username = ? ");
+         statement.setInt(1, statusValue);
+        statement.setString(2, playerUsername);
+        statement.executeUpdate();
+    }
+     
+    //this function take player username and score value and update in the database the score of this player by increase it with the new value
+    public static void updatePlayerScore(String playerUsername, int value) throws SQLException {
+        PreparedStatement statement;
+        statement = con.prepareStatement("update player " +
+                "set player_points = (player_points + ? )" + 
+                "where username = ?");
+        statement.setInt(1, value);
+        statement.setString(2, playerUsername);
+        statement.executeUpdate();
+    }
+    
+  
+    
     
 }
 
