@@ -42,9 +42,11 @@ public class ServerGui extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-
- 
+        Database.dbConnect();
+        int id = Database.login("Ahmed_17", "123456");
+        System.out.println(id);
+        Database.dbDisconnect();
         launch(args);
     }
-    
+
 }
