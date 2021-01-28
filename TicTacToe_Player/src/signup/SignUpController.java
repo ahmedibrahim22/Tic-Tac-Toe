@@ -16,7 +16,11 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -34,88 +38,94 @@ public class SignUpController implements Initializable {
     PrintStream PSFromController;
 
     @FXML
-    private Label errorMsg;
+    private TextField userName;
     @FXML
-    private Text checkpass;
+    private TextField Email;
     @FXML
-    private Text confirmpass;
+    private PasswordField Password;
     @FXML
-    private Text checkuname;
+    private PasswordField confirmationPassword;
     @FXML
-    private Text checkemail;
+    private Label errorMessage;
     @FXML
-    private TextField username;
+    private Text checkPassword;
     @FXML
-    private TextField email;
+    private Text checkcConfirmationPassword;
     @FXML
-    private PasswordField password;
+    private Text checkUserName;
     @FXML
-    private PasswordField confirmationpassword;
+    private Text checkEmail;
 
-    public boolean check1()
+    //function to check the sign up Credentials
+    public boolean checkCredentials()
     {
         boolean flag = true;
-        checkuname.setVisible(false);
-        checkpass.setVisible(false);
-        checkemail.setVisible(false);
-        confirmpass.setVisible(false);
-        if(username.getText().equals(""))
+        checkUserName.setVisible(false);
+        checkPassword.setVisible(false);
+        checkEmail.setVisible(false);
+        checkcConfirmationPassword.setVisible(false);
+        if(userName.getText().equals(""))
         {
-            checkuname.setVisible(true);
+            checkUserName.setVisible(true);
             flag = false;
         }
-        if(password.getText().equals(""))
+        if(Password.getText().equals(""))
         {
-            checkpass.setVisible(true); 
+            checkPassword.setVisible(true); 
             flag = false;
         }
-        if(email.getText().equals(""))
+        if(Email.getText().equals(""))
         {
-            checkemail.setVisible(true); 
+            checkEmail.setVisible(true); 
             flag = false;
         }
-        if(((confirmationpassword.getText()).equals(password.getText())) == false)
+        if(((confirmationPassword.getText()).equals(Password.getText())) == false)
         {
-            confirmpass.setVisible(true); 
+            checkcConfirmationPassword.setVisible(true); 
             flag = false;
         }
-
         return flag;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         PSFromController = TicTacToe_Player.ps;
+        errorMessage.setVisible(false);
     }
     
-    
-
+    //function to handle an action with server while pressing on signUp button
     @FXML
     private void register(ActionEvent event)throws IOException {
-        boolean b=check1();
-       Player player=new Player(username.getText(),password.getText(),email.getText());
-            InsideXOGame xointerface =new InsideXOGame (RecordedMessages.REGISTER,player);
+        //output in variable b because the previous function return boolean flag
+            if(checkCredentials()){
+            Player player=new Player(userName.getText(),Password.getText(),Email.getText());
+            InsideXOGame xointerface =new InsideXOGame (RecordedMessages.SIGNUP,player);
             Gson g = new Gson();
             String s = g.toJson(xointerface);
-            PSFromController.println(s);  
+            PSFromController.println(s);
+        }
     }
     
-    
-    /*need to be done**************/
-    @FXML
-    private void back(ActionEvent event) {
-    }
-    
-     @FXML
-    private void minimize(ActionEvent event) {
-        ((Stage)((Button)event.getSource()).getScene().getWindow()).setIconified(true);
+    //function will be called if the server respond with signup rejected
+    public void displayErrorMessage(){
+        errorMessage.setVisible(true);
     }
 
+    //to return back to login scene while pressing register button
     @FXML
-    private void exit(ActionEvent event) {
-        Platform.exit();
+    private void back(ActionEvent event)throws IOException {
+        FXMLLoader logInLoader = new FXMLLoader();
+           logInLoader.setLocation(getClass().getResource("/login/login.fxml"));
+           Parent logInRoot = logInLoader.load();
+           TicTacToe_Player.LI = logInLoader.getController();
+           Scene logInScene = new Scene(logInRoot);
+           Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+           loginStage.hide();
+           loginStage.setScene(logInScene);
+           loginStage.show();
     }
-
+    
+    
 }
 
  
