@@ -7,31 +7,48 @@ package tictactoe_player;
 
 import Helper_Package.InsideXOGame;
 import Helper_Package.RecordedMessages;
+import PlayerWithPlayer.PlayerWithPlayerController;
 import com.google.gson.Gson;
+import invitationpopup.InvitationPopUpController;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import login.loginController;
-
+import onlinepopup.OnlinePopUpController;
+import playerlist.PlayerListController;
+import signup.SignUpController;
 
 /**
  *
  * @author Ahmed Ibrahim
  */
 public class TicTacToe_Player extends Application {
-   
-    DataInputStream dis;
+    PlayerWithPlayerController pwp;
     public static loginController LI;
+    public static SignUpController SU;
+    public static int score = 0;
+    DataInputStream dis;
     public static PrintStream ps;
     Socket mySocket;
+    
     @Override
     public void start(Stage stage) throws Exception {
         try{
@@ -48,16 +65,21 @@ public class TicTacToe_Player extends Application {
                         xoMessage = g.fromJson(recivedMsg, InsideXOGame.class);
                         
                         //to switch to selection mode scene
-                        if(xoMessage.getTypeOfOperation().equals(RecordedMessages.NEW_PLAYER_LOGGED_IN))
+                        if(xoMessage.getTypeOfOperation().equals(RecordedMessages.LOG_IN_ACCEPTED))
                         {
                             Platform.runLater(()->{
                                 try {
                                     moveToSelectionScene(stage,xoMessage);
                                 } catch (IOException ex) {
-                                    System.err.println("coudn't switch");
+                                    System.err.println("No switching");
                                     ex.printStackTrace();
                                 }
                             });
+                        }
+                        
+                        if(xoMessage.getTypeOfOperation().equals(RecordedMessages.LOGIN_REJECTED))
+                        {
+                            LI.displayErrorMessage(); 
                         }
                         
                         //to switch to login scene
@@ -68,11 +90,10 @@ public class TicTacToe_Player extends Application {
                             moveToLogInScene(stage);
                             });                           
                         }
-
-                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_REJECTED))
+                        
+                         else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.SIGN_UP_REJECTED))
                         {
-                            
-                            loginController.myTurn = false;
+                            SU.displayErrorMessage();                          
                         }
                         
                         //to switch to player with computer scene
@@ -84,12 +105,110 @@ public class TicTacToe_Player extends Application {
                                     moveToPlayWithComputerScene(stage);
                                 } 
                                 catch (IOException ex) {
-                                    System.err.println("coudn't switch");
+                                    System.err.println("couldn't switch");
                                     ex.printStackTrace();
                                 }
                             });
                         }
-
+                        
+                        //to switch to players list scene
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.RETREVING_PLAYERS_LIST))
+                        {
+                                Platform.runLater(()->{
+                                try {
+                                    moveToPlayersListScene(stage, xoMessage);
+                                } catch (IOException ex) {
+                                    System.err.println("couldn't switch");
+                                    ex.printStackTrace();
+                                }
+                            });              
+                        }
+                        
+                        //to switch to invitation to play a game
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.RECEIVING_INVITATION))
+                        {
+                           moveToInvitationPopUp(xoMessage);
+                        }
+                        
+                        //to switch to player with player scene
+                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_ACCEPTED_FROM_SERVER))
+                        {
+                            Platform.runLater(() -> {
+                                moveToPlayerToPlayerScene(stage, xoMessage);
+                            });
+                        }
+                        
+                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_REJECTED_FROM_SERVER))
+                        {
+                            
+                            loginController.myTurn = false;
+                        }
+                        
+                        //to switch to online pop up scene
+                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.NEW_PLAYER_LOGGEDIN_POPUP))
+                        {
+                            moveToOnlinePopUpScene(xoMessage);
+                        }
+                        
+                        //to print the away players XO moves
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.INCOMING_MOVE))
+                        {
+                            Platform.runLater(() -> {
+                                try
+                                {
+                                    printGameMove(xoMessage);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ex.printStackTrace();
+                                }
+                            });
+                        }
+                        
+                        //to print the chat messages in the chat box
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS_FROM_SERVER))
+                        {                    
+                            Platform.runLater(() -> {                              
+                                PrintMessageOfChatRoom(xoMessage);                                    
+                            });
+                        }                        
+                        
+                        //to display XO moves
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.RETRIVEMOVES ))
+                        {
+                            Platform.runLater(() -> {
+                                try
+                                {
+                                    DisplayMoves(xoMessage);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ex.printStackTrace();
+                                }
+                            });
+                        }
+                        
+                        //to indicate that game finished and show the results
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.GAME_GOT_FINISHED_SECCUSSFULLY))
+                        {
+                            pwp.recieveGameEnding();
+                        }
+                        
+                        //to back to the selection scene if the user press back button
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.BACK_FROM_SERVER))
+                        {
+                         
+                            Platform.runLater(() -> {
+                                try {                                    
+                                    moveToSelectionScene(stage,xoMessage);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(TicTacToe_Player.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            });  
+                        }
+                        else if(xoMessage.getTypeOfOperation().equals("gameIsNotSetted")){
+                            System.err.println("gameIsNotSetted");
+                        }
                     }
                     catch (IOException ex) {
                          try
@@ -125,13 +244,11 @@ public class TicTacToe_Player extends Application {
         stage.getIcons().add(new Image("logo.png"));
         stage.show();
     }
-    
-
-    
+      
     //**functions to move from GUI to another GUI**//
     //1st function to move to selection mode scene
     void moveToSelectionScene(Stage stage, InsideXOGame xoMessage) throws IOException{
-        
+        score = xoMessage.getPlayer().getScore();
         FXMLLoader selectionModeLoader=new FXMLLoader();
         selectionModeLoader.setLocation(getClass().getResource("/selectionmode/SelectionMode.fxml"));
         Parent selectionModeRoot = selectionModeLoader.load();
@@ -141,20 +258,7 @@ public class TicTacToe_Player extends Application {
         stage.show();
     }
     
-    
-    //2nd function to move to play with computer scene
-    void moveToPlayWithComputerScene(Stage stage)throws IOException{
-        FXMLLoader playWithComputerLoader = new FXMLLoader();
-        playWithComputerLoader.setLocation(getClass().getResource("/playwithcomputer/PlayWithComputer.fxml"));
-        Parent playWithComputerRoot = playWithComputerLoader.load();
-        Scene playWithComputerScene = new Scene(playWithComputerRoot);
-        stage.hide();
-        stage.setScene(playWithComputerScene);
-        stage.show();
-    }
-    
-    
-    //3rd function to move to log in scene
+    //2nd function to move to log in scene
     void moveToLogInScene(Stage stage){
         try
         {
@@ -173,7 +277,144 @@ public class TicTacToe_Player extends Application {
         }   
     }
     
+    //3rd function to move to play with computer scene
+    void moveToPlayWithComputerScene(Stage stage)throws IOException{
+        FXMLLoader playWithComputerLoader = new FXMLLoader();
+        playWithComputerLoader.setLocation(getClass().getResource("/playwithcomputer/PlayWithComputer.fxml"));
+        Parent playWithComputerRoot = playWithComputerLoader.load();
+        Scene playWithComputerScene = new Scene(playWithComputerRoot);
+        stage.hide();
+        stage.setScene(playWithComputerScene);
+        stage.show();
+    }
+    
+    //4th function to move to online players list scene
+    void moveToPlayersListScene(Stage stage, InsideXOGame xoMessage) throws IOException{
+        FXMLLoader playersListLoader = new FXMLLoader();
+        playersListLoader.setLocation(getClass().getResource("/playerlist/PlayerList.fxml"));
+        Parent playerListRoot = playersListLoader.load();
+        
+        //this is object from PlayersListControler used to call setAllPlayers function
+        //to show all players on the table while loading this scene
+        PlayerListController plc = playersListLoader.getController();
+        plc.setAllPlayers(xoMessage);
+        Scene playerListScene = new Scene(playerListRoot);
+        stage.hide();
+        stage.setScene(playerListScene);
+        stage.show();
+    }
+    
+    //5th function to move to invitation pop up
+    void moveToInvitationPopUp(InsideXOGame xoMessage){
+     Platform.runLater(()->{
+        try{
+           FXMLLoader invitationPopUpLoader = new FXMLLoader();
+           invitationPopUpLoader.setLocation(getClass().getResource("/invitationpopup/InvitationPopUp.fxml"));
+           Parent invitationPopUpRoot = invitationPopUpLoader.load();
+           InvitationPopUpController popUpInvitation = invitationPopUpLoader.getController();
+           Scene invitationPopUpScene = new Scene(invitationPopUpRoot);
+           Stage invitationPopUpStage = new Stage();
+           
+            //this is object from invitation pop up Controller used to call getAwayPlayerName function
+            //to get away player information
+           popUpInvitation.getAwayplayerName(xoMessage,invitationPopUpStage);                  
+           invitationPopUpStage.hide();
+           invitationPopUpStage.initStyle(StageStyle.UNDECORATED);
+           invitationPopUpStage.setScene(invitationPopUpScene); 
+           invitationPopUpStage.show(); 
+        }
+        catch (IOException ex) 
+            {
+              Logger.getLogger(TicTacToe_Player.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }); 
+    }
+    
+    //6th function to move to multiplayers scene
+    void moveToPlayerToPlayerScene(Stage stage, InsideXOGame xoMessage){
+        try
+        {
+            FXMLLoader playerWithPlayerLoader=new FXMLLoader();
+            playerWithPlayerLoader.setLocation(getClass().getResource("/PlayerWithPlayer/PlayerWithPlayer.fxml"));
+            Parent playerWithPlayerRoot = playerWithPlayerLoader.load();
+            
+            //this is object from player with player Controller used to call setIDs function
+            //to set game IDs corresponding to their players
+            pwp=playerWithPlayerLoader.getController();
+            pwp.setIDs(xoMessage.getGame().getGameId(), loginController.username, xoMessage.getGame().getHomeplayer());
+            Scene playerWithPlayerScene = new Scene(playerWithPlayerRoot);
+            stage.hide();
+            stage.setScene(playerWithPlayerScene);
+            stage.show();                     
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }  
+    }
 
+    //7th function to move to online pop up person scene
+    void moveToOnlinePopUpScene(InsideXOGame xoMessage){
+        if(!xoMessage.getPlayer().getUserName().equals(loginController.username))
+        {
+            Platform.runLater(()->{
+            try {
+                FXMLLoader onlinePopUpLoader = new FXMLLoader();
+                onlinePopUpLoader.setLocation(getClass().getResource("/onlinepopup/OnlinePopUp.fxml"));
+                Parent onlinePopUpRoot = onlinePopUpLoader.load();
+                
+                //this is object from OnlinePopUpController used to call getUserName function
+                //to show the player that become online
+                OnlinePopUpController popUp = onlinePopUpLoader.getController();
+                popUp.getUserName(xoMessage.getPlayer().getUserName());
+                
+                Scene onlinePopUpScene = new Scene(onlinePopUpRoot);
+                Stage onlinePopUpStage = new Stage();
+                Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+                onlinePopUpStage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - 500);
+                onlinePopUpStage.setY(primaryScreenBounds.getMinY() + primaryScreenBounds.getHeight() - 150);
+                onlinePopUpStage.initStyle(StageStyle.UNDECORATED);
+                onlinePopUpStage.hide(); 
+                onlinePopUpStage.setScene(onlinePopUpScene);
+                onlinePopUpStage.show(); 
+                PauseTransition delay = new PauseTransition(Duration.seconds(4));
+                delay.setOnFinished( event ->  onlinePopUpStage.close() );
+                delay.play();
+              }catch (IOException ex) {
+                    Logger.getLogger(TicTacToe_Player.class.getName()).log(Level.SEVERE, null, ex);
+              }
+          }); 
+
+        }       
+    }
+
+    //function to print the away player move
+    void printGameMove(InsideXOGame xoMessage){
+        pwp.printAwayMove(xoMessage.getFieldPosition(),true);
+    }
+    
+    //function to print the message inside the chatbox
+    void PrintMessageOfChatRoom(InsideXOGame xoMessage)
+    {
+        pwp.printMessage(xoMessage);
+        //I will handle it later -for fun-
+        /*
+        String path = "sound.mp3";
+        Media media = new Media(new File(path).toURI().toString());
+        MediaPlayer mediaplayer = new MediaPlayer(media);
+        mediaplayer.play();
+        */
+    }
+    
+    //function to display XO signs moves in the screen
+    void  DisplayMoves(InsideXOGame xoMessage)
+    {
+        System.out.println(xoMessage.getGame().getHomeplayer());
+        System.out.println(xoMessage.getGame().getAwayPlayer());
+        pwp.displayMovesOnBoard(xoMessage.getGame().getSavedGame(),
+                                xoMessage.getGame().getHomeplayer(),
+                                xoMessage.getGame().getGameId());
+    }
     @Override
     public void stop(){
         System.out.println("Stage is closing");
@@ -184,6 +425,5 @@ public class TicTacToe_Player extends Application {
     }
     public static void main(String[] args) {
          Application.launch(args);
-    }
-    
+    } 
 }

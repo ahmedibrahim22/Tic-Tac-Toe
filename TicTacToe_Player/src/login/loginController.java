@@ -36,36 +36,34 @@ import tictactoe_player.TicTacToe_Player;
  * @author Ahmed Ibrahim
  */
 public class loginController implements Initializable {
+    //why username static?
+    //to be accesed by the class name to get username at any other scene
     public static String username;
     public static boolean myTurn = false;
-    String password;
+    private String password;
     @FXML
-        Label errorMsg;
+    private Text checkusername;
     @FXML
-        TextField loginusername;
+    private Text checkpassword;
+    Stage window;
+    PrintStream PSFromController;
     @FXML
-        PasswordField loginpassword;
+    private Label errorMessage;
     @FXML
-        Button login;
+    private TextField loginUserName;
     @FXML
-        Text checkusername;
+    private PasswordField loginPassword;
     @FXML
-        Text checkpassword;
+    private Button loginButton;
     @FXML
-        Button signup;
-        Stage window;
-        PrintStream PSFromController;
+    private Button signupButton;
     
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        PSFromController = TicTacToe_Player.ps;
-    }  
-     
-
+    //login button function to validate the inputs from user
+    //also to send message to server to say person want to log in check it's credintional
     @FXML
     private void login(ActionEvent event) {
-        username = loginusername.getText();
-        password = loginpassword.getText();
+        username = loginUserName.getText();
+        password = loginPassword.getText();
        if(username.equals("") || password.equals(""))
        {
             if (username.equals(""))
@@ -98,24 +96,33 @@ public class loginController implements Initializable {
             PSFromController.println(s);
        }
     }
-
-    @FXML
-    void signup(ActionEvent event)throws IOException {
-        FXMLLoader signuppage=new FXMLLoader();
-        signuppage.setLocation(getClass().getResource("/signup/SignUp.fxml"));
-        Parent  signuppageroot = signuppage.load();
-        Scene scenesignup = new Scene(signuppageroot);
-        Stage signupstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        signupstage.hide();
-        signupstage.setScene(scenesignup);
-        signupstage.show();
+    
+    //function will be called if the server respond with login rejected
+    public void displayErrorMessage(){
+        errorMessage.setVisible(true);
     }
     
-    private void minimize(ActionEvent event) {
-        ((Stage)((Button)event.getSource()).getScene().getWindow()).setIconified(true);
+    //to move to sign up scene if the user press on sign up button
+    @FXML
+    void signup(ActionEvent event)throws IOException {
+        FXMLLoader signupLoader=new FXMLLoader();
+        signupLoader.setLocation(getClass().getResource("/signup/SignUp.fxml"));
+        Parent  signupLoaderRoot = signupLoader.load();
+        TicTacToe_Player.SU = signupLoader.getController();
+        Scene signupScene = new Scene(signupLoaderRoot);
+        Stage signupStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        signupStage.hide();
+        signupStage.setScene(signupScene);
+        signupStage.show();
     }
+    
+    //to intialize the login controller with printstream refer to main class printStream
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        PSFromController = TicTacToe_Player.ps;
+        errorMessage.setVisible(false);
+    }
+    
 
-    private void exit(ActionEvent event) {
-        Platform.exit();
-    } 
+    
 }

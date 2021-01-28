@@ -19,18 +19,19 @@ import javafx.scene.text.Text;
  */
 public class OnlinePopUpController implements Initializable {
     
-    private Label label;
     @FXML
     private Text poptext;
+    String uname;
     
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
+
+    public void getUserName(String username){      
+       uname = username;
+       poptext.setText(uname + " is On-line now");
+    } 
     
 }

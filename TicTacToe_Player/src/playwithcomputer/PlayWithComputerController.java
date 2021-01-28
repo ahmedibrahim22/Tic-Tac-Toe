@@ -281,7 +281,7 @@ public class PlayWithComputerController implements Initializable {
     
     void reportGameEnding(){
         Player player = new Player(myUserName);
-        InsideXOGame xoMsg = new InsideXOGame(RecordedMessages.SINGLE_MODE_FINISHED, player);
+        InsideXOGame xoMsg = new InsideXOGame(RecordedMessages.SINGLE_MODE_GAME_FINISHED, player);
         PSFromcontroller.println(new Gson().toJson(xoMsg));
     }
     

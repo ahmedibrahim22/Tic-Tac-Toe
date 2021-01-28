@@ -45,7 +45,7 @@
       <Line endX="155.0" endY="-53.0" layoutX="383.0" layoutY="147.0" startX="155.0" startY="394.0" stroke="AQUA" strokeWidth="5.0" styleClass="line" />
       <Line endX="-228.0" endY="397.0" layoutX="470.0" layoutY="-155.0" startX="213.0" startY="397.0" stroke="AQUA" strokeWidth="5.0" styleClass="line" />
       <Line endX="-227.0" endY="397.0" layoutX="469.0" layoutY="-3.0" startX="214.0" startY="397.0" stroke="AQUA" strokeWidth="5.0" styleClass="line" />
-      <Button layoutX="183.0" layoutY="571.0" mnemonicParsing="false" onAction="#back" prefHeight="50.0" prefWidth="129.0" style="-fx-background-color: #8A2BE2;" text="Back" textFill="WHITE">
+      <Button layoutX="183.0" layoutY="571.0" mnemonicParsing="false" onAction="#back" prefHeight="50.0" prefWidth="129.0" style="-fx-background-color: #8A2BE2; -fx-background-radius: 30px;" text="Back" textFill="WHITE">
          <font>
             <Font size="21.0" />
          </font>
@@ -57,7 +57,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="14.0" layoutY="571.0" mnemonicParsing="false" onAction="#restart" prefHeight="50.0" prefWidth="145.0" style="-fx-background-color: #8A2BE2;" text="Restart" textFill="WHITE">
+      <Button layoutX="14.0" layoutY="571.0" mnemonicParsing="false" onAction="#restart" prefHeight="50.0" prefWidth="145.0" style="-fx-background-color: #8A2BE2; -fx-background-radius: 30px;" text="Restart" textFill="WHITE">
          <font>
             <Font size="21.0" />
          </font>

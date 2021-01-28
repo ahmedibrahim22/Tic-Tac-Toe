@@ -32,24 +32,24 @@
             <Font name="System Bold" size="52.0" />
          </font>
       </Label>
-      <TextField fx:id="username" layoutX="661.0" layoutY="200.0" prefHeight="31.0" prefWidth="250.0" promptText="User Name" />
-      <TextField fx:id="email" layoutX="661.0" layoutY="255.0" prefHeight="31.0" prefWidth="250.0" promptText="Email" />
+      <TextField fx:id="userName" layoutX="661.0" layoutY="200.0" prefHeight="31.0" prefWidth="250.0" promptText="User Name" />
+      <TextField fx:id="Email" layoutX="661.0" layoutY="255.0" prefHeight="31.0" prefWidth="250.0" promptText="Email" />
       <Button layoutX="677.0" layoutY="440.0" mnemonicParsing="false" onAction="#register" prefHeight="55.0" prefWidth="210.0" style="-fx-background-radius: 80px; -fx-background-color: #813ad3;" text="Sing Up" textFill="WHITE">
          <font>
             <Font size="27.0" />
          </font>
       </Button>
-      <PasswordField fx:id="password" layoutX="661.0" layoutY="317.0" prefHeight="31.0" prefWidth="250.0" promptText="Password" />
-      <PasswordField fx:id="confirmationpassword" layoutX="661.0" layoutY="377.0" prefHeight="31.0" prefWidth="250.0" promptText="Password Confirmation" />
-      <Label fx:id="errorMsg" layoutX="706.0" layoutY="158.0" prefHeight="38.0" prefWidth="161.0" text="Invalid User Name!" textAlignment="CENTER" textFill="#fa0505">
+      <PasswordField fx:id="Password" layoutX="661.0" layoutY="317.0" prefHeight="31.0" prefWidth="250.0" promptText="Password" />
+      <PasswordField fx:id="confirmationPassword" layoutX="661.0" layoutY="377.0" prefHeight="31.0" prefWidth="250.0" promptText="Password Confirmation" />
+      <Label fx:id="errorMessage" layoutX="706.0" layoutY="158.0" prefHeight="38.0" prefWidth="161.0" text="Invalid User Name!" textAlignment="CENTER" textFill="#fa0505">
          <font>
             <Font name="Bodoni MT Bold" size="20.0" />
          </font>
       </Label>
-      <Text fx:id="checkpass" disable="true" fill="#c91717" layoutX="666.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Password" visible="false" />
-      <Text fx:id="confirmpass" disable="true" fill="#d00f0f" layoutX="663.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password doesn't match" visible="false" />
-      <Text fx:id="checkuname" disable="true" fill="#c31818" layoutX="664.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Use Name" visible="false" />
-      <Text fx:id="checkemail" disable="true" fill="#d01717" layoutX="662.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Email" visible="false" />
+      <Text fx:id="checkPassword" disable="true" fill="#c91717" layoutX="666.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Password" visible="false" />
+      <Text fx:id="checkcConfirmationPassword" disable="true" fill="#d00f0f" layoutX="663.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password doesn't match" visible="false" />
+      <Text fx:id="checkUserName" disable="true" fill="#c31818" layoutX="664.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Use Name" visible="false" />
+      <Text fx:id="checkEmail" disable="true" fill="#d01717" layoutX="662.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Email" visible="false" />
       <Button layoutX="545.0" layoutY="546.0" mnemonicParsing="false" onAction="#back" prefHeight="50.0" prefWidth="129.0" style="-fx-background-color: #8A2BE2; -fx-background-radius: 80px;" text="Back" textFill="WHITE">
          <font>
             <Font size="21.0" />

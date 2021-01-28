@@ -10,24 +10,29 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="646.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="playerlist.PlayerListController">
+<AnchorPane id="AnchorPane" prefHeight="589.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="playerlist.PlayerListController">
    <children>
-      <Text layoutX="18.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Players List">
+      <ImageView fitHeight="611.0" fitWidth="1015.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@backgroung2.png" />
+         </image>
+      </ImageView>
+      <Text fill="#f8f6f6" layoutX="18.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Players List">
          <font>
             <Font name="Forte" size="65.0" />
          </font>
       </Text>
-      <ImageView fitHeight="196.0" fitWidth="354.0" layoutX="755.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="196.0" fitWidth="354.0" layoutX="756.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@the_best.png" />
          </image>
       </ImageView>
-      <TableView fx:id="playersTable" layoutX="41.0" layoutY="100.0" prefHeight="511.0" prefWidth="698.0">
+      <TableView fx:id="playersListTable" layoutX="44.0" layoutY="87.0" prefHeight="511.0" prefWidth="698.0">
         <columns>
-          <TableColumn fx:id="userNameCol" prefWidth="148.0" text="User Name" />
-          <TableColumn fx:id="scoreCol" prefWidth="155.0" text="Score" />
-            <TableColumn fx:id="statusCol" prefWidth="199.0" text="Status" />
-            <TableColumn fx:id="isPlayingCol" prefWidth="195.0" text="Is Playing" />
+          <TableColumn fx:id="userNameColumn" prefWidth="148.0" text="User Name" />
+          <TableColumn fx:id="scoreColoumn" prefWidth="155.0" text="Score" />
+            <TableColumn fx:id="statusColoumn" prefWidth="199.0" text="Status" />
+            <TableColumn fx:id="isPlayingColoumn" prefWidth="195.0" text="Is Playing" />
         </columns>
       </TableView>
       <Label layoutX="840.0" layoutY="64.0" prefHeight="46.0" prefWidth="87.0" styleClass="buttonXO" text="Try to be " textAlignment="RIGHT">
@@ -35,12 +40,12 @@
             <Font name="Bodoni MT Bold" size="17.0" />
          </font>
       </Label>
-      <Label layoutX="832.0" layoutY="83.0" prefHeight="46.0" prefWidth="87.0" styleClass="buttonXO" text="The BEST !" textAlignment="RIGHT">
+      <Label layoutX="833.0" layoutY="81.0" prefHeight="46.0" prefWidth="87.0" styleClass="buttonXO" text="The BEST !" textAlignment="RIGHT">
          <font>
             <Font name="Bodoni MT Bold" size="17.0" />
          </font>
       </Label>
-      <Button defaultButton="true" layoutX="794.0" layoutY="218.0" mnemonicParsing="false" onAction="#refreshList" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-border-color: #DAA520;" text="Refresh" textFill="#110000">
+      <Button defaultButton="true" layoutX="795.0" layoutY="252.0" mnemonicParsing="false" onAction="#refresh" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-background-radius: 30px;" text="Refresh" textFill="#110000">
          <font>
             <Font name="Bodoni MT Bold" size="24.0" />
          </font>
@@ -52,7 +57,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button defaultButton="true" layoutX="794.0" layoutY="296.0" mnemonicParsing="false" onAction="#GetNames" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-border-color: #DAA520;" text="Invite">
+      <Button defaultButton="true" layoutX="795.0" layoutY="331.0" mnemonicParsing="false" onAction="#invite" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-background-radius: 30px;" text="Invite">
          <font>
             <Font name="Bodoni MT Bold" size="24.0" />
          </font>
@@ -64,7 +69,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="playersTable" defaultButton="true" layoutX="794.0" layoutY="374.0" mnemonicParsing="false" onAction="#back" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-border-color: #DAA520;" text="Back">
+      <Button defaultButton="true" layoutX="795.0" layoutY="417.0" mnemonicParsing="false" onAction="#back" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-background-radius: 30px;" text="Back">
          <font>
             <Font name="Bodoni MT Bold" size="24.0" />
          </font>

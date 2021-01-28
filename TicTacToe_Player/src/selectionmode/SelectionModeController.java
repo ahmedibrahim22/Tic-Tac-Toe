@@ -37,6 +37,7 @@ public class SelectionModeController implements Initializable {
     @FXML
     private Text logedInUserName;
     @FXML
+    private Text logedInUserScore;
     
     
 
@@ -46,55 +47,69 @@ public class SelectionModeController implements Initializable {
         PSFromController = TicTacToe_Player.ps;
         logedInUserName.setText(loginController.username);
         
+        //why Integer.toString?
+        //because setText required text not integer
+        logedInUserScore.setText(Integer.toString(TicTacToe_Player.score));
     }    
 
+    //if the user press single player it will move to the select level scene
     @FXML
     private void singlePlayer(ActionEvent event)throws IOException {
-        FXMLLoader levelSelection=new FXMLLoader();
-        levelSelection.setLocation(getClass().getResource("/selectlevel/SelectLevel.fxml"));
-        Parent  levelSelectionroot = levelSelection.load();
-        Scene scenelevelSelection = new Scene(levelSelectionroot);
-        Stage signupstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        signupstage.hide(); 
-        signupstage.setScene(scenelevelSelection);
-        signupstage.show();  
+        FXMLLoader levelSelectionlader=new FXMLLoader();
+        levelSelectionlader.setLocation(getClass().getResource("/selectlevel/SelectLevel.fxml"));
+        Parent  levelSelectionRoot = levelSelectionlader.load();
+        Scene levelSelectionScene = new Scene(levelSelectionRoot);
+        Stage levelSelectionstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        levelSelectionstage.hide(); 
+        levelSelectionstage.setScene(levelSelectionScene);
+        levelSelectionstage.show();  
     }
 
+    //if the user press multiplayer it will send this message to server in order to return back
+    //the data about the online users
     @FXML
     private void multiplayer(ActionEvent event) {
         Player player = new Player();
         player.setUserName(loginController.username); 
-        InsideXOGame xoMessage =new InsideXOGame (RecordedMessages.GET_PLAYERS,player);
+        InsideXOGame xoMessage =new InsideXOGame (RecordedMessages.RETRIVE_PLAYERS,player);
         Gson g = new Gson();
         String s = g.toJson(xoMessage);
         PSFromController.println(s);
     }
 
+    //if the user press logout it will send logout to server
+    //and it will return back to login scene
     @FXML
     private void logout(ActionEvent event) {
         try
         {
             Player player=new Player();
+            if (loginController.username == null)
+            {
+                loginController.username = "null";
+            }
             player.setUserName(loginController.username);
             InsideXOGame xoMessage =new InsideXOGame (RecordedMessages.LOGOUT,player);
             Gson g = new Gson();
             String s = g.toJson(xoMessage);
             PSFromController.println(s);
-            FXMLLoader signinpage=new FXMLLoader();
-            signinpage.setLocation(getClass().getResource("/signin/signIn.fxml"));
-            Parent  signinpageroot = signinpage.load();
-            Scene scenesignin = new Scene( signinpageroot);
-            Stage signinstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            signinstage.hide();
-            signinstage.setScene(scenesignin);
-            signinstage.show();             
+            FXMLLoader logInLoader=new FXMLLoader();
+            logInLoader.setLocation(getClass().getResource("/login/login.fxml"));
+            Parent  loginRoot = logInLoader.load();
+            TicTacToe_Player.LI = logInLoader.getController();
+            Scene loginScene = new Scene( loginRoot);
+            Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            loginStage.hide();
+            loginStage.setScene(loginScene);
+            loginStage.show();             
         }
         catch (IOException ex)
         {
             ex.printStackTrace();
         }
     }
-    @FXML
+    
+        @FXML
     private void minimize(ActionEvent event) {
         ((Stage)((Button)event.getSource()).getScene().getWindow()).setIconified(true);
     }

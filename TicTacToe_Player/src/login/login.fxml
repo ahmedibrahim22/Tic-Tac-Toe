@@ -37,12 +37,12 @@
             </LinearGradient>
          </textFill>
       </Label>
-      <Label fx:id="errorMsg" layoutX="427.0" layoutY="162.0" prefHeight="38.0" prefWidth="159.0" text="Wrong Credintials!" textAlignment="CENTER" textFill="#fb0505">
+      <Label fx:id="errorMessage" layoutX="425.0" layoutY="161.0" prefHeight="38.0" prefWidth="171.0" text="Wrong credentials!" textAlignment="CENTER" textFill="#fb0505">
          <font>
             <Font name="Bodoni MT Bold" size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="loginusername" layoutX="370.0" layoutY="199.0" prefHeight="31.0" prefWidth="276.0" promptText="User name" style="-fx-border-color: #E22C2B;">
+      <TextField fx:id="loginUserName" layoutX="370.0" layoutY="199.0" prefHeight="31.0" prefWidth="276.0" promptText="User name" style="-fx-border-color: #E22C2B;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -60,9 +60,9 @@
             </LinearGradient>
          </textFill>
       </Label>
-      <PasswordField fx:id="loginpassword" layoutX="370.0" layoutY="270.0" prefHeight="31.0" prefWidth="276.0" promptText="Password" style="-fx-border-color: #E22C2B;" />
+      <PasswordField fx:id="loginPassword" layoutX="370.0" layoutY="270.0" prefHeight="31.0" prefWidth="276.0" promptText="Password" style="-fx-border-color: #E22C2B;" />
       <FontAwesomeIconView fill="WHITE" glyphName="LOCK" layoutX="332.0" layoutY="298.0" size="35" wrappingWidth="28.000004559755325" />
-      <Button fx:id="login" layoutX="430.0" layoutY="327.0" mnemonicParsing="false" onAction="#login" prefHeight="107.0" prefWidth="152.0" style="-fx-background-color: rgba(142, 213, 87, 0.0);;">
+      <Button fx:id="loginButton" layoutX="430.0" layoutY="327.0" mnemonicParsing="false" onAction="#login" prefHeight="107.0" prefWidth="152.0" style="-fx-background-color: rgba(142, 213, 87, 0.0);;">
          <graphic>
             <ImageView fitHeight="101.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -71,7 +71,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="signup" layoutX="113.0" layoutY="447.0" mnemonicParsing="false" onAction="#signup" prefHeight="107.0" prefWidth="152.0" style="-fx-background-color: rgba(142, 213, 87, 0.0);;">
+      <Button fx:id="signupButton" layoutX="113.0" layoutY="447.0" mnemonicParsing="false" onAction="#signup" prefHeight="107.0" prefWidth="152.0" style="-fx-background-color: rgba(142, 213, 87, 0.0);;">
          <graphic>
             <ImageView fitHeight="101.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true">
                <image>
