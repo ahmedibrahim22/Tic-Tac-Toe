@@ -1,41 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package server;
 
 import Helper_Package.InsideXOGame;
 import Helper_Package.Player;
 import Helper_Package.RecordedMessages;
 import com.google.gson.Gson;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.ParseException;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import Database.Database;
 
 /**
  *
- * @author ibrahim
+ * @author Noura Houssien
  */
-
-public class ServerThread extends Thread
+class ServerThread extends Thread
 {
    private final Socket socket;
-   private InputStream is;
-   private OutputStream os;
-   private PrintWriter writer;
-   static Vector<ServerThread> clientsVector =new Vector <>();
+   private DataInputStream dis;
+   private PrintStream ps;
+   private Player newPlayer;
+//   private Database db;
+   static Vector<ServerThread> playersVector =new Vector <>();
+   
    public ServerThread(Socket s)
    {
      this.socket=s;
@@ -44,96 +33,129 @@ public class ServerThread extends Thread
     public void run()
     {
        try {
-           is=socket.getInputStream();
-           BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-           os=socket.getOutputStream();
-           writer=new PrintWriter(os,true);
-           clientsVector.add(this);
+           dis = new DataInputStream(socket.getInputStream());
+           ps = new PrintStream(socket.getOutputStream(),true);
+           newPlayer=new Player();
+           playersVector.add(this);
            String message;
  
             while(true) {
-                message = reader.readLine();
+                message = dis.readLine();
+                System.out.println("message:"+message);
                 if(!message.isEmpty())
                 {
                     try {
                         jsonMessageHandler(message);
                     } catch (ParseException ex) {
-                        Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                        ex.getStackTrace();
+                        System.out.println("error while call json message hundler ");
                     }
                 }
-//                broatCast(message);
             } 
        } catch (IOException ex) {
-           ex.getMessage();
-       }
-       finally{
+           ex.getStackTrace();
+           System.out.println("server can not connect with client");
            try {
                socket.close();
-               is.close();
-               os.close();
+               dis.close();
+               ps.close();
+               playersVector.remove(this);
                
-               System.out.println("close sever socket");
-           } catch (IOException ex) {
+//               newPlayer.setStatus(false);
+//               db.updatePlayerStatus(newPlayer.getUserName(),0); //update status of player to be offline
+               System.out.println("player is leaved and become offline");
+           } catch (IOException e) {
                System.out.println("Error while closing socket connection from server");
-               ex.getMessage();
+               e.getStackTrace();
            }
        }
     }
    
     
     
+    
     private void jsonMessageHandler(String data) throws ParseException {
          
          Gson gson=new Gson();
          InsideXOGame msgObject=gson.fromJson(data,InsideXOGame.class);
-          Player p;
-          String s ;
-        switch (msgObject.getTypeOfOperation().toString()) {
+        
+         String s ;
+        switch (msgObject.getTypeOfOperation()) {
             case RecordedMessages.LOGIN:
-                p=msgObject.getPlayer();
-                s = gson.toJson(p);
-                
-                //send string to database login fun
-                //send acknowledgement to player true or false
-                if(true)
-                {
-                writer.println(RecordedMessages.LOG_IN_ACCEPTED);
-                }
-                if(false)
-                {
-//                writer.println(RecordedMessages.LOG_IN_REJECTED);adding rejected login to recorded message
-                }
-                
+                handelLogInRequest(msgObject);
                 break;
             case RecordedMessages.SIGNUP:
-                 p=msgObject.getPlayer();
-                 s = gson.toJson(p);
-                //send string to database signup fun and return true or false
-                 //send acknowledgement to player 
-                 if(true)
-                 {
-                 writer.println(RecordedMessages.SIGN_UP_ACCEPTED);
-                 }
-                 if(false)
-                 {
-                     writer.println(RecordedMessages.SIGN_UP_REJECTED);
-                 }
+                handelSinUpRequest(msgObject);
                 break;
-            case RecordedMessages.SINGLE_MODE_GAME_FINISHED:
-                  p=msgObject.getPlayer();
-                  s = gson.toJson(p);
-                  //send string to database set score fun
-               
-                break;
+            default:
+                
         
         }
-
+      
     }
+    
+    
+    
+    
+   private void  handelLogInRequest(InsideXOGame objMsg)
+   {
+      
+       Gson g=new Gson();
+       Player player;
+       String userName,password;
+       int playerId=0;
+       player = objMsg.getPlayer();
+       userName=player.getUserName();
+       password=player.getPassword();
+//     playerId=db.login(userName,password); //this function will return -1 if login faild
+       if(playerId!=-1)
+       {
+//         db.updatePlayerStatus(playerId,1);
+//           newPlayer.setStatus(true);
+           newPlayer.setUserName(userName);
+           newPlayer.setPassword(password);
+           objMsg.setOperationResult(true);
+           objMsg.setTypeOfOperation(RecordedMessages.LOG_IN_ACCEPTED);
+           
+           ps.println(g.toJson(objMsg));
+          
+       }
+       else{
+           //should handel in player to receve LOG_IN_REJECTED 
+        objMsg.setOperationResult(false);
+       }
+       
+   }
+   private void handelSinUpRequest(InsideXOGame objMsg)
+   {
+       Gson g=new Gson();
+       Player player;
+       String userName,email,password;
+       int successRegister=0;
+       player = objMsg.getPlayer();
+       userName=player.getUserName();
+       email=player.getEmail();
+       password=player.getPassword();
+       String[] inputData={userName,email,password};
+//        successRegister=db.register(inputData); 
+       if(successRegister==1)
+       {
+         objMsg.setOperationResult(true);
+         objMsg.setTypeOfOperation(RecordedMessages.SIGN_UP_ACCEPTED);
+       }
+       else
+       {
+          objMsg.setOperationResult(false);
+          objMsg.setTypeOfOperation(RecordedMessages.SIGN_UP_REJECTED);
+       }
+       ps.println(g.toJson(objMsg));
+   }
    private void broatCast(String msg)
    {
-     for(ServerThread ch : ServerThread.clientsVector)
+     for(ServerThread ch : ServerThread.playersVector)
      {
-        ch.writer.println("Server: " +msg);
+        ch.ps.println("Server: " +msg);
      }
    }
 }
+

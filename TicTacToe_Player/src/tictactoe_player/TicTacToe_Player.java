@@ -52,7 +52,7 @@ public class TicTacToe_Player extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try{
-            mySocket = new Socket("127.0.0.1", 5000);
+            mySocket = new Socket("localhost", 5000);
             dis = new DataInputStream(mySocket.getInputStream());
             ps = new PrintStream(mySocket.getOutputStream());
             new Thread(()->{
