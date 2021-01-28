@@ -64,39 +64,50 @@ public class loginController implements Initializable {
 
     @FXML
     private void login(ActionEvent event) {
-        username = loginusername.getText();
-        password = loginpassword.getText();
-       if(username.equals("") || password.equals(""))
-       {
-            if (username.equals(""))
-            {
-                checkusername.setVisible(true);
-            }
-            else
-            {
-                checkusername.setVisible(false);
-            }
-            if(password.equals(""))
-            {
-                checkpassword.setVisible(true);
-            }
-            else
-            {
-                checkpassword.setVisible(false);
-            }
-       }
-       else
-       {
-            checkusername.setVisible(false);
-            checkpassword.setVisible(false);
+//        username = loginusername.getText();
+//        password = loginpassword.getText();
+//       if(username.equals("") || password.equals(""))
+//       {
+//            if (username.equals(""))
+//            {
+//                checkusername.setVisible(true);
+//            }
+//            else
+//            {
+//                checkusername.setVisible(false);
+//            }
+//            if(password.equals(""))
+//            {
+//                checkpassword.setVisible(true);
+//            }
+//            else
+//            {
+//                checkpassword.setVisible(false);
+//            }
+//       }
+//       else
+//       {
+//            checkusername.setVisible(false);
+//            checkpassword.setVisible(false);
+//            Player player=new Player();
+//            player.setUserName(username);
+//            player.setPassword(password);
+//            InsideXOGame xoMessage =new InsideXOGame (RecordedMessages.LOGIN,player);
+//            Gson g = new Gson();
+//            String s = g.toJson(xoMessage);
+//            System.out.println("playername:"+player.getUserName());
+//            System.out.println("the message receved from player"+s);
+//            PSFromController.println(s);
+//       }
             Player player=new Player();
-            player.setUserName(username);
-            player.setPassword(password);
+            player.setUserName("noura");
+            player.setPassword("houssien");
             InsideXOGame xoMessage =new InsideXOGame (RecordedMessages.LOGIN,player);
             Gson g = new Gson();
             String s = g.toJson(xoMessage);
+            System.out.println("playername:"+player.getUserName());
+            System.out.println("the message receved from player"+s);
             PSFromController.println(s);
-       }
     }
 
     @FXML

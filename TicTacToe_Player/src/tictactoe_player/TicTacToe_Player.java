@@ -38,71 +38,70 @@ public class TicTacToe_Player extends Application {
             mySocket = new Socket("localhost", 3333);
             dis = new DataInputStream(mySocket.getInputStream());
             ps = new PrintStream(mySocket.getOutputStream());
-            new Thread(()->{
-                while (true){
-                    try {
-                        String recivedMsg = dis.readLine();
-                        System.out.println(recivedMsg);
-                        Gson g = new Gson();
-                        InsideXOGame xoMessage;
-                        xoMessage = g.fromJson(recivedMsg, InsideXOGame.class);
-                        
-                        //to switch to selection mode scene
-                        if(xoMessage.getTypeOfOperation().equals(RecordedMessages.LOG_IN_ACCEPTED))
-                        {
-                            Platform.runLater(()->{
-                                try {
-                                    moveToSelectionScene(stage,xoMessage);
-                                } catch (IOException ex) {
-                                    System.err.println("coudn't switch");
-                                    ex.printStackTrace();
-                                }
-                            });
-                        }
-                        
-                        //to switch to login scene
-                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.SIGN_UP_ACCEPTED))
-                        {
-                            System.err.println("Register here");
-                            Platform.runLater(()->{
-                            moveToLogInScene(stage);
-                            });                           
-                        }
-
-                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_REJECTED))
-                        {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            String recivedMsg = dis.readLine();
+                            System.out.println(recivedMsg);
+                            Gson g = new Gson();
+                            InsideXOGame xoMessage;
+                            xoMessage = g.fromJson(recivedMsg, InsideXOGame.class);
                             
-                            loginController.myTurn = false;
+                            //to switch to selection mode scene
+                            if(xoMessage.getTypeOfOperation().equals(RecordedMessages.LOG_IN_ACCEPTED))
+                            {
+                                Platform.runLater(()->{
+                                    try {
+                                        moveToSelectionScene(stage,xoMessage);
+                                    } catch (IOException ex) {
+                                        System.err.println("coudn't switch");
+                                        ex.printStackTrace();
+                                    }
+                                });
+                            }
+                            
+                            //to switch to login scene
+                            else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.SIGN_UP_ACCEPTED))
+                            {
+                                System.err.println("Register here");
+                                Platform.runLater(()->{
+                                    moveToLogInScene(stage);
+                                });
+                            }
+                            
+                            else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_REJECTED))
+                            {
+                                
+                                loginController.myTurn = false;
+                            }
+                            
+                            //to switch to player with computer scene
+                            else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.PLAYING_SINGLE_MODE))
+                            {
+                                Platform.runLater(()->{
+                                    try
+                                    {
+                                        moveToPlayWithComputerScene(stage);
+                                    }
+                                    catch (IOException ex) {
+                                        System.err.println("coudn't switch");
+                                        ex.printStackTrace();
+                                    }
+                                });
+                            }
+                        } catch (IOException ex) {
+                            try {
+                                TicTacToe_Player.this.dis.close();
+                                ps.close();
+                                TicTacToe_Player.this.mySocket.close();
+                                break;
+                            }catch (IOException exception)
+                            {
+                                exception.printStackTrace();
+                            }
                         }
-                        
-                        //to switch to player with computer scene
-                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.PLAYING_SINGLE_MODE))
-                        {
-                            Platform.runLater(()->{
-                                try 
-                                {
-                                    moveToPlayWithComputerScene(stage);
-                                } 
-                                catch (IOException ex) {
-                                    System.err.println("coudn't switch");
-                                    ex.printStackTrace();
-                                }
-                            });
-                        }
-
-                    }
-                    catch (IOException ex) {
-                         try
-                         {
-                            this.dis.close();
-                            ps.close();
-                            this.mySocket.close();
-                            break;                             
-                         }
-                         catch (IOException exception)
-                         {
-                             exception.printStackTrace();
-                         }
                     }
                 }
             }).start();
