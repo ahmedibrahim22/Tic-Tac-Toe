@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Vector;
 
 /**
@@ -24,6 +25,8 @@ class ServerThread extends Thread
    private Player newPlayer;
 //   private Database db;
    static Vector<ServerThread> playersVector =new Vector <>();
+   static HashMap<Integer, ServerThread> onlinePlayers = new HashMap<>();
+   static HashMap<String, Integer> usernameToId = new HashMap<>();
    
    public ServerThread(Socket s)
    {
@@ -87,9 +90,39 @@ class ServerThread extends Thread
             case RecordedMessages.SIGNUP:
                 handelSinUpRequest(msgObject);
                 break;
-            default:
-                
-        
+            case RecordedMessages.PLAYING_SINGLE_MODE:
+                handelPlayingSingleModeRequest(msgObject);
+                break;
+            case RecordedMessages.SINGLE_MODE_GAME_FINISHED:
+                handelSingleGameFinishedRequest(msgObject);
+                break;
+            case RecordedMessages.RETRIVE_PLAYERS:
+                handelRetrivePlayersRequest(msgObject);
+                break;
+            case RecordedMessages.INVITE:
+                handelInviteRequest(msgObject);
+                break;    
+            case RecordedMessages.INVITATION_ACCEPTED:
+                handelInvitationAcceptedRequest(msgObject);
+                break; 
+            case RecordedMessages.INVITATION_REJECTED:
+                handelInvitationRejectedRequest(msgObject);
+                break; 
+            case RecordedMessages.GAME_PLAY_MOVE:
+                handelGamePlayMoveRequest(msgObject);
+                break; 
+            case RecordedMessages.GAME_GOT_FINISHED:
+                handelGameGotFinishedRequest(msgObject);
+                break; 
+            case RecordedMessages.RESUME:
+                handelResumeRequest(msgObject);
+                break; 
+            case RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS:
+                handelChatRequest(msgObject);
+                break; 
+            case RecordedMessages.BACK:
+                handelBackRequest(msgObject);
+                break;     
         }
       
     }
@@ -157,5 +190,38 @@ class ServerThread extends Thread
         ch.ps.println("Server: " +msg);
      }
    }
+
+    private void handelPlayingSingleModeRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelSingleGameFinishedRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelRetrivePlayersRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelInviteRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelInvitationAcceptedRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelInvitationRejectedRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelGamePlayMoveRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelGameGotFinishedRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelResumeRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelChatRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelBackRequest(InsideXOGame msgObject) {
+    }
 }
 

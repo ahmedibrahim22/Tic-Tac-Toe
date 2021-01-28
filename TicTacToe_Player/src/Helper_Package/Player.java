@@ -12,9 +12,15 @@ package Helper_Package;
 public class Player {
   
     // Player Variables
-    private String userName,password,email;
-    private int score,gameId;
-    private boolean isPlaying,status;
+    private int playerId;
+    private int opponentId;
+    private int gameId;
+    private String userName;
+    private String password;
+    private String email;
+    private int score;
+    private boolean isPlaying;
+    private boolean status;
     
     //player constructors
     public Player(){};
