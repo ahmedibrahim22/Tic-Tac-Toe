@@ -47,7 +47,7 @@ public class Server {
             }
            
         } catch (IOException ex) {
-            System.out.println("Error while create new server socket");
+            System.out.println("Error in server socket");
             ex.getStackTrace();
         }
         }).start();
@@ -107,6 +107,7 @@ class ServerThread extends Thread
                dis.close();
                ps.close();
                playersVector.remove(this);
+               newPlayer=new Player();
                newPlayer.setStatus(false);
 //               db.updatePlayerStatus(newPlayer.getUserName(),0); //update status of player to be offline
                System.out.println("player is leaved and become offline");
