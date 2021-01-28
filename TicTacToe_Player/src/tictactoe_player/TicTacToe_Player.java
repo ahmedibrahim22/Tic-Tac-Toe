@@ -35,7 +35,7 @@ public class TicTacToe_Player extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try{
-            mySocket = new Socket("127.0.0.1", 5000);
+            mySocket = new Socket("localhost", 3333);
             dis = new DataInputStream(mySocket.getInputStream());
             ps = new PrintStream(mySocket.getOutputStream());
             new Thread(()->{
@@ -48,7 +48,7 @@ public class TicTacToe_Player extends Application {
                         xoMessage = g.fromJson(recivedMsg, InsideXOGame.class);
                         
                         //to switch to selection mode scene
-                        if(xoMessage.getTypeOfOperation().equals(RecordedMessages.NEW_PLAYER_LOGGED_IN))
+                        if(xoMessage.getTypeOfOperation().equals(RecordedMessages.LOG_IN_ACCEPTED))
                         {
                             Platform.runLater(()->{
                                 try {

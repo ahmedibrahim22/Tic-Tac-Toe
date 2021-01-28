@@ -64,7 +64,7 @@ public class SelectionModeController implements Initializable {
     private void multiplayer(ActionEvent event) {
         Player player = new Player();
         player.setUserName(loginController.username); 
-        InsideXOGame xoMessage =new InsideXOGame (RecordedMessages.GET_PLAYERS,player);
+        InsideXOGame xoMessage =new InsideXOGame (RecordedMessages.RETRIVE_PLAYERS,player);
         Gson g = new Gson();
         String s = g.toJson(xoMessage);
         PSFromController.println(s);

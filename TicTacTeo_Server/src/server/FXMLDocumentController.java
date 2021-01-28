@@ -5,9 +5,9 @@
  */
 package server;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,9 +16,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 /**
- * FXML Controller class
+ * FXML Controller class for server GUI
  *
- * @author FOX
+ * @author Noura Houssien
  */
 public class FXMLDocumentController implements Initializable {
 
@@ -36,9 +36,7 @@ public class FXMLDocumentController implements Initializable {
     private Button turnOFFBtn;
 
     Server myServer;
-    /**
-     * Initializes the controller class.
-     */
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -48,18 +46,15 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void startServerConnection(ActionEvent event) {
             myServer=new Server(3333);
-                myServer.startConnection();
+            
             
     }
 
     @FXML
     private void stopServerConnection(ActionEvent event) {
-         try {
-            myServer.getServerSocket().close();
-        } catch (IOException ex) {
-            System.out.println("Cannot close the server");
-            ex.getMessage();
-        }
+         myServer.closeServer();
+         Platform.exit();
+     
     }
 
     

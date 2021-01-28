@@ -94,7 +94,7 @@ public class SignUpController implements Initializable {
     private void register(ActionEvent event)throws IOException {
         boolean b=check1();
        Player player=new Player(username.getText(),password.getText(),email.getText());
-            InsideXOGame xointerface =new InsideXOGame (RecordedMessages.REGISTER,player);
+            InsideXOGame xointerface =new InsideXOGame (RecordedMessages.SIGNUP,player);
             Gson g = new Gson();
             String s = g.toJson(xointerface);
             PSFromController.println(s);  
