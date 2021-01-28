@@ -1,28 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server;
-
-import Helper_Package.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import static com.oracle.jrockit.jfr.ContentType.Class;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.ParseException;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jdk.nashorn.internal.parser.JSONParser;
-
 
 
 /**
@@ -35,14 +14,12 @@ public class Server {
     Server(int port)
     {
        this.port=port;
+       startServer();
     }
-    public ServerSocket getServerSocket()
+  
+    private void startServer()
     {
-        return this.sSocket;
-    }
-    public void startConnection()
-    {
-        
+        new Thread(() -> {
         System.out.println("server running...");
         try {
             sSocket=new ServerSocket(port);
@@ -54,18 +31,21 @@ public class Server {
             }
            
         } catch (IOException ex) {
-            System.out.println("Error while create new server socket");
-            ex.getMessage();
+            System.out.println("Error in server socket");
+            ex.getStackTrace();
         }
-        finally{
+        }).start();
+    }
+    
+    public void closeServer()
+    {
             try {
                 sSocket.close();
-                 System.out.println("closing sever sockeet");
+                System.out.println("sever closed.");
                 
             } catch (IOException ex) {
-                System.out.println("Error while closing sever socket");
-                ex.getMessage();
+                System.out.println("Error while closing sever");
+                ex.getStackTrace();
             }
-        }
     }
 }

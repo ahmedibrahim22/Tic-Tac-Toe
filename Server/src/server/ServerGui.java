@@ -1,22 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package server;
 
 import Database.Database;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -42,10 +29,10 @@ public class ServerGui extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-        Database.dbConnect();
-        int id = Database.login("Ahmed_17", "123456");
-        System.out.println(id);
-        Database.dbDisconnect();
+//        Database.dbConnect();
+//        int id = Database.login("Ahmed_17", "123456");
+//        System.out.println(id);
+//        Database.dbDisconnect();
         launch(args);
     }
 
