@@ -122,7 +122,7 @@ public class TicTacToe_Player extends Application {
         stage.setScene(scene);
         stage.setTitle("Tic Tac Toe Game");
         stage.setResizable(false);
-        stage.getIcons().add(new Image("logo.png"));
+//        stage.getIcons().add(new Image("logo.png"));
         stage.show();
     }
     
