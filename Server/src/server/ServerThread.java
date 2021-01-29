@@ -198,6 +198,7 @@ class ServerThread extends Thread
     }
 
     private void handelRetrivePlayersRequest(InsideXOGame msgObject) {
+        
     }
 
     private void handelInviteRequest(InsideXOGame msgObject) {

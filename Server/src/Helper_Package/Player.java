@@ -12,15 +12,9 @@ package Helper_Package;
 public class Player {
   
     // Player Variables
-    private int playerId;
-    private int opponentId;
-    private int gameId;
-    private String userName;
-    private String password;
-    private String email;
-    private int score;
+    private String userName,password,email,status;
+    private int score,gameId;
     private boolean isPlaying;
-    private boolean status;
     
     //player constructors
     public Player(){};
@@ -44,12 +38,12 @@ public class Player {
         
     }
     
-    public Player (String _userName, boolean _status,int _score)
+    public Player (String _userName, String _status,int _score)
     {
         userName  = _userName;
         status    = _status;
         score     = _score;
-    };
+    }
     
     public Player (String _userName,int _score)
     {
@@ -57,7 +51,7 @@ public class Player {
         score     = _score;
     };
     
-    public Player (String _userName,String _email,String _lastName,boolean _status,int _score,boolean _isPlaying,int _gameId)
+    public Player (String _userName,String _email,String _lastName,String _status,int _score,boolean _isPlaying,int _gameId)
     {
         userName  = _userName;
         email     = _email;
@@ -66,6 +60,7 @@ public class Player {
         isPlaying = _isPlaying;
         gameId    = _gameId;
     }
+   
     
     //setters
     public void setUserName(String _userName){
@@ -81,10 +76,17 @@ public class Player {
     }
     
 
-    public void setStatus(boolean _status){
-           status=_status;
+  public void setStatus(Integer _status){
+        if(_status==0){
+            status="Offline";
+       }
+       else if(_status==1){
+            status="Online";
+       }
+       else if(_status==2){
+            status="Busy";
+       }
     }
-    
     public void setScore(int _score){
             score=_score;
     }
@@ -112,7 +114,7 @@ public class Player {
     
 
     
-    public boolean getStatus(){
+    public String getStatus(){
         return status;
     }
     
@@ -127,5 +129,7 @@ public class Player {
     public int getGameId(){
         return gameId;
     }
+    
+     
     
 }

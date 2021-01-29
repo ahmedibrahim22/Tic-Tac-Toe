@@ -40,11 +40,11 @@
             </LinearGradient>
          </textFill>
       </Label>
-      <TableView layoutX="209.0" layoutY="88.0" opacity="0.8" prefHeight="375.0" prefWidth="630.0">
+      <TableView fx:id="dataTable" layoutX="209.0" layoutY="88.0" opacity="0.8" prefHeight="375.0" prefWidth="630.0">
         <columns>
-          <TableColumn prefWidth="211.0" text="User Name" />
-          <TableColumn prefWidth="218.0" text="Score" />
-            <TableColumn prefWidth="200.0" text="Status" />
+          <TableColumn fx:id="userName" prefWidth="211.0" text="User Name" />
+          <TableColumn fx:id="score" prefWidth="218.0" text="Score" />
+            <TableColumn fx:id="status" prefWidth="200.0" text="Status" />
         </columns>
       </TableView>
       <Label layoutX="147.0" layoutY="560.0" prefHeight="52.0" prefWidth="233.0" styleClass="buttonXO" text="Turn Server ON" textAlignment="RIGHT">
