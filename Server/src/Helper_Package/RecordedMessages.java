@@ -30,9 +30,15 @@ public class RecordedMessages {
     public static final String RESUME = "resume";
     public static final String RETRIVEMOVES = "retriveMoves";
     public static final String CHAT_PLAYERS_WITH_EACH_OTHERS = "chatMessage";
+    public static final String CHAT_PLAYERS_WITH_EACH_OTHERS_FROM_SERVER = "chatMessageFromServer";
     public static final String RETRIVE_PLAYERS = "retrivePlayers";
     public static final String INVITE = "invite";
     public static final String GAME_PLAY_MOVE = "GamePlayMove";
     public static final String MULTI_MODE_GAME_FINISHED = "multiModeFinished";
     public static final String RECEIVING_INVITATION = "receivingInvitation";
+    public static final String LOGIN_REJECTED = "logInRejected";
+    public static final String INVITATION_ACCEPTED_FROM_SERVER = "inviationAcceptedFromServer";
+    public static final String INVITATION_REJECTED_FROM_SERVER = "inviationRejectedFromServer";
+    public static final String BACK_FROM_SERVER = "backFromServer";
+
 }

@@ -87,7 +87,39 @@ class ServerThread extends Thread
             case RecordedMessages.SIGNUP:
                 handelSinUpRequest(msgObject);
                 break;
-            default:
+            case RecordedMessages.PLAYING_SINGLE_MODE:
+                handelPlayingSingleModeRequest(msgObject);
+                break;
+            case RecordedMessages.SINGLE_MODE_GAME_FINISHED:
+                handelSingleGameFinishedRequest(msgObject);
+                break;
+            case RecordedMessages.RETRIVE_PLAYERS:
+                handelRetrivePlayersRequest(msgObject);
+                break;
+            case RecordedMessages.INVITE:
+                handelInviteRequest(msgObject);
+                break;    
+            case RecordedMessages.INVITATION_ACCEPTED:
+                handelInvitationAcceptedRequest(msgObject);
+                break; 
+            case RecordedMessages.INVITATION_REJECTED:
+                handelInvitationRejectedRequest(msgObject);
+                break; 
+            case RecordedMessages.GAME_PLAY_MOVE:
+                handelGamePlayMoveRequest(msgObject);
+                break; 
+            case RecordedMessages.GAME_GOT_FINISHED:
+                handelGameGotFinishedRequest(msgObject);
+                break; 
+            case RecordedMessages.RESUME:
+                handelResumeRequest(msgObject);
+                break; 
+            case RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS:
+                handelChatRequest(msgObject);
+                break; 
+            case RecordedMessages.BACK:
+                handelBackRequest(msgObject);
+                break;     
                 
         
         }
@@ -111,17 +143,16 @@ class ServerThread extends Thread
        if(playerId!=-1)
        {
 //         db.updatePlayerStatus(playerId,1);
-//           newPlayer.setStatus(true);
+           newPlayer.setStatus(true);
            newPlayer.setUserName(userName);
            newPlayer.setPassword(password);
            objMsg.setOperationResult(true);
            objMsg.setTypeOfOperation(RecordedMessages.LOG_IN_ACCEPTED);
-           
            ps.println(g.toJson(objMsg));
           
        }
        else{
-           //should handel in player to receve LOG_IN_REJECTED 
+        objMsg.setTypeOfOperation(RecordedMessages.LOGIN_REJECTED);
         objMsg.setOperationResult(false);
        }
        
@@ -157,5 +188,67 @@ class ServerThread extends Thread
         ch.ps.println("Server: " +msg);
      }
    }
+
+  
+
+   
+      private void handelPlayingSingleModeRequest(InsideXOGame objMsg) {
+        
+       Gson g=new Gson();
+       Player player;
+       String userName;
+       player = objMsg.getPlayer();
+       userName=player.getUserName();
+//       db.updatePlayerStatus(userName,2);
+       objMsg.setOperationResult(true);
+       objMsg.getPlayer().setIsPlaying(true);
+       objMsg.getPlayer().setStatus(true);       
+       objMsg.setTypeOfOperation(RecordedMessages.PLAYING_SINGLE_MODE);
+       ps.println(g.toJson(objMsg));
+
+    }
+
+    private void handelSingleGameFinishedRequest(InsideXOGame msgObject) {
+       Gson g=new Gson();
+       Player player;
+       String userName;
+       player = msgObject.getPlayer();
+       userName=player.getUserName();
+//        db.updatePlayerScore(userName,5);
+       msgObject.setOperationResult(true);
+       
+       msgObject.getPlayer().setScore(5);
+       msgObject.setTypeOfOperation(RecordedMessages.SINGLE_MODE_PLAYER_SCORE_UPDATED);
+       ps.println(g.toJson(msgObject));
+      
+    }
+
+    private void handelRetrivePlayersRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelInviteRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelInvitationAcceptedRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelInvitationRejectedRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelGamePlayMoveRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelGameGotFinishedRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelResumeRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelChatRequest(InsideXOGame msgObject) {
+    }
+
+    private void handelBackRequest(InsideXOGame msgObject) {
+    }
+    
 }
 
