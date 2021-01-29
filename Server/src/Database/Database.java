@@ -13,9 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import Helper_Package.Player;
 
-
-import Database.Player;
 
 /**
  *
@@ -156,9 +155,9 @@ public class Database {
            String password= rs.getString(4);
            int points = rs.getInt(5);
            int status = rs.getInt(6);
-           Player p = new Player(id,name,email,password,points);
-           p.setClassify(points);
+           Player p = new Player(name,password,email);
            p.setStatus(status);
+           p.setScore(points);
            players.add(p);
         }  
         return players;
