@@ -11,6 +11,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -27,7 +28,7 @@ class ServerThread extends Thread
    static Vector<ServerThread> playersVector =new Vector <>();
    static HashMap<Integer, ServerThread> onlinePlayers = new HashMap<>();
    static HashMap<String, Integer> usernameToId = new HashMap<>();
-   
+   Gson g = new Gson();
    public ServerThread(Socket s)
    {
      this.socket=s;
@@ -72,6 +73,10 @@ class ServerThread extends Thread
                e.getStackTrace();
            }
        }
+    }
+
+    public Player getNewPlayer() {
+        return newPlayer;
     }
    
     
@@ -198,9 +203,21 @@ class ServerThread extends Thread
     }
 
     private void handelRetrivePlayersRequest(InsideXOGame msgObject) {
+        Vector<Player> players = new Vector<>();
+        for(Map.Entry<Integer, ServerThread> handler : onlinePlayers.entrySet()){
+            Player player = handler.getValue().getNewPlayer(); 
+            if(player.getStatus() == true){
+                players.add(player);
+            }
+        }
+        msgObject.setOperationResult(true);
+        msgObject.setTypeOfOperation(RecordedMessages.RETREVING_PLAYERS_LIST);
+        msgObject.players = players;
+        ps.println(g.toJson(msgObject));
     }
 
     private void handelInviteRequest(InsideXOGame msgObject) {
+    //    int opponentUserId = msgObject.getGame().setAwayPlayer(_awayPlayer);
     }
 
     private void handelInvitationAcceptedRequest(InsideXOGame msgObject) {
