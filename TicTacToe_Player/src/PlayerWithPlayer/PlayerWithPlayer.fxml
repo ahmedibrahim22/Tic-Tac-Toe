@@ -146,9 +146,9 @@
             </LinearGradient>
          </textFill>
       </Label>
-      <AnchorPane layoutX="244.0" layoutY="112.0" maxWidth="920.0" prefHeight="443.0" prefWidth="401.0" style="-fx-background-color: transparent;" styleClass="border" stylesheets="@../../../../Abdelhakim-project/Java-Tic-Tac-Toe/Player/playwithcomputer/PlayWithComputer.css">
+      <AnchorPane layoutX="244.0" layoutY="112.0" maxWidth="920.0" prefHeight="443.0" prefWidth="401.0" style="-fx-background-color: transparent;" >
          <children>
-            <Button id="1" fx:id="pos1" layoutX="2.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
+            <Button id="1" fx:id="pos1" layoutX="2.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
                   <Font name="Andalus" size="68.0" />
                </font>
@@ -164,7 +164,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="1" fx:id="pos2" layoutX="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
+            <Button id="2" fx:id="pos2" layoutX="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
                   <Font name="Andalus" size="68.0" />
                </font>
@@ -180,7 +180,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="1" fx:id="pos3" layoutX="303.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
+            <Button id="3" fx:id="pos3" layoutX="303.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
                   <Font name="Andalus" size="68.0" />
                </font>
@@ -196,7 +196,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="1" fx:id="pos6" layoutX="303.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
+            <Button id="6" fx:id="pos6" layoutX="303.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
                   <Font name="Andalus" size="68.0" />
                </font>
@@ -212,7 +212,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="1" fx:id="pos5" layoutX="153.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
+            <Button id="5" fx:id="pos5" layoutX="153.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
                   <Font name="Andalus" size="68.0" />
                </font>
@@ -228,7 +228,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="1" fx:id="pos4" layoutX="2.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
+            <Button id="4" fx:id="pos4" layoutX="2.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
                   <Font name="Andalus" size="68.0" />
                </font>
@@ -244,7 +244,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="1" fx:id="pos7" layoutX="3.0" layoutY="304.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
+            <Button id="7" fx:id="pos7" layoutX="3.0" layoutY="304.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
                   <Font name="Andalus" size="68.0" />
                </font>
@@ -260,7 +260,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="1" fx:id="pos8" layoutX="154.0" layoutY="305.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
+            <Button id="8" fx:id="pos8" layoutX="154.0" layoutY="305.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
                   <Font name="Andalus" size="68.0" />
                </font>
@@ -276,7 +276,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="1" fx:id="pos9" layoutX="304.0" layoutY="304.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
+            <Button id="9" fx:id="pos9" layoutX="304.0" layoutY="304.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
                   <Font name="Andalus" size="68.0" />
                </font>

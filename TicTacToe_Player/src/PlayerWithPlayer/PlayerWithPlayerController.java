@@ -339,12 +339,10 @@ public class PlayerWithPlayerController implements Initializable {
         gameResult.setText("");
     }
     
-    @FXML
     private void minimize(ActionEvent event) {
         ((Stage)((Button)event.getSource()).getScene().getWindow()).setIconified(true);
     }
 
-    @FXML
     private void exit(ActionEvent event) {
         Player player=new Player();
         player.setUserName(loginController.username);

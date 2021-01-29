@@ -82,6 +82,7 @@ public class PlayWithComputerController implements Initializable {
         intMove=gridToInt(gridMove);
         return intMove;
     }
+    //from x,y to int,int
     int gridToInt(GFG.Move gridMove){
         int outInt=0;
         if(gridMove.row==0 && gridMove.col==0)
@@ -104,7 +105,7 @@ public class PlayWithComputerController implements Initializable {
             outInt=9;        
         return outInt;
     }
-    
+    //set symbole in position
     void regMove(int position, char symbol){
         switch (position){
             case 1:
@@ -140,12 +141,14 @@ public class PlayWithComputerController implements Initializable {
         movesPool.remove((Integer) position);
     } 
      
+    //to set symbole for ai and player
      char getRndSymbol(){
         Random r = new Random();
         String symbols = "XO";
         return symbols.charAt(r.nextInt(symbols.length()));
     }
     boolean gameEnded;
+    //from video
     boolean isWinningPosition(Vector<Integer> moves){
         boolean winFlag = false;
         Integer []  topRow = {1, 2, 3};
@@ -192,6 +195,7 @@ public class PlayWithComputerController implements Initializable {
         gameEnded = false;
     }
     
+    //function to set random move
     Integer getRndMove() {
         int number = (int) (Math.random() * movesPool.size());
         return movesPool.get(number);
@@ -235,10 +239,10 @@ public class PlayWithComputerController implements Initializable {
     private void playMove(ActionEvent event) {
         if (!gameEnded) {
             // Player move
-            Integer playerPos = Integer.parseInt(((Control) event.getSource()).getId());
-            if (!movesPool.isEmpty() && movesPool.contains(playerPos)) {
+            Integer playerPos = Integer.parseInt(((Control) event.getSource()).getId()); //return id of the played position
+            if (!movesPool.isEmpty() && movesPool.contains(playerPos)) {    //moves pool is empty ya3ni lesa feh mkan , by7tawi 3la el player position deh
                 displayMove(playerPos, playerSymbol);
-                movesPool.remove(playerPos);
+                movesPool.remove(playerPos);  // remove it from pool
                 regMove(playerPos, playerSymbol);                
                 playerMoves.add(playerPos);
                 numOfMoves++;
@@ -250,7 +254,7 @@ public class PlayWithComputerController implements Initializable {
                 }
                    // AI move
                 if (!movesPool.isEmpty() && !gameEnded) {
-                    Integer AIPos=null;
+                    Integer AIPos=null; //if comp loss dont perform ant other moves
                     if(SelectLevelController.gameLevel==0){
                         AIPos = getRndMove();
                     }
@@ -270,7 +274,7 @@ public class PlayWithComputerController implements Initializable {
                     }
                 }
                 if (numOfMoves >= 9 && !gameEnded){
-                    System.out.println("It's a draw!");
+                    System.out.println("It's a draw!"); //t3adel
                     gameResult.setText("It's a Draw! ");
                     gameEnded = true;
                 }
@@ -330,12 +334,10 @@ public class PlayWithComputerController implements Initializable {
         gameResult.setText("");
     }
     
-    @FXML
     private void minimize(ActionEvent event) {
         ((Stage)((Button)event.getSource()).getScene().getWindow()).setIconified(true);
     }
 
-    @FXML
     private void exit(ActionEvent event) {
         Player player=new Player();
         player.setUserName(loginController.username);

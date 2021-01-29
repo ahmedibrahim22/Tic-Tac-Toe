@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Vector;
 
 /**
@@ -24,6 +25,8 @@ class ServerThread extends Thread
    private Player newPlayer;
 //   private Database db;
    static Vector<ServerThread> playersVector =new Vector <>();
+   static HashMap<Integer, ServerThread> onlinePlayers = new HashMap<>();
+   static HashMap<String, Integer> usernameToId = new HashMap<>();
    
    public ServerThread(Socket s)
    {
@@ -120,10 +123,7 @@ class ServerThread extends Thread
             case RecordedMessages.BACK:
                 handelBackRequest(msgObject);
                 break;     
-                
-        
         }
-      
     }
     
     
@@ -143,7 +143,7 @@ class ServerThread extends Thread
        if(playerId!=-1)
        {
 //         db.updatePlayerStatus(playerId,1);
-           newPlayer.setStatus(true);
+           newPlayer.setStatus(1);
            newPlayer.setUserName(userName);
            newPlayer.setPassword(password);
            objMsg.setOperationResult(true);
@@ -189,9 +189,7 @@ class ServerThread extends Thread
      }
    }
 
-  
 
-   
       private void handelPlayingSingleModeRequest(InsideXOGame objMsg) {
         
        Gson g=new Gson();
@@ -202,7 +200,7 @@ class ServerThread extends Thread
 //       db.updatePlayerStatus(userName,2);
        objMsg.setOperationResult(true);
        objMsg.getPlayer().setIsPlaying(true);
-       objMsg.getPlayer().setStatus(true);       
+       objMsg.getPlayer().setStatus(2);       
        objMsg.setTypeOfOperation(RecordedMessages.PLAYING_SINGLE_MODE);
        ps.println(g.toJson(objMsg));
 
@@ -225,7 +223,7 @@ class ServerThread extends Thread
 
     private void handelRetrivePlayersRequest(InsideXOGame msgObject) {
     }
-
+   
     private void handelInviteRequest(InsideXOGame msgObject) {
     }
 
@@ -249,6 +247,5 @@ class ServerThread extends Thread
 
     private void handelBackRequest(InsideXOGame msgObject) {
     }
-    
 }
 

@@ -122,7 +122,5 @@ public class loginController implements Initializable {
         PSFromController = TicTacToe_Player.ps;
         errorMessage.setVisible(false);
     }
-    
-
-    
+ 
 }
