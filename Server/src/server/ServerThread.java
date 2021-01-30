@@ -23,7 +23,7 @@ class ServerThread extends Thread
    private DataInputStream dis;
    private PrintStream ps;
    private Player newPlayer;
-//   private Database db;
+
    static Vector<ServerThread> playersVector =new Vector <>();
    static HashMap<Integer, ServerThread> onlinePlayers = new HashMap<>();
    static HashMap<String, Integer> usernameToId = new HashMap<>();
@@ -39,7 +39,7 @@ class ServerThread extends Thread
            dis = new DataInputStream(socket.getInputStream());
            ps = new PrintStream(socket.getOutputStream(),true);
            newPlayer=new Player();
-           playersVector.add(this);
+//           playersVector.add(this);
            String message;
  
             while(true) {
@@ -62,10 +62,10 @@ class ServerThread extends Thread
                socket.close();
                dis.close();
                ps.close();
-               playersVector.remove(this);
+//               playersVector.remove(this);
                
 //               newPlayer.setStatus(false);
-//               db.updatePlayerStatus(newPlayer.getUserName(),0); //update status of player to be offline
+//               Database.updatePlayerStatus(newPlayer.getUserName(),0); //update status of player to be offline
                System.out.println("player is leaved and become offline");
            } catch (IOException e) {
                System.out.println("Error while closing socket connection from server");
@@ -139,13 +139,17 @@ class ServerThread extends Thread
        player = objMsg.getPlayer();
        userName=player.getUserName();
        password=player.getPassword();
-//     playerId=db.login(userName,password); //this function will return -1 if login faild
+//     playerId=Database.login(userName,password); //this function will return -1 if login faild
        if(playerId!=-1)
        {
-//         db.updatePlayerStatus(playerId,1);
+//         Database.updatePlayerStatus(playerId,1);
            newPlayer.setStatus(1);
            newPlayer.setUserName(userName);
            newPlayer.setPassword(password);
+           newPlayer.setIsPlaying(false);
+           //set player id here
+           ServerThread.onlinePlayers.put(playerId,this);
+           ServerThread.usernameToId.put(userName,playerId);
            objMsg.setOperationResult(true);
            objMsg.setTypeOfOperation(RecordedMessages.LOG_IN_ACCEPTED);
            ps.println(g.toJson(objMsg));
@@ -168,7 +172,7 @@ class ServerThread extends Thread
        email=player.getEmail();
        password=player.getPassword();
        String[] inputData={userName,email,password};
-//        successRegister=db.register(inputData); 
+//        successRegister=Database.register(inputData); 
        if(successRegister==1)
        {
          objMsg.setOperationResult(true);
@@ -197,7 +201,7 @@ class ServerThread extends Thread
        String userName;
        player = objMsg.getPlayer();
        userName=player.getUserName();
-//       db.updatePlayerStatus(userName,2);
+//       Database.updatePlayerStatus(userName,2);
        objMsg.setOperationResult(true);
        objMsg.getPlayer().setIsPlaying(true);
        objMsg.getPlayer().setStatus(2);       
@@ -212,7 +216,7 @@ class ServerThread extends Thread
        String userName;
        player = msgObject.getPlayer();
        userName=player.getUserName();
-//        db.updatePlayerScore(userName,5);
+//        Database.updatePlayerScore(userName,5);
        msgObject.setOperationResult(true);
        
        msgObject.getPlayer().setScore(5);
