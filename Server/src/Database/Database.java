@@ -52,6 +52,7 @@ public class Database {
         int id=-1;
         if(rs.next()){
             id = rs.getInt("id");
+            updatePlayerStatus(id,1);
         }
         
         return id;
@@ -64,7 +65,7 @@ public class Database {
         int userName_exist=valiateUsername(arr[0]);
         if(email_exist==0 && userName_exist ==0){
             PreparedStatement statement;
-            statement = con.prepareStatement("insert into Player(`username`,`email`,`password`)values(?,?,?)");
+            statement = con.prepareStatement("insert into player(`username`,`email`,`password`)values(?,?,?)");
             statement.setString(1, arr[0]);
             statement.setString(2, arr[1]);
             statement.setString(3, arr[2]);
@@ -155,20 +156,10 @@ public class Database {
            String password= rs.getString(4);
            int points = rs.getInt(5);
            int status = rs.getInt(6);
-           String st="";
-           if(status==0){
-            st="Offline";
-        }
-       else if(status==1){
-            st="Online";
-       }
-       else if(status==2){
-            st="Busy";
-       }
-           Player p = new Player(name,password,email,st);
-//           p.setStringStatus(status);
+     
+           Player p = new Player(name,password,email);
+           p.setStringStatus(status);
            p.setScore(points);
-           System.out.println(p.getStringStatus());
            players.add(p);
         }  
         return players;
@@ -176,7 +167,7 @@ public class Database {
     //this function created to add game between two players in data base
     public static void addPlayersGame(int player1Id , int player2Id ,int winnerId) throws SQLException{
         PreparedStatement statement;
-        statement = con.prepareStatement("insert into Game(`player1_id`,`player2_id`,`winner_id`,`status`)values(?,?,?,?)");
+        statement = con.prepareStatement("insert into game(`player1_id`,`player2_id`,`winner_id`,`status`)values(?,?,?,?)");
         statement.setInt(1, player1Id);
         statement.setInt(2, player2Id);
         statement.setInt(3, winnerId);        
@@ -277,6 +268,35 @@ public class Database {
     }
     
   
+    
+    public static void setWinner(int game_id , int player1_id,int player2_id , int winner_id) throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("update game set winner_id= ? where id = ? and player1_id = ? and player2_id = ? ");
+        statement.setInt(1, winner_id);
+        statement.setInt(2, game_id);
+        statement.setInt(3, player1_id);
+        statement.setInt(4, player2_id);
+        statement.executeUpdate();
+    }
+    
+    public static void logout(int player_id) throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("update player set player_status= ? where id = ?");
+        statement.setInt(1, 0);
+        statement.setInt(2, player_id);
+        statement.executeUpdate();
+    }
+    
+    public static void changeAllStatus() throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("update player set player_status= ?");
+        statement.setInt(1, 0);
+        statement.executeUpdate();
+    }
+
+    
+        
+    
     
     
 }

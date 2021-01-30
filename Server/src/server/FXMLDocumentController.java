@@ -45,7 +45,14 @@ Server myServer;
    
 @Override
 public void initialize(URL url, ResourceBundle rb) {
-        try {
+     
+
+        }
+    
+@FXML
+private void startServerConnection(ActionEvent event) {
+    
+       try {
         Database.dbConnect();
         ObservableList players=Database.getPlayers();
         dataTable.setItems(players);
@@ -70,19 +77,18 @@ public void initialize(URL url, ResourceBundle rb) {
         Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-
-        }
     
-@FXML
-private void startServerConnection(ActionEvent event) {
-            myServer=new Server(5000);
+    
+            myServer=new Server(3000);
     }
 
 @FXML
 private void stopServerConnection(ActionEvent event) {
-         myServer.closeServer();
-         Platform.exit();
-     
+     for ( int i = 0; i<dataTable.getItems().size(); i++) {
+             dataTable.getItems().clear();
+            }     
+    myServer.closeServer();
+        
     }
 
     
