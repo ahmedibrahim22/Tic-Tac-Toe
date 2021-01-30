@@ -42,7 +42,7 @@ import tictactoe_player.TicTacToe_Player;
 public class PlayerListController implements Initializable {
     PrintStream PSFromController;
     Player player;
-    //boolean inviteName = false;
+    boolean inviteName = false;
     String homePlayer = loginController.username;
     String AwayPlayer;    
     Vector<Player> holdAllPlayers;
@@ -89,20 +89,21 @@ public class PlayerListController implements Initializable {
     private void back(ActionEvent event) {  
          try
         {
-            FXMLLoader signinpage=new FXMLLoader();
-            signinpage.setLocation(getClass().getResource("/selectionmode/SelectionMode.fxml"));
-            Parent  signinpageroot = signinpage.load();
-            Scene scenesignin = new Scene( signinpageroot);
-            Stage signinstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            signinstage.hide();
-            signinstage.setScene(scenesignin);
-            signinstage.show();            
+            FXMLLoader selectionmodeloader=new FXMLLoader();
+            selectionmodeloader.setLocation(getClass().getResource("/selectionmode/SelectionMode.fxml"));
+            Parent  selectionmodeRoot = selectionmodeloader.load();
+            Scene selectionmodeScene = new Scene( selectionmodeRoot);
+            Stage selectionmodeStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            selectionmodeStage.hide();
+            selectionmodeStage.setScene(selectionmodeScene);
+            selectionmodeStage.show();            
         }
         catch (IOException ex)
         {
             ex.printStackTrace();
         }
     }
+    @FXML
     private void MouseClicked(MouseEvent event) {
        player = playersListTable.getSelectionModel().getSelectedItem();
     }
@@ -122,22 +123,7 @@ public class PlayerListController implements Initializable {
 
     //used to select the away player that user want to play with him
     //and send an invitation to him
-    @FXML
-    private void invite(ActionEvent event) {
-         if (!player.getUserName().equals(loginController.username))
-        {
-            AwayPlayer = player.getUserName();
-            Game createNewGame = new Game();
-            createNewGame.setHomePlayer(homePlayer);
-            createNewGame.setAwayPlayer(AwayPlayer);
-            InsideXOGame xoMessage =new InsideXOGame (RecordedMessages.INVITE, createNewGame);
-            loginController.myTurn = true;
-            Gson g = new Gson();
-            String s = g.toJson(xoMessage);
-            System.out.println(s);
-            PSFromController.println(s);             
-        }
-    }
+
     
     private void minimize(ActionEvent event) {
          ((Stage)((Button)event.getSource()).getScene().getWindow()).setIconified(true);
@@ -152,5 +138,26 @@ public class PlayerListController implements Initializable {
         PSFromController.println(s);        
         Platform.exit();
     } 
+
+    @FXML
+    private void Invite(ActionEvent event) {
+        if (!player.getUserName().equals(loginController.username))
+        {
+            if (player.getStatus() && !player.getIsPlaying())
+            {
+                AwayPlayer = player.getUserName();
+                Game offlineGameCreation = new Game();
+                offlineGameCreation.setHomePlayer(homePlayer);
+                offlineGameCreation.setAwayPlayer(AwayPlayer);
+                InsideXOGame xointerface =new InsideXOGame (RecordedMessages.INVITE,offlineGameCreation);
+                loginController.myTurn = true;
+                Gson g = new Gson();
+                String s = g.toJson(xointerface);
+                System.out.println(s);
+                PSFromController.println(s);  
+            }           
+        }
+    }
+
+   }
     
-}

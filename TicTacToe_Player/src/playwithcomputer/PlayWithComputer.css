@@ -9,7 +9,6 @@ and open the template in the editor.
 */
 
 
-
 .buttonXO
 {
     -fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0); 

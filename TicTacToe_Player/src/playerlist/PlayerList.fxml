@@ -27,7 +27,7 @@
             <Image url="@the_best.png" />
          </image>
       </ImageView>
-      <TableView fx:id="playersListTable" layoutX="44.0" layoutY="87.0" prefHeight="511.0" prefWidth="698.0">
+      <TableView fx:id="playersListTable" layoutX="44.0" layoutY="87.0" onMouseClicked="#MouseClicked" prefHeight="511.0" prefWidth="698.0">
         <columns>
           <TableColumn fx:id="userNameColumn" prefWidth="148.0" text="User Name" />
           <TableColumn fx:id="scoreColoumn" prefWidth="155.0" text="Score" />
@@ -57,19 +57,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button defaultButton="true" layoutX="795.0" layoutY="331.0" mnemonicParsing="false" onAction="#invite" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-background-radius: 30px;" text="Invite">
-         <font>
-            <Font name="Bodoni MT Bold" size="24.0" />
-         </font>
-         <graphic>
-            <ImageView fitHeight="36.0" fitWidth="210.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@invite2.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Button defaultButton="true" layoutX="795.0" layoutY="417.0" mnemonicParsing="false" onAction="#back" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-background-radius: 30px;" text="Back">
+      <Button defaultButton="true" layoutX="797.0" layoutY="417.0" mnemonicParsing="false" onAction="#back" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-background-radius: 30px;" text="Back">
          <font>
             <Font name="Bodoni MT Bold" size="24.0" />
          </font>
@@ -77,6 +65,18 @@
             <ImageView fitHeight="36.0" fitWidth="210.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@back2.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button defaultButton="true" layoutX="796.0" layoutY="333.0" mnemonicParsing="false" onAction="#Invite" prefHeight="54.0" prefWidth="152.0" style="-fx-background-color: #DAA520; -fx-background-radius: 30px;" text="Invite" textFill="#110000">
+         <font>
+            <Font name="Bodoni MT Bold" size="24.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="36.0" fitWidth="210.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@invite2.png" />
                </image>
             </ImageView>
          </graphic>
