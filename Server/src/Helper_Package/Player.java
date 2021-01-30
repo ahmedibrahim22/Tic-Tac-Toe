@@ -49,7 +49,7 @@ public class Player {
         userName  = _userName;
         status    = _status;
         score     = _score;
-    };
+    }
     
     public Player (String _userName,int _score)
     {
@@ -66,6 +66,7 @@ public class Player {
         isPlaying = _isPlaying;
         gameId    = _gameId;
     }
+   
     
     //setters
     public void setUserName(String _userName){
@@ -81,10 +82,7 @@ public class Player {
     }
     
 
-    public void setStatus(boolean _status){
-           status=_status;
-    }
-    
+  
     public void setScore(int _score){
             score=_score;
     }
@@ -109,8 +107,12 @@ public class Player {
     public String getEmail(){
         return email;
     }
-    
 
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+    
+    
     
     public boolean getStatus(){
         return status;
@@ -143,4 +145,5 @@ public class Player {
     public void setOpponentId(int opponentId) {
         this.opponentId = opponentId;
     }
+
 }

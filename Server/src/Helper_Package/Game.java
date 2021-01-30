@@ -128,11 +128,6 @@ public class Game {
     
     public char[] getSavedGame(){
         return savedGame;
-    }
-    
-
-    
-    
-    
+    } 
     
 }

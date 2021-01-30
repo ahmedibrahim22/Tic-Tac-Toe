@@ -28,7 +28,7 @@ class ServerThread extends Thread
    private DataInputStream dis;
    private PrintStream ps;
    private Player newPlayer;
-//   private Database db;
+
    static Vector<ServerThread> playersVector =new Vector <>();
    static HashMap<Integer, ServerThread> onlinePlayers = new HashMap<>();
    static HashMap<String, Integer> usernameToId = new HashMap<>();
@@ -44,7 +44,7 @@ class ServerThread extends Thread
            dis = new DataInputStream(socket.getInputStream());
            ps = new PrintStream(socket.getOutputStream(),true);
            newPlayer=new Player();
-           playersVector.add(this);
+//           playersVector.add(this);
            String message;
  
             while(true) {
@@ -67,10 +67,10 @@ class ServerThread extends Thread
                socket.close();
                dis.close();
                ps.close();
-               playersVector.remove(this);
+//               playersVector.remove(this);
                
 //               newPlayer.setStatus(false);
-//               db.updatePlayerStatus(newPlayer.getUserName(),0); //update status of player to be offline
+//               Database.updatePlayerStatus(newPlayer.getUserName(),0); //update status of player to be offline
                System.out.println("player is leaved and become offline");
            } catch (IOException e) {
                System.out.println("Error while closing socket connection from server");
@@ -154,7 +154,6 @@ class ServerThread extends Thread
                 handelBackRequest(msgObject);
                 break;     
         }
-      
     }
     
     
@@ -170,21 +169,24 @@ class ServerThread extends Thread
        player = objMsg.getPlayer();
        userName=player.getUserName();
        password=player.getPassword();
-//     playerId=db.login(userName,password); //this function will return -1 if login faild
+//     playerId=Database.login(userName,password); //this function will return -1 if login faild
        if(playerId!=-1)
        {
-//         db.updatePlayerStatus(playerId,1);
-//           newPlayer.setStatus(true);
+//         Database.updatePlayerStatus(playerId,1);
+           newPlayer.setStatus(true);
            newPlayer.setUserName(userName);
            newPlayer.setPassword(password);
+           newPlayer.setIsPlaying(false);
+           //set player id here
+           ServerThread.onlinePlayers.put(playerId,this);
+           ServerThread.usernameToId.put(userName,playerId);
            objMsg.setOperationResult(true);
            objMsg.setTypeOfOperation(RecordedMessages.LOG_IN_ACCEPTED);
-           
            ps.println(g.toJson(objMsg));
           
        }
        else{
-           //should handel in player to receve LOG_IN_REJECTED 
+        objMsg.setTypeOfOperation(RecordedMessages.LOGIN_REJECTED);
         objMsg.setOperationResult(false);
        }
        
@@ -200,7 +202,7 @@ class ServerThread extends Thread
        email=player.getEmail();
        password=player.getPassword();
        String[] inputData={userName,email,password};
-//        successRegister=db.register(inputData); 
+//        successRegister=Database.register(inputData); 
        if(successRegister==1)
        {
          objMsg.setOperationResult(true);
@@ -221,10 +223,37 @@ class ServerThread extends Thread
      }
    }
 
-    private void handelPlayingSingleModeRequest(InsideXOGame msgObject) {
+
+      private void handelPlayingSingleModeRequest(InsideXOGame objMsg) {
+        
+       Gson g=new Gson();
+       Player player;
+       String userName;
+       player = objMsg.getPlayer();
+       userName=player.getUserName();
+//       Database.updatePlayerStatus(userName,2);
+       objMsg.setOperationResult(true);
+       objMsg.getPlayer().setIsPlaying(true);
+       objMsg.getPlayer().setStatus(true);///////////////       
+       objMsg.setTypeOfOperation(RecordedMessages.PLAYING_SINGLE_MODE);
+       ps.println(g.toJson(objMsg));
+
     }
 
     private void handelSingleGameFinishedRequest(InsideXOGame msgObject) {
+       Gson g=new Gson();
+       Player player;
+       String userName;
+       player = msgObject.getPlayer();
+       userName=player.getUserName();
+       
+//        Database.updatePlayerScore(userName,5);
+       msgObject.setOperationResult(true);
+       
+       msgObject.getPlayer().setScore(5);
+       msgObject.setTypeOfOperation(RecordedMessages.SINGLE_MODE_PLAYER_SCORE_UPDATED);
+       ps.println(g.toJson(msgObject));
+      
     }
 
     private void handelRetrivePlayersRequest(InsideXOGame msgObject) {
@@ -242,7 +271,7 @@ class ServerThread extends Thread
         ps.println(g.toJson(msgObject));
         //System.out.println(g.toJson(msgObject));
     }
-
+   
     private void handelInviteRequest(InsideXOGame msgObject) {
         int opponentUserId = usernameToId.get(msgObject.getGame().getAwayPlayer());
         if(onlinePlayers.containsKey(opponentUserId)){//add he is not busy
@@ -280,7 +309,7 @@ class ServerThread extends Thread
 
     private void handelInvitationRejectedRequest(InsideXOGame msgObject) {
         int opponentUserId = usernameToId.get(msgObject.getGame().getAwayPlayer());
-        if(onlinePlayers.containsKey(opponentUserId)){
+        if(onlinePlayers.containsKey(opponentUserId) && onlinePlayers.get(opponentUserId).getNewPlayer().getStatus()){
             msgObject.setOperationResult(true);
             msgObject.setTypeOfOperation(RecordedMessages.INVITATION_REJECTED_FROM_SERVER);
             onlinePlayers.get(opponentUserId).getPs().println(g.toJson(msgObject));// json
@@ -332,7 +361,7 @@ class ServerThread extends Thread
     }
 
     private void handelChatRequest(InsideXOGame msgObject) {
-        if(onlinePlayers.containsKey(newPlayer.getOpponentId())){
+        if(onlinePlayers.containsKey(newPlayer.getOpponentId()) && onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().getStatus()){
             msgObject.setOperationResult(true);
             msgObject.setTypeOfOperation(RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS_FROM_SERVER);
             onlinePlayers.get(newPlayer.getOpponentId()).getPs().println(g.toJson(msgObject));//json

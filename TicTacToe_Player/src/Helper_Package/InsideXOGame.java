@@ -22,7 +22,7 @@ public class InsideXOGame {
     
     //constructors
     public InsideXOGame(){
-    players = new Vector<>();
+        players = new Vector<>();
     }
     
     public InsideXOGame(String _typeOfOperation){
@@ -44,6 +44,8 @@ public class InsideXOGame {
         player          = _player;
         game            = _game;
     }
+
+    
     
     public InsideXOGame(String _typeOfOperation, Game _game, int _fieldPosition, char _signPlayed){
         typeOfOperation = _typeOfOperation;
@@ -93,6 +95,8 @@ public class InsideXOGame {
     public char getSignPlayed(){
         return signPlayed;
     }
+    
+    
 }
 
 

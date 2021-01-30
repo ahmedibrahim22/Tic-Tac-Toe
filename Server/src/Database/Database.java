@@ -13,9 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import Helper_Package.Player;
 
-
-import Database.Player;
 
 /**
  *
@@ -79,7 +78,6 @@ public class Database {
     
     // this function takes the game id , player id and the states as an array[9] of strings and save the game in the database
     public static void saveGame(int gameId,int player1_id ,int player2_id,char[] maze) throws SQLException, IndexOutOfBoundsException, IllegalAccessException{
-        
         PreparedStatement statement;
         statement = con.prepareStatement("insert into game_info (`game_id`,`value1`,`value2`,`value3`,"
                 + "`value4`,`value5`,`value6`,`value7`,`value8`,`value9`,`player1_id`,`player2_id`)"
@@ -93,13 +91,15 @@ public class Database {
         statement.executeUpdate();
     }
     
+    
     //this function take a paused game id and return the game states in as an array[9] of strings 
-    public static String[] loadGame(int gameId, int player_id) throws SQLException, IndexOutOfBoundsException{
+    public static String[] loadGame(int gameId, int player1_id , int player2_id) throws SQLException, IndexOutOfBoundsException{
         String[] maze = new String[9];
         PreparedStatement statement;
-        statement = con.prepareStatement("select * from game_info where game_id = ? and player_id= ?");
+        statement = con.prepareStatement("select * from game_info where game_id = ? and player1_id= ? and player2_id = ?");
         statement.setInt(1, gameId);
-        statement.setInt(2, player_id);
+        statement.setInt(2, player1_id);
+        statement.setInt(3, player2_id);
         ResultSet rs = statement.executeQuery();
         if(rs.next()){
             for(int i=0;i<9;i++){
@@ -110,12 +110,12 @@ public class Database {
     }
     
     //this function takes player id and return result set with all ids of his paused games 
-    public static ResultSet loadAllPlayerSavedGames(int playerId) throws SQLException, IndexOutOfBoundsException{
-        PreparedStatement statement;
-        statement = con.prepareStatement("select * from game_info where player_id= ?");
-        statement.setInt(1, playerId);
-        return statement.executeQuery();
-    }
+//    public static ResultSet loadAllPlayerSavedGames(int playerId) throws SQLException, IndexOutOfBoundsException{
+//        PreparedStatement statement;
+//        statement = con.prepareStatement("select * from game_info where player_id= ?");
+//        statement.setInt(1, playerId);
+//        return statement.executeQuery();
+//    }
     
     //this function take player id and return the status of this player
     public static int getPlayerStatus(int playerId) throws SQLException,IndexOutOfBoundsException{
@@ -155,9 +155,9 @@ public class Database {
            String password= rs.getString(4);
            int points = rs.getInt(5);
            int status = rs.getInt(6);
-           Player p = new Player(id,name,email,password,points);
-           p.setClassify(points);
-           p.setStatus(status);
+           Player p = new Player(name,password,email);
+//           p.setStatus(status);
+           p.setScore(points);
            players.add(p);
         }  
         return players;
@@ -266,6 +266,21 @@ public class Database {
         statement.setInt(1, value);
         statement.setString(2, playerUsername);
         statement.executeUpdate();
+    }
+    
+    public static int getPoints(int player_id) throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("Select player_points from player where id = ?");
+        statement.setInt(1, player_id);
+        ResultSet rs = statement.executeQuery();
+        int points=0;
+        if(rs.next()){
+            points = rs.getInt("player_points");
+        }
+        
+        return points;
+        
+        
     }
     
   
