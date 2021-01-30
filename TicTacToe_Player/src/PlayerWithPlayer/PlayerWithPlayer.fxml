@@ -66,7 +66,7 @@
       <Line endX="155.0" endY="-53.0" layoutX="386.0" layoutY="166.0" startX="155.0" startY="394.0" stroke="AQUA" strokeWidth="5.0" styleClass="line" />
       <Line endX="-228.0" endY="397.0" layoutX="473.0" layoutY="-136.0" startX="213.0" startY="397.0" stroke="AQUA" strokeWidth="5.0" styleClass="line" />
       <Line endX="-227.0" endY="397.0" layoutX="472.0" layoutY="16.0" startX="214.0" startY="397.0" stroke="AQUA" strokeWidth="5.0" styleClass="line" />
-      <Label layoutX="942.0" layoutY="24.0" prefHeight="59.0" prefWidth="194.0" styleClass="buttonXO" text="Messenger" textAlignment="RIGHT">
+      <Label layoutX="914.0" layoutY="24.0" prefHeight="65.0" prefWidth="222.0" styleClass="buttonXO" text="Messenger" textAlignment="RIGHT">
          <font>
             <Font name="Bodoni MT Bold" size="44.0" />
          </font>
@@ -133,7 +133,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Label fx:id="gameResult" layoutX="474.0" layoutY="563.0" prefHeight="46.0" prefWidth="159.0" styleClass="buttonXO" textAlignment="RIGHT">
+      <Label fx:id="gameResult" layoutX="474.0" layoutY="563.0" prefHeight="50.0" prefWidth="204.0" styleClass="buttonXO" textAlignment="RIGHT">
          <font>
             <Font name="Bodoni MT Bold" size="34.0" />
          </font>
@@ -146,11 +146,11 @@
             </LinearGradient>
          </textFill>
       </Label>
-      <AnchorPane layoutX="244.0" layoutY="112.0" maxWidth="920.0" prefHeight="443.0" prefWidth="401.0" style="-fx-background-color: transparent;" >
+      <AnchorPane layoutX="244.0" layoutY="112.0" maxWidth="920.0" prefHeight="443.0" prefWidth="401.0" style="-fx-background-color: transparent;" styleClass="border">
          <children>
-            <Button id="1" fx:id="pos1" layoutX="2.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
+            <Button id="1" fx:id="pos1" layoutX="2.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
                <font>
-                  <Font name="Andalus" size="68.0" />
+                  <Font name="Andalus" size="57.0" />
                </font>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -164,9 +164,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="2" fx:id="pos2" layoutX="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
+            <Button id="2" fx:id="pos2" layoutX="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
                <font>
-                  <Font name="Andalus" size="68.0" />
+                  <Font name="Andalus" size="57.0" />
                </font>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -180,9 +180,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="3" fx:id="pos3" layoutX="303.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
+            <Button id="3" fx:id="pos3" layoutX="303.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
                <font>
-                  <Font name="Andalus" size="68.0" />
+                  <Font name="Andalus" size="57.0" />
                </font>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -196,9 +196,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="6" fx:id="pos6" layoutX="303.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
+            <Button id="6" fx:id="pos6" layoutX="303.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
                <font>
-                  <Font name="Andalus" size="68.0" />
+                  <Font name="Andalus" size="57.0" />
                </font>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -212,9 +212,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="5" fx:id="pos5" layoutX="153.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
+            <Button id="5" fx:id="pos5" layoutX="153.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
                <font>
-                  <Font name="Andalus" size="68.0" />
+                  <Font name="Andalus" size="57.0" />
                </font>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -228,9 +228,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="4" fx:id="pos4" layoutX="2.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
+            <Button id="4" fx:id="pos4" layoutX="2.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
                <font>
-                  <Font name="Andalus" size="68.0" />
+                  <Font name="Andalus" size="57.0" />
                </font>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -244,9 +244,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="7" fx:id="pos7" layoutX="3.0" layoutY="304.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
+            <Button id="7" fx:id="pos7" layoutX="3.0" layoutY="304.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
                <font>
-                  <Font name="Andalus" size="68.0" />
+                  <Font name="Andalus" size="57.0" />
                </font>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -260,9 +260,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="8" fx:id="pos8" layoutX="154.0" layoutY="305.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
+            <Button id="8" fx:id="pos8" layoutX="154.0" layoutY="305.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
                <font>
-                  <Font name="Andalus" size="68.0" />
+                  <Font name="Andalus" size="57.0" />
                </font>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -276,9 +276,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button id="9" fx:id="pos9" layoutX="304.0" layoutY="304.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
+            <Button id="9" fx:id="pos9" layoutX="304.0" layoutY="304.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" styleClass="buttonXO">
                <font>
-                  <Font name="Andalus" size="68.0" />
+                  <Font name="Andalus" size="57.0" />
                </font>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -336,13 +336,31 @@
       </Label>
       <Label fx:id="homeNameLabel" layoutX="706.0" layoutY="48.0" prefHeight="46.0" prefWidth="150.0" styleClass="buttonXO" textAlignment="CENTER">
          <font>
-            <Font size="31.0" />
+            <Font name="System Bold" size="31.0" />
          </font>
       </Label>
       <Label fx:id="opponentNameLabel" layoutX="23.0" layoutY="52.0" prefHeight="46.0" prefWidth="150.0" styleClass="buttonXO" textAlignment="RIGHT">
          <font>
             <Font size="31.0" />
          </font>
+      </Label>
+      <Label fx:id="congrats" layoutX="174.0" layoutY="196.0" prefHeight="308.0" prefWidth="595.0">
+         <graphic>
+            <ImageView fitHeight="281.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@congrats.gif" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+      <Label fx:id="betterluck" layoutX="167.0" layoutY="125.0" prefHeight="308.0" prefWidth="595.0">
+         <graphic>
+            <ImageView fitHeight="421.0" fitWidth="1121.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@better-luck-edited.png" />
+               </image>
+            </ImageView>
+         </graphic>
       </Label>
    </children>
 </AnchorPane>

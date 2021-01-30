@@ -180,15 +180,12 @@ public class PlayWithComputerController implements Initializable {
         playerMoves.clear();
         AIMoves.clear();
         movesPool.clear();
-        playerSymbol = getRndSymbol();
-        if (playerSymbol == 'X'){
-            AISymbol = 'O';
-        }
-        else{
-            AISymbol = 'X';
-        }
+        AISymbol = 'O';
+        playerSymbol = 'X';
+/*
         playerSign.setText(Character.toString(playerSymbol));
         computerSign.setText(Character.toString(AISymbol));
+*/
         for(int i=0; i<9; i++)
             movesPool.add(i+1);
         numOfMoves = 0;
