@@ -216,6 +216,7 @@ class ServerThread extends Thread
        String userName;
        player = msgObject.getPlayer();
        userName=player.getUserName();
+       
 //        Database.updatePlayerScore(userName,5);
        msgObject.setOperationResult(true);
        
