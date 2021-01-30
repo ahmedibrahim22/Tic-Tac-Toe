@@ -12,9 +12,10 @@ package Helper_Package;
 public class Player {
   
     // Player Variables
-    private String userName,password,email,status;
+    private String statusString;
+    private String userName,password,email;
     private int score,gameId;
-    private boolean isPlaying;
+    private boolean isPlaying,status;
     
     //player constructors
     public Player(){};
@@ -37,13 +38,21 @@ public class Player {
         email =_email;
         
     }
+     public Player(String _userName,String _password,String _email,String _status_st)
+    {
+        userName  =_userName;
+        password  =_password;
+        email =_email;
+        statusString=_status_st;
+        
+    }
     
-    public Player (String _userName, String _status,int _score)
+    public Player (String _userName, boolean _status,int _score)
     {
         userName  = _userName;
         status    = _status;
         score     = _score;
-    }
+    };
     
     public Player (String _userName,int _score)
     {
@@ -51,7 +60,7 @@ public class Player {
         score     = _score;
     };
     
-    public Player (String _userName,String _email,String _lastName,String _status,int _score,boolean _isPlaying,int _gameId)
+    public Player (String _userName,String _email,String _lastName,boolean _status,int _score,boolean _isPlaying,int _gameId)
     {
         userName  = _userName;
         email     = _email;
@@ -60,7 +69,6 @@ public class Player {
         isPlaying = _isPlaying;
         gameId    = _gameId;
     }
-   
     
     //setters
     public void setUserName(String _userName){
@@ -76,17 +84,10 @@ public class Player {
     }
     
 
-  public void setStatus(Integer _status){
-        if(_status==0){
-            status="Offline";
-       }
-       else if(_status==1){
-            status="Online";
-       }
-       else if(_status==2){
-            status="Busy";
-       }
+    public void setStatus(boolean _status){
+           status=_status;
     }
+    
     public void setScore(int _score){
             score=_score;
     }
@@ -114,7 +115,7 @@ public class Player {
     
 
     
-    public String getStatus(){
+    public boolean getStatus(){
         return status;
     }
     
@@ -129,4 +130,20 @@ public class Player {
     public int getGameId(){
         return gameId;
     }
+    
+    public void setStringStatus(Integer _status){
+       if(_status==0){
+            statusString="Offline";
+       }
+       else if(_status==1){
+            statusString="Online";
+       }
+       else if(_status==2){
+            statusString="Busy";
+       }
+    }
+    public String getStringStatus(){
+        return statusString;
+    }
+    
 }

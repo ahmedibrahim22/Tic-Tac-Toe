@@ -35,27 +35,27 @@ private Button turnOFFBtn;
 
 Server myServer;
     @FXML
-    private TableColumn<Player, String> userName;
+    private TableColumn<Player, String>userName;
     @FXML
-    private TableColumn<Player, Integer> score;
+    private TableColumn<Player, Integer>score;
     @FXML
-    private TableColumn<Player, String> status;
+    private TableColumn<Player, String>statusString;
     @FXML
     private TableView<Player> dataTable;
    
 @Override
 public void initialize(URL url, ResourceBundle rb) {
         try {
-            Database.dbConnect();
-            
+        Database.dbConnect();
+        ObservableList players=Database.getPlayers();
+        dataTable.setItems(players);
         userName.setCellValueFactory(new PropertyValueFactory<Player, String>("userName"));
         score.setCellValueFactory(new PropertyValueFactory<Player, Integer>("score"));
-        status.setCellValueFactory(new PropertyValueFactory<Player, String>("status"));
+        statusString.setCellValueFactory(new PropertyValueFactory<Player, String>("statusString"));
         userName.setStyle("-fx-alignment: CENTER;");
         score.setStyle("-fx-alignment: CENTER;");
-        status.setStyle("-fx-alignment: CENTER;");
+        statusString.setStyle("-fx-alignment: CENTER;");
         
-        dataTable.setItems(Database.getPlayers());
         dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
         Database.dbDisconnect();

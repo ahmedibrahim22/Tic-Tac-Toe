@@ -26,7 +26,7 @@
             <Image url="@backgroung2.png" />
          </image>
       </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="626.0" opacity="0.13" stroke="BLACK" strokeType="INSIDE" width="1030.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="626.0" layoutX="203.0" opacity="0.13" stroke="BLACK" strokeType="INSIDE" width="1030.0" />
       <Label layoutX="203.0" layoutY="-9.0" prefHeight="104.0" prefWidth="678.0" styleClass="buttonXO" text="Tic Tac Toe Server Side" textAlignment="RIGHT">
          <font>
             <Font name="Bodoni MT Bold" size="65.0" />
@@ -44,7 +44,7 @@
         <columns>
           <TableColumn fx:id="userName" prefWidth="211.0" text="User Name" />
           <TableColumn fx:id="score" prefWidth="218.0" text="Score" />
-            <TableColumn fx:id="status" prefWidth="200.0" text="Status" />
+            <TableColumn fx:id="statusString" prefWidth="200.0" text="Status" />
         </columns>
       </TableView>
       <Label layoutX="147.0" layoutY="560.0" prefHeight="52.0" prefWidth="233.0" styleClass="buttonXO" text="Turn Server ON" textAlignment="RIGHT">

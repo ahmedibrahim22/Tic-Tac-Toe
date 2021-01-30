@@ -155,9 +155,20 @@ public class Database {
            String password= rs.getString(4);
            int points = rs.getInt(5);
            int status = rs.getInt(6);
-           Player p = new Player(name,password,email);
-           p.setStatus(status);
+           String st="";
+           if(status==0){
+            st="Offline";
+        }
+       else if(status==1){
+            st="Online";
+       }
+       else if(status==2){
+            st="Busy";
+       }
+           Player p = new Player(name,password,email,st);
+//           p.setStringStatus(status);
            p.setScore(points);
+           System.out.println(p.getStringStatus());
            players.add(p);
         }  
         return players;
