@@ -64,7 +64,7 @@ public class Database {
         int userName_exist=valiateUsername(arr[0]);
         if(email_exist==0 && userName_exist ==0){
             PreparedStatement statement;
-            statement = con.prepareStatement("insert into Player(`username`,`email`,`password`)values(?,?,?)");
+            statement = con.prepareStatement("insert into player(`username`,`email`,`password`)values(?,?,?)");
             statement.setString(1, arr[0]);
             statement.setString(2, arr[1]);
             statement.setString(3, arr[2]);
@@ -155,9 +155,22 @@ public class Database {
            String password= rs.getString(4);
            int points = rs.getInt(5);
            int status = rs.getInt(6);
-           Player p = new Player(name,password,email);
-//           p.setStatus(status);
+
+
+           String st="";
+           if(status==0){
+                st="Offline";
+           }
+           else if(status==1){
+                st="Online";
+           }
+           else if(status==2){
+                st="Busy";
+           }
+           Player p = new Player(name,password,email,st);
+//           p.setStringStatus(status);
            p.setScore(points);
+           System.out.println(p.getStringStatus());
            players.add(p);
         }  
         return players;

@@ -297,14 +297,14 @@ public class PlayWithComputerController implements Initializable {
     private void back(ActionEvent event) {
         try
         {
-            FXMLLoader signinpage=new FXMLLoader();
-            signinpage.setLocation(getClass().getResource("/selectionmode/SelectionModeController.fxml"));
-            Parent  signinpageroot = signinpage.load();
-            Scene scenesignin = new Scene( signinpageroot);
-            Stage signinstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            signinstage.hide();
-            signinstage.setScene(scenesignin);
-            signinstage.show();            
+            FXMLLoader selectionModeLoader=new FXMLLoader();
+            selectionModeLoader.setLocation(getClass().getResource("/selectionmode/SelectionModeController.fxml"));
+            Parent  selectionModeRoot = selectionModeLoader.load();
+            Scene selectionModeScene = new Scene( selectionModeRoot);
+            Stage selectionModeStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            selectionModeStage.hide();
+            selectionModeStage.setScene(selectionModeScene);
+            selectionModeStage.show();            
         }
         catch (IOException ex)
         {

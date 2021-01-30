@@ -131,14 +131,14 @@ public class TicTacToe_Player extends Application {
                         }
                         
                         //to switch to player with player scene
-                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_ACCEPTED))
+                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_ACCEPTED_FROM_SERVER))
                         {
                             Platform.runLater(() -> {
                                 moveToPlayerToPlayerScene(stage, xoMessage);
                             });
                         }
                         
-                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_REJECTED))
+                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_REJECTED_FROM_SERVER))
                         {
                             
                             loginController.myTurn = false;
@@ -203,7 +203,7 @@ public class TicTacToe_Player extends Application {
                         }
                         
                         //to back to the selection scene if the user press back button
-                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.BACK))
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.BACK_FROM_SERVER))
                         {
                          
                             Platform.runLater(() -> {

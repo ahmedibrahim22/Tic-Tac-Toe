@@ -150,9 +150,7 @@
                      </stops>
                   </LinearGradient>
                </textFill>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+
             </Button>
             <Button id="2" fx:id="pos2" layoutX="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;" >
                <font>
@@ -166,9 +164,7 @@
                      </stops>
                   </LinearGradient>
                </textFill>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+               
             </Button>
             <Button id="3" fx:id="pos3" layoutX="303.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;">
                <font>
@@ -182,9 +178,7 @@
                      </stops>
                   </LinearGradient>
                </textFill>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+               
             </Button>
             <Button id="6" fx:id="pos6" layoutX="303.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;">
                <font>
@@ -198,9 +192,7 @@
                      </stops>
                   </LinearGradient>
                </textFill>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+               
             </Button>
             <Button id="5" fx:id="pos5" layoutX="153.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;">
                <font>
@@ -214,9 +206,7 @@
                      </stops>
                   </LinearGradient>
                </textFill>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+               
             </Button>
             <Button id="4" fx:id="pos4" layoutX="2.0" layoutY="152.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;">
                <font>
@@ -230,9 +220,7 @@
                      </stops>
                   </LinearGradient>
                </textFill>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+               
             </Button>
             <Button id="7" fx:id="pos7" layoutX="3.0" layoutY="306.0" mnemonicParsing="false" onAction="#playMove" prefHeight="146.0" prefWidth="138.0" style="-fx-background-color: transparent;">
                <font>
@@ -246,9 +234,7 @@
                      </stops>
                   </LinearGradient>
                </textFill>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+               
             </Button>
             <Button id="8" fx:id="pos8" layoutX="153.0" layoutY="300.0" mnemonicParsing="false" onAction="#playMove" prefHeight="147.0" prefWidth="138.0" style="-fx-background-color: transparent;">
                <font>
@@ -262,9 +248,7 @@
                      </stops>
                   </LinearGradient>
                </textFill>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+               
             </Button>
             <Button id="9" fx:id="pos9" layoutX="303.0" layoutY="301.0" mnemonicParsing="false" onAction="#playMove" prefHeight="147.0" prefWidth="138.0" style="-fx-background-color: transparent;">
                <font>
@@ -278,9 +262,7 @@
                      </stops>
                   </LinearGradient>
                </textFill>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+               
             </Button>
          </children>
       </AnchorPane>

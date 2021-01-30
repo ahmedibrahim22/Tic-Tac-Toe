@@ -94,17 +94,51 @@ class ServerThread extends Thread
          String s ;
         switch (msgObject.getTypeOfOperation()) {
             case RecordedMessages.LOGIN:
-                handelLogInRequest(msgObject);
+             {
+                 try {
+                     handelLogInRequest(msgObject);
+                 } catch (SQLException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
                 break;
+
             case RecordedMessages.SIGNUP:
-                handelSinUpRequest(msgObject);
+             {
+                 try {
+                     handelSinUpRequest(msgObject);
+                 } catch (SQLException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (ClassNotFoundException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (InstantiationException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (IllegalAccessException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
                 break;
+
             case RecordedMessages.PLAYING_SINGLE_MODE:
-                handelPlayingSingleModeRequest(msgObject);
+             {
+                 try {
+                     handelPlayingSingleModeRequest(msgObject);
+                 } catch (SQLException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
                 break;
+
             case RecordedMessages.SINGLE_MODE_GAME_FINISHED:
-                handelSingleGameFinishedRequest(msgObject);
+             {
+                 try {
+                     handelSingleGameFinishedRequest(msgObject);
+                 } catch (SQLException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
                 break;
+
             case RecordedMessages.RETRIVE_PLAYERS:
                 handelRetrivePlayersRequest(msgObject);
                 break;
@@ -159,7 +193,7 @@ class ServerThread extends Thread
     
     
     
-   private void  handelLogInRequest(InsideXOGame objMsg)
+   private void  handelLogInRequest(InsideXOGame objMsg) throws SQLException
    {
       
        Gson g=new Gson();
@@ -169,10 +203,10 @@ class ServerThread extends Thread
        player = objMsg.getPlayer();
        userName=player.getUserName();
        password=player.getPassword();
-//     playerId=Database.login(userName,password); //this function will return -1 if login faild
+       playerId=Database.login(userName,password); //this function will return -1 if login faild
        if(playerId!=-1)
        {
-//         Database.updatePlayerStatus(playerId,1);
+           Database.updatePlayerStatus(playerId,1);
            newPlayer.setStatus(true);
            newPlayer.setUserName(userName);
            newPlayer.setPassword(password);
@@ -191,7 +225,7 @@ class ServerThread extends Thread
        }
        
    }
-   private void handelSinUpRequest(InsideXOGame objMsg)
+   private void handelSinUpRequest(InsideXOGame objMsg) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException
    {
        Gson g=new Gson();
        Player player;
@@ -202,7 +236,7 @@ class ServerThread extends Thread
        email=player.getEmail();
        password=player.getPassword();
        String[] inputData={userName,email,password};
-//        successRegister=Database.register(inputData); 
+       successRegister=Database.register(inputData); 
        if(successRegister==1)
        {
          objMsg.setOperationResult(true);
@@ -224,14 +258,14 @@ class ServerThread extends Thread
    }
 
 
-      private void handelPlayingSingleModeRequest(InsideXOGame objMsg) {
+      private void handelPlayingSingleModeRequest(InsideXOGame objMsg) throws SQLException {
         
        Gson g=new Gson();
        Player player;
        String userName;
        player = objMsg.getPlayer();
        userName=player.getUserName();
-//       Database.updatePlayerStatus(userName,2);
+       Database.updatePlayerStatus(userName,2);
        objMsg.setOperationResult(true);
        objMsg.getPlayer().setIsPlaying(true);
        objMsg.getPlayer().setStatus(true);///////////////       
@@ -240,14 +274,14 @@ class ServerThread extends Thread
 
     }
 
-    private void handelSingleGameFinishedRequest(InsideXOGame msgObject) {
+    private void handelSingleGameFinishedRequest(InsideXOGame msgObject) throws SQLException {
        Gson g=new Gson();
        Player player;
        String userName;
        player = msgObject.getPlayer();
        userName=player.getUserName();
        
-//        Database.updatePlayerScore(userName,5);
+       Database.updatePlayerScore(userName,5);
        msgObject.setOperationResult(true);
        
        msgObject.getPlayer().setScore(5);
