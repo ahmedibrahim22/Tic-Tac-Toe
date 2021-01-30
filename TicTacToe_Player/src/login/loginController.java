@@ -58,6 +58,12 @@ public class loginController implements Initializable {
     @FXML
     private Button signupButton;
     
+     //to intialize the login controller with printstream refer to main class printStream
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        PSFromController = TicTacToe_Player.ps;
+        errorMessage.setVisible(false);
+    }
     //login button function to validate the inputs from user
     //also to send message to server to say person want to log in check it's credintional
     @FXML
@@ -116,12 +122,7 @@ public class loginController implements Initializable {
         signupStage.show();
     }
     
-    //to intialize the login controller with printstream refer to main class printStream
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        PSFromController = TicTacToe_Player.ps;
-        errorMessage.setVisible(false);
-    }
+
     
 
     

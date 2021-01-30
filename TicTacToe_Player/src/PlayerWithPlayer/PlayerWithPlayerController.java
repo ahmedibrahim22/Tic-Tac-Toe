@@ -83,6 +83,11 @@ public class PlayerWithPlayerController implements Initializable {
     Vector<Integer> opponentMoves= new Vector<>();
     Vector<Integer> movesPool= new Vector<>();
     int numOfMoves;
+    public static boolean turnOffNotification = true;
+    @FXML
+    private Label congrats;
+    @FXML
+    private Label betterluck;
     boolean isWinningPosition(Vector<Integer> moves){
         boolean winFlag = false;
         Integer []  topRow = {1, 2, 3};
@@ -111,14 +116,17 @@ public class PlayerWithPlayerController implements Initializable {
         playerMoves.clear();
         opponentMoves.clear();
         movesPool.clear();
+        turnOffNotification = true;
         if(loginController.myTurn){
             playerSymbol = 'X';
             opponentSymbol = 'O';
+            gameResult.setText("Your Turn");
         }
         else
         {
             playerSymbol = 'O';
-            opponentSymbol = 'X';        
+            opponentSymbol = 'X';
+            gameResult.setText("Their Turn");
         }
         for(int i=0; i<9; i++)
             movesPool.add(i+1);
@@ -160,17 +168,9 @@ public class PlayerWithPlayerController implements Initializable {
                 break;
         }
     }
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        PSFromController = TicTacToe_Player.ps;
-        init();
-        myturn = loginController.myTurn;
-    }    
-
     @FXML
-    private void playMove(ActionEvent event) {
-         if (myturn)
+    void playMove(ActionEvent event) {
+        if (myturn)
         {
             if (!gameEnded) {
                 // Player move
@@ -182,150 +182,47 @@ public class PlayerWithPlayerController implements Initializable {
                     sendMyMove();
                     numOfMoves++;
                     myturn = false;
+                    gameResult.setText("Their Turn");
                     if(isWinningPosition(playerMoves)){
-                        System.out.println("You win! :D");
-                        gameResult.setText("You Win! :D");
+                        System.out.println("You win! 😃");
+                        gameResult.setText("You Win! 😃");
                         gameEnded = true;
                         myturn = false;
-                        reportGameEnding();
+                        reportGameEnding(true);
                     }
                 }
-                if (numOfMoves >= 9){
+                if (!gameEnded && numOfMoves >= 9){
                     System.out.println("It's a draw!");
                     gameResult.setText("It's a Draw! ");
                     gameEnded = true;
                     myturn = false;
+                    reportGameEnding(false);                    
                 }
             }            
         }
     }
-    
-    void sendMyMove(){
-        Game game = new Game(gameID, myUserName, opponentUserName);
-        InsideXOGame xoMessage = new InsideXOGame(RecordedMessages.GAME_PLAY_MOVE, game, playerPos, playerSymbol);
+
+    void reportGameEnding(boolean state){
+        InsideXOGame xoMessage = new InsideXOGame(RecordedMessages.GAME_GOT_FINISHED, new Player(myUserName), new Game(gameID, myUserName, opponentUserName));
+        xoMessage.setOperationResult(state);
         Gson g = new Gson();
-        System.out.println(g.toJson(xoMessage));
-        PSFromController.println(g.toJson(xoMessage));
-    }
-    
-        void reportGameEnding(){
-        InsideXOGame xoMsgs = new InsideXOGame(RecordedMessages.GAME_GOT_FINISHED, new Player(myUserName), new Game(gameID, myUserName, opponentUserName));
-        Gson g = new Gson();
-        String messageend = g.toJson(xoMsgs);
+        String messageend = g.toJson(xoMessage);
         System.out.println(messageend);
         PSFromController.println(messageend);
     }
-        
     public void recieveGameEnding(){
         gameEnded = true;
         myturn = false;
     }
-    
-    public void setIDs(int gameID, String myUserName, String opponentUserName){
-        this.gameID = gameID;
-        this.myUserName = myUserName;
-        this.opponentUserName = opponentUserName;
-        homeNameLabel.setText(myUserName);
-        opponentNameLabel.setText(opponentUserName);
-    }
-    
-    public void printAwayMove(Integer playerPos,boolean _myturn){
-        if (!movesPool.isEmpty() && movesPool.contains(playerPos)) {
-            opponentMoves.add(playerPos);
-            movesPool.remove(playerPos);
-            if(!gameEnded){
-                Platform.runLater(()->{
-                    displayMove(playerPos, opponentSymbol);
-                    myturn = _myturn;
-                });
-            }
-        }
-        if(isWinningPosition(opponentMoves)){
-            System.out.println("You Lose! :(");
-            gameResult.setText("You Lose! :(");
-            gameEnded = true;
-            myturn = false;
-        }
-    }
-    
-    @FXML
-    private void back(ActionEvent event) {
-        InsideXOGame xoMessage = new InsideXOGame(RecordedMessages.BACK);
-        Gson g = new Gson();
-        PSFromController.println(g.toJson(xoMessage));
-    }
-
-    @FXML
-    private void resume(ActionEvent event) {
-        Game game = new Game(gameID, myUserName, opponentUserName);
-        InsideXOGame xoMsg = new InsideXOGame(RecordedMessages.RESUME, game);
-        Gson g = new Gson();
-        PSFromController.println(g.toJson(xoMsg));
-    }
-
-    @FXML
-    private void sendMessage(ActionEvent event) {
-        String chatingMessage = "["+ loginController.username +"]: "+ textAreaMessanger.getText();
-        textAreaMessanger.setText("");
-        textScreenMessanger.appendText(chatingMessage+"\n");
-        Game onlineGameChating = new Game(myUserName, opponentUserName, chatingMessage);
-        InsideXOGame xoMessage = new InsideXOGame(RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS, onlineGameChating);
-        Gson g = new Gson();
-        String message = g.toJson(xoMessage);
-        System.out.println(message);
-        PSFromController.println(message); 
-    }
-    
-    public void displayMovesOnBoard (char[] savedGame, String homePlayer, int gameID)
-    {
-        this.gameID = gameID;
-        if(myUserName == homePlayer){
-            playerSymbol = 'X';
-            opponentSymbol = 'O';
-        }
-        else{
-            playerSymbol = 'O';
-            opponentSymbol = 'X';
-        }
-        clearAll();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        PSFromController = TicTacToe_Player.ps;
+        gameResult.setText("");
         init();
-        char s = ' ';
-        for(int i=0;i<9;i++)
-        {
-            Integer move = i+1;
-            if(savedGame[i] == '-' )
-            {
-                savedGame[i] = s ; 
-            }
-            else if(savedGame[i] == playerSymbol){
-                playerMoves.add(move);
-                movesPool.remove(move);
-                myturn = true;
-            }
-            else{
-                opponentMoves.add(move);
-                movesPool.remove(move);
-                myturn = false;
-            }
-        }
-        pos1.setText(Character.toString(savedGame[0]));
-        pos2.setText(Character.toString(savedGame[1]));
-        pos3.setText(Character.toString(savedGame[2]));
-        pos4.setText(Character.toString(savedGame[3]));
-        pos5.setText(Character.toString(savedGame[4]));
-        pos6.setText(Character.toString(savedGame[5]));
-        pos7.setText(Character.toString(savedGame[6]));
-        pos8.setText(Character.toString(savedGame[7]));
-        pos9.setText(Character.toString(savedGame[8]));  
+        myturn = loginController.myTurn;
     }
-       
-    public void printMessage(InsideXOGame xoMessage)
-    {
-        textScreenMessanger.appendText(xoMessage.getGame().getMessage()+"\n");
-        System.out.println(textScreenMessanger.getText());
-    }
-    
-        void clearAll ()
+
+    void clearAll ()
     {
         pos1.setText("");
         pos2.setText("");
@@ -338,13 +235,184 @@ public class PlayerWithPlayerController implements Initializable {
         pos9.setText("");
         gameResult.setText("");
     }
+    void sendMyMove(){
+        Game game = new Game(gameID, myUserName, opponentUserName);
+        InsideXOGame xoMessage = new InsideXOGame(RecordedMessages.GAME_PLAY_MOVE, game, playerPos, playerSymbol);
+        Gson g = new Gson();
+        System.out.println(g.toJson(xoMessage));
+        PSFromController.println(g.toJson(xoMessage));
+    }
     
+    public void setIDs(int gameID, String myUserName, String opponentUserName){
+        this.gameID = gameID;
+        this.myUserName = myUserName;
+        this.opponentUserName = opponentUserName;
+        if(myturn){
+            Platform.runLater(() -> {
+                homeNameLabel.setText(myUserName);
+                opponentNameLabel.setText(opponentUserName);
+                gameResult.setText("Your Turn");
+            });
+        }
+        else{
+            Platform.runLater(() -> {
+                homeNameLabel.setText(opponentUserName);
+                opponentNameLabel.setText(myUserName);
+                gameResult.setText("Their Turn");
+            });
+        }
+
+
+    }
+
+    public void printOpponentMove(Integer playerPos,boolean _myturn){
+        if (!movesPool.isEmpty() && movesPool.contains(playerPos)) {
+            opponentMoves.add(playerPos);
+            movesPool.remove(playerPos);
+            numOfMoves++;
+            if(!gameEnded){
+                displayMove(playerPos, opponentSymbol);
+                myturn = _myturn;
+                if (myturn)
+                {
+                    gameResult.setText("Your Turn");
+                }
+                else
+                {
+                    gameResult.setText("Their Turn");
+                }
+            }
+        }
+        if(isWinningPosition(opponentMoves)){
+            System.out.println("You Lose! 🙁");
+            gameResult.setText("You Lose! 🙁");
+            gameEnded = true;
+            myturn = false;
+        }
+        if (!gameEnded && numOfMoves >= 9){
+            System.out.println("It's a draw!");
+            gameResult.setText("It's a Draw! ");
+            gameEnded = true;
+            myturn = false;
+        }
+
+    }
     @FXML
+    private void back(ActionEvent event)
+    {
+        InsideXOGame xoMsg = new InsideXOGame(RecordedMessages.BACK_FROM_ONLINE,new Player(myUserName),new Game(myUserName, opponentUserName));
+        Gson g = new Gson();
+        PSFromController.println(g.toJson(xoMsg));
+        turnOffNotification = false;
+    }
+
+
+    @FXML
+    private void sendMessage(ActionEvent event) {
+        String chatingMessage = "["+ loginController.username +"]: "+ textAreaMessanger.getText();
+        textAreaMessanger.setText("");
+        textScreenMessanger.appendText(chatingMessage+"\n");
+        Game onlineGameChating = new Game(myUserName, opponentUserName, chatingMessage);
+        InsideXOGame xointerface = new InsideXOGame(RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS, onlineGameChating);
+        Gson g = new Gson();
+        String message = g.toJson(xointerface);
+        System.out.println(message);
+        PSFromController.println(message); 
+    }
+
+    @FXML
+    private void resume(ActionEvent event) {
+        Game gamelog = new Game(gameID, myUserName, opponentUserName);
+        InsideXOGame xoMsg = new InsideXOGame(RecordedMessages.RESUME, gamelog);
+        Gson g = new Gson();
+        PSFromController.println(g.toJson(xoMsg));
+    }
+    
+    public void displayMovesOnBoard (char[] savedGame, String homePlayer, int gameID)
+    {
+        clearAll();
+        init();
+        int countHome = 0;
+        int countOpponent = 0;
+        this.gameID = gameID;
+        if(myUserName.equals(homePlayer))
+        {
+            playerSymbol = 'X';
+            playerSign.setText(Character.toString(playerSymbol));
+            opponentSymbol = 'O';
+            opponenPlayerSign.setText(Character.toString(opponentSymbol));
+        }
+        else
+        {
+            playerSymbol = 'O';
+            playerSign.setText(Character.toString(playerSymbol));            
+            opponentSymbol = 'X';
+            opponenPlayerSign.setText(Character.toString(opponentSymbol));
+        }
+        char s = ' ';
+        for(int i=0;i<9;i++)
+        {
+            Integer move = i+1;
+            if(savedGame[i] == '-' )
+            {
+                savedGame[i] = s ; 
+            }
+            else if(savedGame[i] == playerSymbol){
+                playerMoves.add(move);
+                movesPool.remove(move);
+                countHome++;
+            }
+            else{
+                opponentMoves.add(move);
+                movesPool.remove(move);
+                countOpponent++;
+            }
+        }
+        
+        if(countHome <= countOpponent)
+        {
+            myturn = true;
+            gameResult.setText("Your Turn");            
+        }
+        else
+        {
+            myturn = false;
+            gameResult.setText("Their Turn");              
+        }
+        
+        pos1.setText(Character.toString(savedGame[0]));
+        pos2.setText(Character.toString(savedGame[1]));
+        pos3.setText(Character.toString(savedGame[2]));
+        pos4.setText(Character.toString(savedGame[3]));
+        pos5.setText(Character.toString(savedGame[4]));
+        pos6.setText(Character.toString(savedGame[5]));
+        pos7.setText(Character.toString(savedGame[6]));
+        pos8.setText(Character.toString(savedGame[7]));
+        pos9.setText(Character.toString(savedGame[8]));  
+    }
+       
+    public void printMessage(InsideXOGame xo)
+    {
+        if (!xo.getGame().getMessage().equals("IS_LEFT"))
+        {
+            textScreenMessanger.appendText(xo.getGame().getMessage()+"\n");
+            System.out.println(textScreenMessanger.getText());
+        }
+        else
+        {
+            gameResult.setText("Opponent Left The Session");
+        }
+    }
+    
+    public void cancelOrEnableResume(boolean state)
+    {
+        resume.setDisable(state);
+    }
+    
     private void minimize(ActionEvent event) {
         ((Stage)((Button)event.getSource()).getScene().getWindow()).setIconified(true);
     }
 
-    @FXML
     private void exit(ActionEvent event) {
         Player player=new Player();
         player.setUserName(loginController.username);

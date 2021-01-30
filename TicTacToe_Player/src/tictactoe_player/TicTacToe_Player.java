@@ -52,7 +52,7 @@ public class TicTacToe_Player extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try{
-            mySocket = new Socket("localhost", 5000);
+            mySocket = new Socket("127.0.0.1", 5005);
             dis = new DataInputStream(mySocket.getInputStream());
             ps = new PrintStream(mySocket.getOutputStream());
             new Thread(()->{
@@ -131,14 +131,14 @@ public class TicTacToe_Player extends Application {
                         }
                         
                         //to switch to player with player scene
-                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_ACCEPTED_FROM_SERVER))
+                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_ACCEPTED))
                         {
                             Platform.runLater(() -> {
                                 moveToPlayerToPlayerScene(stage, xoMessage);
                             });
                         }
                         
-                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_REJECTED_FROM_SERVER))
+                        else if (xoMessage.getTypeOfOperation().equals(RecordedMessages.INVITATION_REJECTED))
                         {
                             
                             loginController.myTurn = false;
@@ -166,7 +166,7 @@ public class TicTacToe_Player extends Application {
                         }
                         
                         //to print the chat messages in the chat box
-                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS_FROM_SERVER))
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS))
                         {                    
                             Platform.runLater(() -> {                              
                                 PrintMessageOfChatRoom(xoMessage);                                    
@@ -179,7 +179,15 @@ public class TicTacToe_Player extends Application {
                             Platform.runLater(() -> {
                                 try
                                 {
-                                    DisplayMoves(xoMessage);
+                                    if (xoMessage.getGame().getGameId() != 0)
+                                        {
+                                            DisplayMoves(xoMessage);
+                                            cancelResume(false);
+                                        }
+                                        else
+                                        {
+                                            cancelResume(true);
+                                        }
                                 }
                                 catch (Exception ex)
                                 {
@@ -195,7 +203,7 @@ public class TicTacToe_Player extends Application {
                         }
                         
                         //to back to the selection scene if the user press back button
-                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.BACK_FROM_SERVER))
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.BACK))
                         {
                          
                             Platform.runLater(() -> {
@@ -241,7 +249,7 @@ public class TicTacToe_Player extends Application {
         stage.setScene(scene);
         stage.setTitle("Tic Tac Toe Game");
         stage.setResizable(false);
-//        stage.getIcons().add(new Image("logo.png"));
+       // stage.getIcons().add(new Image("logo.png"));
         stage.show();
     }
       
@@ -390,7 +398,7 @@ public class TicTacToe_Player extends Application {
 
     //function to print the away player move
     void printGameMove(InsideXOGame xoMessage){
-        pwp.printAwayMove(xoMessage.getFieldPosition(),true);
+        pwp.printOpponentMove(xoMessage.getFieldPosition(),true);
     }
     
     //function to print the message inside the chatbox
@@ -414,6 +422,11 @@ public class TicTacToe_Player extends Application {
         pwp.displayMovesOnBoard(xoMessage.getGame().getSavedGame(),
                                 xoMessage.getGame().getHomeplayer(),
                                 xoMessage.getGame().getGameId());
+    }
+    
+    void cancelResume(boolean state)
+    {
+        pwp.cancelOrEnableResume(state);
     }
     @Override
     public void stop(){

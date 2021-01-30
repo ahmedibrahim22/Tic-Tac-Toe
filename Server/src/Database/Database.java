@@ -24,10 +24,10 @@ import Database.Player;
  */
 public class Database {
     static Connection con =null;
-    static String db_name="xo_netwok_game";
+    static String db_name="xo_network_game_player";
     static String url="jdbc:mysql://localhost:3306/"+db_name;
-    static String username="maher";
-    static String password="password1234";
+    static String username="Ibrahim";
+    static String password="jesus01203952089";
     
     //this function created to connect to the database
     public static void dbConnect() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
@@ -78,16 +78,18 @@ public class Database {
     }      
     
     // this function takes the game id , player id and the states as an array[9] of strings and save the game in the database
-    public static void saveGame(int gameId,int playerId ,String[] maze) throws SQLException, IndexOutOfBoundsException, IllegalAccessException{
+    public static void saveGame(int gameId,int player1_id ,int player2_id,char[] maze) throws SQLException, IndexOutOfBoundsException, IllegalAccessException{
+        
         PreparedStatement statement;
         statement = con.prepareStatement("insert into game_info (`game_id`,`value1`,`value2`,`value3`,"
-                + "`value4`,`value5`,`value6`,`value7`,`value8`,`value9`,`player_id`)"
-                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)");
+                + "`value4`,`value5`,`value6`,`value7`,`value8`,`value9`,`player1_id`,`player2_id`)"
+                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)");
         statement.setInt(1, gameId);
         for(int i = 2; i <= 10; i++){
-            statement.setString(i, maze[i - 2]);
+            statement.setString(i, String.valueOf(maze[i-2]));
         }
-        statement.setInt(11, playerId);
+        statement.setInt(11, player1_id);
+        statement.setInt(12, player2_id);
         statement.executeUpdate();
     }
     
@@ -161,14 +163,32 @@ public class Database {
         return players;
     }    
     //this function created to add game between two players in data base
-    public static void addPlayersGame(int player1Id , int player2Id ,int winnerId) throws SQLException{
+    public static int addPlayersGame(int player1Id , int player2Id ,int winnerId) throws SQLException{
+        int id = 0;
         PreparedStatement statement;
-        statement = con.prepareStatement("insert into Game(`player1_id`,`player2_id`,`winner_id`,`status`)values(?,?,?,?)");
-        statement.setInt(1, player1Id);
-        statement.setInt(2, player2Id);
-        statement.setInt(3, winnerId);        
-        statement.setInt(4, 1);
-        statement.executeUpdate();
+        if(winnerId==0){
+                  
+            statement=con.prepareStatement("insert into Game(`player1_id`,`player2_id`,`status`)values(?,?,?)",Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, player1Id);
+            statement.setInt(2, player2Id);
+            statement.setInt(3, 0);			
+            statement.executeUpdate();
+            ResultSet rs=statement.getGeneratedKeys();
+            if(rs.next()){
+		id=rs.getInt(1);
+            }
+          
+           
+        }
+        else{
+            statement = con.prepareStatement("insert into Game(`player1_id`,`player2_id`,`winner_id`,`status`)values(?,?,?,?)");
+            statement.setInt(1, player1Id);
+            statement.setInt(2, player2Id);
+            statement.setInt(3, winnerId);        
+            statement.setInt(4, 1);
+            statement.executeUpdate();
+        }
+        return id;
     }
     // this function is created to change the status of player
      public static void updatePlayerStatus(int playerId, int statusValue) throws SQLException {

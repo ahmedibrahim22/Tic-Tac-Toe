@@ -14,11 +14,8 @@ import java.security.Timestamp;
 public class Game {
     //Game Variables
     private int gameId;
-    private String homePlayer;
-    private String awayPlayer;
-    private String message;
-    private Timestamp startGameDate;
-    private Timestamp endGameDate;
+    private String homePlayer,awayPlayer,message;
+    private Timestamp startGameDate,endGameDate;
     private boolean isFinished;
     private char[] savedGame = new char[9];
     

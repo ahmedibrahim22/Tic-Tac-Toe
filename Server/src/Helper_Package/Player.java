@@ -128,4 +128,19 @@ public class Player {
         return gameId;
     }
     
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
+    public int getOpponentId() {
+        return opponentId;
+    }
+
+    public void setOpponentId(int opponentId) {
+        this.opponentId = opponentId;
+    }
 }

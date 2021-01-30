@@ -57,12 +57,13 @@ public class InvitationPopUpController implements Initializable {
         String s = g.toJson(xoMessage);
         PSFromController.println(s);
         stage.hide();
-        /* to be test
+        /*
         String path = "game.mp3";
         Media media = new Media(new File(path).toURI().toString());
         MediaPlayer mediaplayer = new MediaPlayer(media);
         mediaplayer.play();
         */
+        
     }
 
     @FXML
