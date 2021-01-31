@@ -166,7 +166,7 @@ public class TicTacToe_Player extends Application {
                         }
                         
                         //to print the chat messages in the chat box
-                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS))
+                        else if(xoMessage.getTypeOfOperation().equals(RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS_FROM_SERVER))
                         {                    
                             Platform.runLater(() -> {                              
                                 PrintMessageOfChatRoom(xoMessage);                                    
