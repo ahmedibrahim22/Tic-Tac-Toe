@@ -21,6 +21,7 @@ public class Game {
     private Timestamp endGameDate;
     private boolean isFinished;
     private char[] savedGame = new char[9];
+    private String winner;
     
     //Game Class Constructors
     public Game(){};

@@ -95,6 +95,10 @@ public class InsideXOGame {
     public char getSignPlayed(){
         return signPlayed;
     }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
     
     
 }

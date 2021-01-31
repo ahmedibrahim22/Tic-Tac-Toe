@@ -215,9 +215,12 @@ class ServerThread extends Thread
            newPlayer.setUserName(userName);
            newPlayer.setPassword(password);
            newPlayer.setIsPlaying(false);
+           newPlayer.setScore(Database.getPoints(playerId));
+           System.out.println(newPlayer.getScore());
            //set player id here
            ServerThread.onlinePlayers.put(playerId,this);
            ServerThread.usernameToId.put(userName,playerId);
+           objMsg.getPlayer().setScore(newPlayer.getScore());
            objMsg.setOperationResult(true);
            objMsg.setTypeOfOperation(RecordedMessages.LOG_IN_ACCEPTED);
            ps.println(g.toJson(objMsg));
@@ -286,6 +289,7 @@ class ServerThread extends Thread
        userName=player.getUserName();
        
        Database.updatePlayerScore(userName,5);
+       newPlayer.setScore(newPlayer.getScore() + 5);
        msgObject.setOperationResult(true);
        
        msgObject.getPlayer().setScore(5);
@@ -416,6 +420,7 @@ class ServerThread extends Thread
 
     private void handelBackRequest(InsideXOGame msgObject) {
         newPlayer.setIsPlaying(false);
+        msgObject.setPlayer(newPlayer);
         msgObject.setOperationResult(true);
         msgObject.setTypeOfOperation(RecordedMessages.BACK_FROM_SERVER);
         ps.println(g.toJson(msgObject));//json

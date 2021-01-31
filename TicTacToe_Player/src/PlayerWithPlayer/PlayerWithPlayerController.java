@@ -298,7 +298,9 @@ public class PlayerWithPlayerController implements Initializable {
     @FXML
     private void back(ActionEvent event)
     {
+        
         InsideXOGame xoMsg = new InsideXOGame(RecordedMessages.BACK_FROM_ONLINE,new Player(myUserName),new Game(myUserName, opponentUserName));
+        xoMsg.getGame().setIsFinished(gameEnded);
         Gson g = new Gson();
         PSFromController.println(g.toJson(xoMsg));
         turnOffNotification = false;

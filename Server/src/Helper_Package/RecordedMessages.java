@@ -41,5 +41,6 @@ public class RecordedMessages {
     public static final String INVITATION_REJECTED_FROM_SERVER = "inviationRejectedFromServer";
     public static final String BACK_FROM_SERVER = "backFromServer";
     public static final String BACK_FROM_ONLINE = "backFromonline";   
+    public static final String BACK_FROM_ONLINE_FROM_SERVER = "backFromonlinefromserver";   
 
 }
