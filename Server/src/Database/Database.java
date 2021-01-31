@@ -52,6 +52,7 @@ public class Database {
         int id=-1;
         if(rs.next()){
             id = rs.getInt("id");
+            updatePlayerStatus(id,1);
         }
         
         return id;
@@ -109,14 +110,7 @@ public class Database {
         return maze;
     }
     
-    //this function takes player id and return result set with all ids of his paused games 
-//    public static ResultSet loadAllPlayerSavedGames(int playerId) throws SQLException, IndexOutOfBoundsException{
-//        PreparedStatement statement;
-//        statement = con.prepareStatement("select * from game_info where player_id= ?");
-//        statement.setInt(1, playerId);
-//        return statement.executeQuery();
-//    }
-    
+
     //this function take player id and return the status of this player
     public static int getPlayerStatus(int playerId) throws SQLException,IndexOutOfBoundsException{
         PreparedStatement statement;
@@ -146,7 +140,7 @@ public class Database {
     public static ObservableList<Player> getPlayers() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         ObservableList<Player> players = FXCollections.observableArrayList();
         Statement stmt = con.createStatement();
-        String queryString = new String("select * from player");
+        String queryString = new String("select * from player order by  player_status desc");
         ResultSet rs = stmt.executeQuery(queryString);
         while (rs.next()) {
            int id = rs.getInt(1);
@@ -155,22 +149,10 @@ public class Database {
            String password= rs.getString(4);
            int points = rs.getInt(5);
            int status = rs.getInt(6);
-
-
-           String st="";
-           if(status==0){
-                st="Offline";
-           }
-           else if(status==1){
-                st="Online";
-           }
-           else if(status==2){
-                st="Busy";
-           }
-           Player p = new Player(name,password,email,st);
-//           p.setStringStatus(status);
+     
+           Player p = new Player(name,password,email);
+           p.setStringStatus(status);
            p.setScore(points);
-           System.out.println(p.getStringStatus());
            players.add(p);
         }  
         return players;
@@ -283,6 +265,35 @@ public class Database {
     }
     
   
+    
+    public static void setWinner(int game_id , int player1_id,int player2_id , int winner_id) throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("update game set winner_id= ? where id = ? and player1_id = ? and player2_id = ? ");
+        statement.setInt(1, winner_id);
+        statement.setInt(2, game_id);
+        statement.setInt(3, player1_id);
+        statement.setInt(4, player2_id);
+        statement.executeUpdate();
+    }
+    
+    public static void logout(int player_id) throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("update player set player_status= ? where id = ?");
+        statement.setInt(1, 0);
+        statement.setInt(2, player_id);
+        statement.executeUpdate();
+    }
+    
+    public static void changeAllStatus() throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("update player set player_status= ?");
+        statement.setInt(1, 0);
+        statement.executeUpdate();
+    }
+
+    
+        
+    
     
     
 }

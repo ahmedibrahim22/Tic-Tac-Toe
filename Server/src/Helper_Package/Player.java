@@ -22,7 +22,7 @@ public class Player {
     private boolean isPlaying;
     private boolean status;
     private String statusString;
-    
+
     //player constructors
     public Player(){};
     
@@ -44,21 +44,13 @@ public class Player {
         email =_email;
         
     }
-     public Player(String _userName,String _password,String _email,String _status_st)
-    {
-        userName  =_userName;
-        password  =_password;
-        email =_email;
-        statusString=_status_st;
-        
-    }
     
     public Player (String _userName, boolean _status,int _score)
     {
         userName  = _userName;
         status    = _status;
         score     = _score;
-    };
+    }
     
     public Player (String _userName,int _score)
     {
@@ -75,6 +67,7 @@ public class Player {
         isPlaying = _isPlaying;
         gameId    = _gameId;
     }
+   
     
     //setters
     public void setUserName(String _userName){
@@ -95,6 +88,7 @@ public class Player {
            status=_status;
     }
     
+
     public void setScore(int _score){
             score=_score;
     }
@@ -119,8 +113,8 @@ public class Player {
     public String getEmail(){
         return email;
     }
-    
 
+    
     public boolean getStatus(){
         return status;
     }
@@ -153,7 +147,7 @@ public class Player {
         this.opponentId = opponentId;
     }
 
-    public void setStringStatus(Integer _status){
+    public void setStringStatus(int _status){
        if(_status==0){
             statusString="Offline";
        }
@@ -167,5 +161,5 @@ public class Player {
     public String getStringStatus(){
         return statusString;
     }
-    
+
 }

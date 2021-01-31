@@ -23,6 +23,7 @@ import Database.Database;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * FXML Controller class for server 
@@ -50,74 +51,85 @@ Server myServer;
    
 @Override
 public void initialize(URL url, ResourceBundle rb) {
-        try {
-//            Database.dbConnect();
-//            
-//            userName.setCellValueFactory(new PropertyValueFactory<Player, String>("userName"));
-//            score.setCellValueFactory(new PropertyValueFactory<Player, Integer>("score"));
-//            status.setCellValueFactory(new PropertyValueFactory<Player, String>("status"));
-//            userName.setStyle("-fx-alignment: CENTER;");
-//            score.setStyle("-fx-alignment: CENTER;");
-//            status.setStyle("-fx-alignment: CENTER;");
-//
-//            dataTable.setItems(Database.getPlayers());
-//            dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-//
-//            Database.dbDisconnect();
-
-            Database.dbConnect();
-            ObservableList players=Database.getPlayers();
-            dataTable.setItems(players);
-            userName.setCellValueFactory(new PropertyValueFactory<Player, String>("userName"));
-            score.setCellValueFactory(new PropertyValueFactory<Player, Integer>("score"));
-            statusString.setCellValueFactory(new PropertyValueFactory<Player, String>("statusString"));
-            userName.setStyle("-fx-alignment: CENTER;");
-            score.setStyle("-fx-alignment: CENTER;");
-            statusString.setStyle("-fx-alignment: CENTER;");
-
-            dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-            Database.dbDisconnect();
-
-    } catch (SQLException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (ClassNotFoundException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
+     
 
         }
     
 @FXML
 private void startServerConnection(ActionEvent event) {
-    try {
-        Database.dbConnect();
+            listPlayers();
+            myServer=new Server(5005);
+    }
+
+@FXML
+private void stopServerConnection(ActionEvent event) throws SQLException {
+      
+    resetTable();
+    Database.changeAllStatus();
+    myServer.closeServer();
+    Database.dbDisconnect();
+
+    }
+    public void listPlayers(){
+        try {
+            Database.dbConnect();
+            ObservableList players=Database.getPlayers();
+            dataTable.setItems(players);
+            userName.setCellValueFactory(new PropertyValueFactory<Player, String>("userName"));
+            score.setCellValueFactory(new PropertyValueFactory<Player, Integer>("score"));
+            statusString.setCellValueFactory(cellData -> 
+            new SimpleStringProperty(cellData.getValue().getStringStatus()));
+            userName.setStyle("-fx-alignment: CENTER;");
+            score.setStyle("-fx-alignment: CENTER;");
+            statusString.setStyle("-fx-alignment: CENTER;");
+
+            dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+    } catch (SQLException ex) {
+        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
     } catch (ClassNotFoundException ex) {
         Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
     } catch (InstantiationException ex) {
         Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
     } catch (IllegalAccessException ex) {
         Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (SQLException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    }
-            myServer=new Server(5005);
     }
 
-@FXML
-private void stopServerConnection(ActionEvent event) {
-    try {
-        Database.dbDisconnect();
-    } catch (SQLException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    }
-         myServer.closeServer();
-         Platform.exit();
+
     }
 
+    
+//@FXML
+//private void startServerConnection(ActionEvent event) {
+//    try {
+//        Database.dbConnect();
+//    } catch (ClassNotFoundException ex) {
+//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//    } catch (InstantiationException ex) {
+//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//    } catch (IllegalAccessException ex) {
+//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//    } catch (SQLException ex) {
+//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//    }
+//            myServer=new Server(5005);
+//    }
+
+//@FXML
+//private void stopServerConnection(ActionEvent event) {
+//    try {
+//        Database.dbDisconnect();
+//    } catch (SQLException ex) {
+//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//    }
+//         myServer.closeServer();
+//         Platform.exit();
+//    }
+
+    public void resetTable(){
+        for( int i = 0; i<dataTable.getItems().size(); i++) {
+            dataTable.getItems().clear();
+        }   
+    }
     
 }
