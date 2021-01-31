@@ -344,23 +344,5 @@
             <Font size="31.0" />
          </font>
       </Label>
-      <Label fx:id="congrats" layoutX="174.0" layoutY="196.0" prefHeight="308.0" prefWidth="595.0">
-         <graphic>
-            <ImageView fitHeight="281.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@congrats.gif" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Label>
-      <Label fx:id="betterluck" layoutX="167.0" layoutY="125.0" prefHeight="308.0" prefWidth="595.0">
-         <graphic>
-            <ImageView fitHeight="421.0" fitWidth="1121.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@better-luck-edited.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Label>
    </children>
 </AnchorPane>

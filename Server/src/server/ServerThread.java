@@ -186,7 +186,10 @@ class ServerThread extends Thread
                 break; 
             case RecordedMessages.BACK:
                 handelBackRequest(msgObject);
-                break;     
+                break; 
+            case RecordedMessages.LOGOUT:
+                handelLogoutRequest(msgObject);
+                break; 
         }
     }
     
@@ -207,6 +210,7 @@ class ServerThread extends Thread
        if(playerId!=-1)
        {
            Database.updatePlayerStatus(playerId,1);
+           newPlayer.setPlayerId(playerId);
            newPlayer.setStatus(true);
            newPlayer.setUserName(userName);
            newPlayer.setPassword(password);
@@ -323,11 +327,14 @@ class ServerThread extends Thread
     }
 
     private void handelInvitationAcceptedRequest(InsideXOGame msgObject) throws SQLException {
-        int opponentUserId = usernameToId.get(msgObject.getGame().getAwayPlayer());
+        int opponentUserId = usernameToId.get(msgObject.getGame().getHomeplayer());
         if(onlinePlayers.containsKey(opponentUserId)){
             Player opponentPlayer = onlinePlayers.get(opponentUserId).getNewPlayer(); 
             if(opponentPlayer.getStatus() && !opponentPlayer.getIsPlaying()){
-                int gameId = Database.addPlayersGame(newPlayer.getPlayerId(), opponentUserId, 0);
+                System.out.println(newPlayer.getPlayerId());
+                System.out.println(opponentUserId);
+                
+                int gameId = Database.addPlayersGame(newPlayer.getPlayerId(), opponentUserId);
                 msgObject.setOperationResult(true);
                 msgObject.setTypeOfOperation(RecordedMessages.INVITATION_ACCEPTED_FROM_SERVER);
                 msgObject.getGame().setGameId(gameId);
@@ -336,13 +343,18 @@ class ServerThread extends Thread
                 onlinePlayers.get(opponentUserId).getNewPlayer().setIsPlaying(true);
                 onlinePlayers.get(opponentUserId).getNewPlayer().setOpponentId(newPlayer.getPlayerId());
                 onlinePlayers.get(opponentUserId).getPs().println(g.toJson(msgObject));// json
+                String home = msgObject.getGame().getHomeplayer();
+                msgObject.getGame().setHomePlayer(msgObject.getGame().getAwayPlayer());
+                msgObject.getGame().setAwayPlayer(home);                
+                ps.println(g.toJson(msgObject));
+                System.out.println(g.toJson(msgObject));
                 return;
             }
         }
     }
 
     private void handelInvitationRejectedRequest(InsideXOGame msgObject) {
-        int opponentUserId = usernameToId.get(msgObject.getGame().getAwayPlayer());
+        int opponentUserId = usernameToId.get(msgObject.getGame().getHomeplayer());
         if(onlinePlayers.containsKey(opponentUserId) && onlinePlayers.get(opponentUserId).getNewPlayer().getStatus()){
             msgObject.setOperationResult(true);
             msgObject.setTypeOfOperation(RecordedMessages.INVITATION_REJECTED_FROM_SERVER);
@@ -415,6 +427,10 @@ class ServerThread extends Thread
 
     public void setPs(PrintStream ps) {
         this.ps = ps;
+    }
+
+    private void handelLogoutRequest(InsideXOGame msgObject) {
+        
     }
     
     

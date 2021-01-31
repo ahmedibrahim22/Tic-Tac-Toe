@@ -84,10 +84,6 @@ public class PlayerWithPlayerController implements Initializable {
     Vector<Integer> movesPool= new Vector<>();
     int numOfMoves;
     public static boolean turnOffNotification = true;
-    @FXML
-    private Label congrats;
-    @FXML
-    private Label betterluck;
     boolean isWinningPosition(Vector<Integer> moves){
         boolean winFlag = false;
         Integer []  topRow = {1, 2, 3};
@@ -268,7 +264,9 @@ public class PlayerWithPlayerController implements Initializable {
     public void printOpponentMove(Integer playerPos,boolean _myturn){
         if (!movesPool.isEmpty() && movesPool.contains(playerPos)) {
             opponentMoves.add(playerPos);
-            movesPool.remove(playerPos);
+            if(movesPool.contains(playerPos)){
+                movesPool.remove(playerPos);                
+            }
             numOfMoves++;
             if(!gameEnded){
                 displayMove(playerPos, opponentSymbol);

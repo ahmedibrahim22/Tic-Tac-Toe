@@ -349,7 +349,7 @@ public class TicTacToe_Player extends Application {
             //this is object from player with player Controller used to call setIDs function
             //to set game IDs corresponding to their players
             pwp=playerWithPlayerLoader.getController();
-            pwp.setIDs(xoMessage.getGame().getGameId(), loginController.username, xoMessage.getGame().getHomeplayer());
+            pwp.setIDs(xoMessage.getGame().getGameId(), loginController.username, xoMessage.getGame().getAwayPlayer());
             Scene playerWithPlayerScene = new Scene(playerWithPlayerRoot);
             stage.hide();
             stage.setScene(playerWithPlayerScene);

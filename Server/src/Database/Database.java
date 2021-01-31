@@ -25,8 +25,8 @@ public class Database {
     static Connection con =null;
     static String db_name="xo_network_game_player";
     static String url="jdbc:mysql://localhost:3306/"+db_name;
-    static String username="";//////your name
-    static String password="";//////your password
+    static String username="Ibrahim";//////your name
+    static String password="jesus01203952089";//////your password
     
     //this function created to connect to the database
     public static void dbConnect() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
@@ -176,30 +176,16 @@ public class Database {
         return players;
     }    
     //this function created to add game between two players in data base
-    public static int addPlayersGame(int player1Id , int player2Id ,int winnerId) throws SQLException{
+    public static int addPlayersGame(int player1Id , int player2Id) throws SQLException{
         int id = 0;
-        PreparedStatement statement;
-        if(winnerId==0){
-                  
-            statement=con.prepareStatement("insert into Game(`player1_id`,`player2_id`,`status`)values(?,?,?)",Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, player1Id);
-            statement.setInt(2, player2Id);
-            statement.setInt(3, 0);			
-            statement.executeUpdate();
-            ResultSet rs=statement.getGeneratedKeys();
-            if(rs.next()){
-		id=rs.getInt(1);
-            }
-          
-           
-        }
-        else{
-            statement = con.prepareStatement("insert into Game(`player1_id`,`player2_id`,`winner_id`,`status`)values(?,?,?,?)");
-            statement.setInt(1, player1Id);
-            statement.setInt(2, player2Id);
-            statement.setInt(3, winnerId);        
-            statement.setInt(4, 1);
-            statement.executeUpdate();
+        PreparedStatement statement;         
+        statement=con.prepareStatement("insert into game(`player1_id`,`player2_id`)values(?,?)",Statement.RETURN_GENERATED_KEYS);
+        statement.setInt(1, player1Id);
+        statement.setInt(2, player2Id);			
+        statement.executeUpdate();
+        ResultSet rs=statement.getGeneratedKeys();
+        if(rs.next()){
+            id=rs.getInt(1);
         }
         return id;
     }
