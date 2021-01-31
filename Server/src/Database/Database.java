@@ -110,14 +110,7 @@ public class Database {
         return maze;
     }
     
-    //this function takes player id and return result set with all ids of his paused games 
-//    public static ResultSet loadAllPlayerSavedGames(int playerId) throws SQLException, IndexOutOfBoundsException{
-//        PreparedStatement statement;
-//        statement = con.prepareStatement("select * from game_info where player_id= ?");
-//        statement.setInt(1, playerId);
-//        return statement.executeQuery();
-//    }
-    
+
     //this function take player id and return the status of this player
     public static int getPlayerStatus(int playerId) throws SQLException,IndexOutOfBoundsException{
         PreparedStatement statement;
@@ -147,7 +140,7 @@ public class Database {
     public static ObservableList<Player> getPlayers() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         ObservableList<Player> players = FXCollections.observableArrayList();
         Statement stmt = con.createStatement();
-        String queryString = new String("select * from player");
+        String queryString = new String("select * from player order by  player_status desc");
         ResultSet rs = stmt.executeQuery(queryString);
         while (rs.next()) {
            int id = rs.getInt(1);

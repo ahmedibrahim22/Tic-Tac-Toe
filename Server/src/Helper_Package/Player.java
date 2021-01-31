@@ -12,11 +12,16 @@ package Helper_Package;
 public class Player {
   
     // Player Variables
+    private int playerId;
+    private int opponentId;
+    private int gameId;
+    private String userName;
+    private String password;
+    private String email;
+    private int score;
+    private boolean isPlaying;
+    private boolean status;
     private String statusString;
-    private String userName,password,email;
-    private int score,gameId;
-    private boolean isPlaying,status;
-    
     //player constructors
     public Player(){};
     
@@ -38,21 +43,13 @@ public class Player {
         email =_email;
         
     }
-     public Player(String _userName,String _password,String _email,String _status_st)
-    {
-        userName  =_userName;
-        password  =_password;
-        email =_email;
-        statusString=_status_st;
-        
-    }
     
     public Player (String _userName, boolean _status,int _score)
     {
         userName  = _userName;
         status    = _status;
         score     = _score;
-    };
+    }
     
     public Player (String _userName,int _score)
     {
@@ -69,6 +66,7 @@ public class Player {
         isPlaying = _isPlaying;
         gameId    = _gameId;
     }
+   
     
     //setters
     public void setUserName(String _userName){
@@ -84,10 +82,7 @@ public class Player {
     }
     
 
-    public void setStatus(boolean _status){
-           status=_status;
-    }
-    
+  
     public void setScore(int _score){
             score=_score;
     }
@@ -112,8 +107,12 @@ public class Player {
     public String getEmail(){
         return email;
     }
-    
 
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+    
+    
     
     public boolean getStatus(){
         return status;
@@ -131,7 +130,24 @@ public class Player {
         return gameId;
     }
     
-    public void setStringStatus(Integer _status){
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
+    public int getOpponentId() {
+        return opponentId;
+    }
+
+    public void setOpponentId(int opponentId) {
+        this.opponentId = opponentId;
+    }
+    
+    
+    public void setStringStatus(int _status){
        if(_status==0){
             statusString="Offline";
        }
@@ -145,5 +161,5 @@ public class Player {
     public String getStringStatus(){
         return statusString;
     }
-    
+
 }

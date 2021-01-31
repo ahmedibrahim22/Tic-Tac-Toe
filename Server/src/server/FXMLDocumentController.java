@@ -18,6 +18,7 @@ import Database.Database;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * FXML Controller class for server 
@@ -51,21 +52,34 @@ public void initialize(URL url, ResourceBundle rb) {
     
 @FXML
 private void startServerConnection(ActionEvent event) {
-    
-       try {
+            listPlayers();
+            myServer=new Server(5000);
+    }
+
+@FXML
+private void stopServerConnection(ActionEvent event) throws SQLException {
+      
+    resetTable();
+    Database.changeAllStatus();
+    myServer.closeServer();
+    Database.dbDisconnect();
+
+    }
+    public void listPlayers(){
+        try {
         Database.dbConnect();
         ObservableList players=Database.getPlayers();
         dataTable.setItems(players);
         userName.setCellValueFactory(new PropertyValueFactory<Player, String>("userName"));
         score.setCellValueFactory(new PropertyValueFactory<Player, Integer>("score"));
-        statusString.setCellValueFactory(new PropertyValueFactory<Player, String>("statusString"));
+        statusString.setCellValueFactory(cellData -> 
+        new SimpleStringProperty(cellData.getValue().getStringStatus()));
         userName.setStyle("-fx-alignment: CENTER;");
         score.setStyle("-fx-alignment: CENTER;");
         statusString.setStyle("-fx-alignment: CENTER;");
         
         dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
-        Database.dbDisconnect();
 
     } catch (SQLException ex) {
         Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,20 +90,12 @@ private void startServerConnection(ActionEvent event) {
     } catch (IllegalAccessException ex) {
         Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
     }
-
-    
-    
-            myServer=new Server(3000);
     }
 
-@FXML
-private void stopServerConnection(ActionEvent event) {
-     for ( int i = 0; i<dataTable.getItems().size(); i++) {
-             dataTable.getItems().clear();
-            }     
-    myServer.closeServer();
-        
+    public void resetTable(){
+        for( int i = 0; i<dataTable.getItems().size(); i++) {
+            dataTable.getItems().clear();
+        }   
     }
-
     
 }
