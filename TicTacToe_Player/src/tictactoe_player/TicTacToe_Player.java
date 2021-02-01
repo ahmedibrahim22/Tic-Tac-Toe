@@ -182,11 +182,11 @@ public class TicTacToe_Player extends Application {
                                     if (xoMessage.getGame().getGameId() != 0)
                                         {
                                             DisplayMoves(xoMessage);
-                                            cancelResume(false);
+                                            //cancelResume(false);
                                         }
                                         else
                                         {
-                                            cancelResume(true);
+                                            //cancelResume(true);
                                         }
                                 }
                                 catch (Exception ex)
@@ -421,7 +421,8 @@ public class TicTacToe_Player extends Application {
         System.out.println(xoMessage.getGame().getAwayPlayer());
         pwp.displayMovesOnBoard(xoMessage.getGame().getSavedGame(),
                                 xoMessage.getGame().getHomeplayer(),
-                                xoMessage.getGame().getGameId());
+                                xoMessage.getGame().getGameId(),
+                                xoMessage.getPlayer().isIsMyTurn());
     }
     
     void cancelResume(boolean state)

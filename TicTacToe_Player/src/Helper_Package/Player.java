@@ -21,7 +21,9 @@ public class Player {
     private int score;
     private boolean isPlaying;
     private boolean status;
-    
+    private String statusString;
+    private boolean isMyTurn;
+
     //player constructors
     public Player(){};
     
@@ -83,6 +85,11 @@ public class Player {
     
 
   
+    public void setStatus(boolean _status){
+           status=_status;
+    }
+    
+
     public void setScore(int _score){
             score=_score;
     }
@@ -108,11 +115,6 @@ public class Player {
         return email;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-    
-    
     
     public boolean getStatus(){
         return status;
@@ -146,4 +148,28 @@ public class Player {
         this.opponentId = opponentId;
     }
 
+    public void setStringStatus(int _status){
+       if(_status==0){
+            statusString="Offline";
+       }
+       else if(_status==1){
+            statusString="Online";
+       }
+       else if(_status==2){
+            statusString="Busy";
+       }
+    }
+    public String getStringStatus(){
+        return statusString;
+    }
+
+    public boolean isIsMyTurn() {
+        return isMyTurn;
+    }
+
+    public void setIsMyTurn(boolean isMyTurn) {
+        this.isMyTurn = isMyTurn;
+    }
+
+    
 }

@@ -298,7 +298,7 @@ public class PlayWithComputerController implements Initializable {
         try
         {
             FXMLLoader selectionModeLoader=new FXMLLoader();
-            selectionModeLoader.setLocation(getClass().getResource("/selectionmode/SelectionModeController.fxml"));
+            selectionModeLoader.setLocation(getClass().getResource("/selectionmode/SelectionMode.fxml"));
             Parent  selectionModeRoot = selectionModeLoader.load();
             Scene selectionModeScene = new Scene( selectionModeRoot);
             Stage selectionModeStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

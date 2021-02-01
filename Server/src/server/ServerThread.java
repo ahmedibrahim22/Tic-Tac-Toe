@@ -5,6 +5,7 @@ import Helper_Package.InsideXOGame;
 import Helper_Package.Player;
 import Helper_Package.RecordedMessages;
 import Database.Database;
+import Helper_Package.Game;
 import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -28,8 +29,8 @@ class ServerThread extends Thread
    private DataInputStream dis;
    private PrintStream ps;
    private Player newPlayer;
-
-   static Vector<ServerThread> playersVector =new Vector <>();
+   private Game game = new Game();;
+   static Vector<ServerThread> playersVector = new Vector <>();
    static HashMap<Integer, ServerThread> onlinePlayers = new HashMap<>();
    static HashMap<String, Integer> usernameToId = new HashMap<>();
    Gson g = new Gson();
@@ -179,17 +180,45 @@ class ServerThread extends Thread
                 break; 
  
             case RecordedMessages.RESUME:
-                handelResumeRequest(msgObject);
+             {
+                 try {
+                     handelResumeRequest(msgObject);
+                 } catch (SQLException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
                 break; 
+ 
             case RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS:
                 handelChatRequest(msgObject);
                 break; 
             case RecordedMessages.BACK:
                 handelBackRequest(msgObject);
+                break;
+            case RecordedMessages.BACK_FROM_ONLINE:
+             {
+                 try {
+                     handelBackFromOnlineRequest(msgObject);
+                 } catch (SQLException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (IndexOutOfBoundsException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (IllegalAccessException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
                 break; 
+ 
             case RecordedMessages.LOGOUT:
-                handelLogoutRequest(msgObject);
+             {
+                 try {
+                     handelLogoutRequest(msgObject);
+                 } catch (SQLException ex) {
+                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
                 break; 
+ 
         }
     }
     
@@ -339,6 +368,8 @@ class ServerThread extends Thread
                 System.out.println(opponentUserId);
                 
                 int gameId = Database.addPlayersGame(newPlayer.getPlayerId(), opponentUserId);
+                game.setGameId(gameId);
+                onlinePlayers.get(opponentUserId).getGame().setGameId(gameId);
                 msgObject.setOperationResult(true);
                 msgObject.setTypeOfOperation(RecordedMessages.INVITATION_ACCEPTED_FROM_SERVER);
                 msgObject.getGame().setGameId(gameId);
@@ -357,6 +388,14 @@ class ServerThread extends Thread
         }
     }
 
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     private void handelInvitationRejectedRequest(InsideXOGame msgObject) {
         int opponentUserId = usernameToId.get(msgObject.getGame().getHomeplayer());
         if(onlinePlayers.containsKey(opponentUserId) && onlinePlayers.get(opponentUserId).getNewPlayer().getStatus()){
@@ -369,44 +408,115 @@ class ServerThread extends Thread
     }
 
     private void handelGamePlayMoveRequest(InsideXOGame msgObject) throws SQLException, IndexOutOfBoundsException, IllegalAccessException {
-        char[] maz = msgObject.getGame().getSavedGame();
-        maz[msgObject.getFieldPosition()] = msgObject.getSignPlayed();
-        msgObject.getGame().setSavedGame(maz);
-        if(onlinePlayers.containsKey(newPlayer.getOpponentId()) && onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().getStatus()){
-            msgObject.setOperationResult(true);
-            msgObject.setTypeOfOperation(RecordedMessages.INCOMING_MOVE);
-            onlinePlayers.get(newPlayer.getOpponentId()).getPs().println(g.toJson(msgObject));// json
-        }else{// other player went off line
-            Database.saveGame(msgObject.getGame().getGameId(), newPlayer.getGameId(), newPlayer.getOpponentId(), msgObject.getGame().getSavedGame());
-            /*int myMoves, himMoves;
-            myMoves = himMoves = 0;
-            for(int i = 0; i < 9; i++){
-                if(maz[i] == msgObject.getSignPlayed()){
-                    myMoves++;
-                }else if(maz[i] == 'X' || maz[i] == 'O'){
-                    himMoves++;
-                }
-            }
-            if(myMoves > himMoves){//handle to meet o
-                Database.saveGame(msgObject.getGame().getGameId(), newPlayer.getGameId(), newPlayer.getOpponentId(), msgObject.getGame().getSavedGame());                
-            }else{
-                Database.saveGame(msgObject.getGame().getGameId(), newPlayer.getOpponentId(), newPlayer.getPlayerId(), msgObject.getGame().getSavedGame());                                
-            }*/
+        if(newPlayer.getOpponentId() == 0){
+            return;
         }
+        char[] maz = game.getSavedGame();
+        maz[msgObject.getFieldPosition() - 1] = msgObject.getSignPlayed();
+        game.setSavedGame(maz);
+        if(onlinePlayers.containsKey(newPlayer.getOpponentId())){ 
+            Player opponentPlayer = onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer(); 
+            if(opponentPlayer.getStatus() && opponentPlayer.getIsPlaying()){
+                onlinePlayers.get(newPlayer.getOpponentId()).getGame().setSavedGame(maz);
+                msgObject.setOperationResult(true);
+                msgObject.setTypeOfOperation(RecordedMessages.INCOMING_MOVE);
+                onlinePlayers.get(newPlayer.getOpponentId()).getPs().println(g.toJson(msgObject));// json
+            }
+        }else{// other player went off line
+            if(newPlayer.getUserName().equals(msgObject.getGame().getHomeplayer())){
+                Database.saveGame(game.getGameId(), newPlayer.getPlayerId(), newPlayer.getOpponentId(), game.getSavedGame());  
+            }else{
+                Database.saveGame(game.getGameId(), newPlayer.getOpponentId(), newPlayer.getPlayerId(), game.getSavedGame());                  
+            }
+            msgObject.getGame().setMessage("sorry the opponent left your game is saved!");
+            msgObject.getGame().setAwayPlayer("Server");
+            msgObject.getGame().setHomePlayer("Server");
+            msgObject.setTypeOfOperation(RecordedMessages.CHAT_PLAYERS_WITH_EACH_OTHERS_FROM_SERVER);
+            ps.println(g.toJson(msgObject));
+            newPlayer.setOpponentId(0);
+        }
+        System.out.println(game.getSavedGame());
     }
 
     private void handelGameGotFinishedRequest(InsideXOGame msgObject) throws SQLException {
         msgObject.setOperationResult(true);
         msgObject.setTypeOfOperation(RecordedMessages.GAME_GOT_FINISHED_SECCUSSFULLY);
+        Database.setWinner(game.getGameId(), newPlayer.getPlayerId(), newPlayer.getOpponentId(), newPlayer.getPlayerId());
+        Database.setWinner(game.getGameId(), newPlayer.getOpponentId(), newPlayer.getPlayerId(), newPlayer.getPlayerId());
+        Database.removeSavedGame(game.getGameId());
         newPlayer.setIsPlaying(false);
         onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().setIsPlaying(false);
         onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().setOpponentId(0);
         newPlayer.setOpponentId(0);
+        newPlayer.setScore(newPlayer.getScore() + 10);
         Database.updatePlayerScore(newPlayer.getPlayerId(), 10);
+        msgObject.setPlayer(newPlayer);
         ps.println(g.toJson(msgObject));
     }
 
-    private void handelResumeRequest(InsideXOGame msgObject) {
+    private void handelResumeRequest(InsideXOGame msgObject) throws SQLException {
+        boolean flage = false, get = true, homeTurn = false;
+        msgObject.setTypeOfOperation(RecordedMessages.RETRIVEMOVES);
+        char[] maz = Database.loadGame(newPlayer.getPlayerId(), newPlayer.getOpponentId());
+        int id = Database.getSavedGameId(newPlayer.getPlayerId(), newPlayer.getOpponentId());
+        if(maz == null){
+            flage = true;
+            maz = Database.loadGame(newPlayer.getOpponentId(), newPlayer.getPlayerId());
+            id = Database.getSavedGameId(newPlayer.getOpponentId(), newPlayer.getPlayerId());
+        }
+        if(maz == null){
+            get = false;
+        }else{
+            int homeMoves, awayMoves;
+            homeMoves = awayMoves = 0;
+            for(int i = 0; i < 9; i++){
+                if(maz[i] == 'X'){
+                    homeMoves++;
+                }else if(maz[i] == 'O'){
+                    awayMoves++;
+                }
+            }
+            if(homeMoves == 0 || homeMoves == awayMoves){//handle to meet o
+                homeTurn = true;
+            }else{
+                homeTurn = false;
+            }
+        }
+        if(get){
+            System.out.println("ok");
+            Database.removeGame(game.getGameId());
+            game.setGameId(id);
+            game.setSavedGame(maz);
+            onlinePlayers.get(newPlayer.getOpponentId()).getGame().setGameId(id);
+            onlinePlayers.get(newPlayer.getOpponentId()).getGame().setSavedGame(maz);
+            //msgObject.getGame().setHomePlayer();
+            msgObject.getGame().setGameId(id);
+            msgObject.getGame().setSavedGame(maz);
+            
+            if(flage){
+                msgObject.getGame().setHomePlayer(onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().getUserName());
+                msgObject.getGame().setAwayPlayer(newPlayer.getUserName());
+                msgObject.setPlayer(onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer());
+                msgObject.getPlayer().setIsMyTurn(homeTurn);
+                onlinePlayers.get(newPlayer.getOpponentId()).getPs().println(g.toJson(msgObject));
+                System.out.println(g.toJson(msgObject));
+                msgObject.setPlayer(newPlayer);
+                msgObject.getPlayer().setIsMyTurn(!homeTurn);
+                ps.println(g.toJson(msgObject));
+                System.out.println(g.toJson(msgObject));
+            }else{
+                msgObject.getGame().setHomePlayer(newPlayer.getUserName());
+                msgObject.getGame().setAwayPlayer(onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().getUserName()); 
+                msgObject.setPlayer(newPlayer);                
+                msgObject.getPlayer().setIsMyTurn(homeTurn);
+                ps.println(g.toJson(msgObject));
+                System.out.println(g.toJson(msgObject));
+                msgObject.setPlayer(onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer());
+                msgObject.getPlayer().setIsMyTurn(!homeTurn);
+                onlinePlayers.get(newPlayer.getOpponentId()).getPs().println(g.toJson(msgObject));
+                System.out.println(g.toJson(msgObject));
+            }  
+        }
         
     }
 
@@ -434,8 +544,33 @@ class ServerThread extends Thread
         this.ps = ps;
     }
 
-    private void handelLogoutRequest(InsideXOGame msgObject) {
-        
+    private void handelLogoutRequest(InsideXOGame msgObject) throws SQLException {
+        newPlayer.setStatus(false);
+        onlinePlayers.remove(newPlayer.getPlayerId());
+        Database.updatePlayerStatus(newPlayer.getPlayerId(), 0);
+    }
+
+    private void handelBackFromOnlineRequest(InsideXOGame msgObject) throws SQLException, IndexOutOfBoundsException, IllegalAccessException {
+        newPlayer.setIsPlaying(false);
+        System.out.println(g.toJson(msgObject));
+        if(!msgObject.getGame().getIsFinished() && newPlayer.getOpponentId() != 0){
+            System.out.println(game.getSavedGame().toString());
+            if(newPlayer.getUserName().equals(msgObject.getGame().getHomeplayer())){
+                Database.saveGame(game.getGameId(), newPlayer.getPlayerId(), newPlayer.getOpponentId(), game.getSavedGame());
+            }else{
+                Database.saveGame(game.getGameId(), newPlayer.getOpponentId(), newPlayer.getPlayerId(), game.getSavedGame());                
+            }
+            msgObject.getGame().setMessage("sorry the opponent left your game is saved!");
+            msgObject.getGame().setAwayPlayer("Server");
+            msgObject.getGame().setHomePlayer("Server");
+            handelChatRequest(msgObject);
+        }
+        msgObject.setTypeOfOperation(RecordedMessages.BACK_FROM_SERVER);
+        if(newPlayer.getOpponentId() != 0){
+            onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().setOpponentId(0);
+            newPlayer.setOpponentId(0);
+        }
+        ps.println(g.toJson(msgObject));
     }
     
     
