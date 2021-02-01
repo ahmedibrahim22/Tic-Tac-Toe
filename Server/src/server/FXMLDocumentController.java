@@ -56,7 +56,9 @@ public void initialize(URL url, ResourceBundle rb) {
         }
     
 @FXML
-private void startServerConnection(ActionEvent event) {
+private void startServerConnection(ActionEvent event) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+            Database.dbConnect();
+            Database.changeAllStatus();
             listPlayers();
             myServer=new Server(3000);
     }
@@ -72,7 +74,6 @@ private void stopServerConnection(ActionEvent event) throws SQLException {
     }
     public void listPlayers(){
         try {
-            Database.dbConnect();
             ObservableList players=Database.getPlayers();
             dataTable.setItems(players);
             userName.setCellValueFactory(new PropertyValueFactory<Player, String>("userName"));
