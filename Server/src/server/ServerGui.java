@@ -15,14 +15,17 @@ import javafx.stage.Stage;
  * @author Ahmed Ibrahim
  */
 public class ServerGui extends Application {
-    
+ 
+     public static FXMLDocumentController test;
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
-        Scene scene = new Scene(root);
-        
+       FXMLLoader ServerPage=new FXMLLoader();
+        ServerPage.setLocation(getClass().getResource("FXMLDocument.fxml"));
+        Parent  ServerPageroot = ServerPage.load();
+        test=ServerPage.getController();
+        Scene scene = new Scene(ServerPageroot);
         stage.setScene(scene);
+        stage.setTitle("Server Page");
         stage.show();
     }
     /**

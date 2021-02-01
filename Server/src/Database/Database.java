@@ -23,10 +23,10 @@ import Helper_Package.Player;
  */
 public class Database {
     static Connection con =null;
-    static String db_name="xo_network_game_player";
+    static String db_name="xo_netwok_game";
     static String url="jdbc:mysql://localhost:3306/"+db_name;
-    static String username="Ibrahim";//////your name
-    static String password="jesus01203952089";//////your password
+    static String username="maher";//////your name
+    static String password="password1234";//////your password
     
     //this function created to connect to the database
     public static void dbConnect() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
@@ -140,7 +140,7 @@ public class Database {
     public static ObservableList<Player> getPlayers() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         ObservableList<Player> players = FXCollections.observableArrayList();
         Statement stmt = con.createStatement();
-        String queryString = new String("select * from player order by  player_status desc");
+        String queryString = new String("select * from player order by  player_points desc");
         ResultSet rs = stmt.executeQuery(queryString);
         while (rs.next()) {
            int id = rs.getInt(1);
