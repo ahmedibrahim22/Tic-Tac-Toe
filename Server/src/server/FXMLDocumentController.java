@@ -58,7 +58,7 @@ public void initialize(URL url, ResourceBundle rb) {
 @FXML
 private void startServerConnection(ActionEvent event) {
             listPlayers();
-            myServer=new Server(5005);
+            myServer=new Server(3003);
     }
 
 @FXML

@@ -23,10 +23,10 @@ import Helper_Package.Player;
  */
 public class Database {
     static Connection con =null;
-    static String db_name="xo_network_game_player";
+    static String db_name="xo_netwok_game";
     static String url="jdbc:mysql://localhost:3306/"+db_name;
-    static String username="Ibrahim";//////your name
-    static String password="jesus01203952089";//////your password
+    static String username="root";//////your name
+    static String password="12345";//////your password
     
     //this function created to connect to the database
     public static void dbConnect() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
