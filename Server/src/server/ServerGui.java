@@ -16,9 +16,9 @@ import javafx.stage.Stage;
  * @author Ahmed Ibrahim
  */
 public class ServerGui extends Application {
-    
+
+ 
      public static FXMLDocumentController test;
-     
     @Override
     public void start(Stage stage) throws Exception {
        FXMLLoader ServerPage=new FXMLLoader();

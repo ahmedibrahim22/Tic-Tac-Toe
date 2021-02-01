@@ -56,21 +56,10 @@ public void initialize(URL url, ResourceBundle rb) {
         }
     
 @FXML
-private void startServerConnection(ActionEvent event) {
-    try {
-        Database.dbConnect();
-        Database.changeAllStatus();
 
-    } catch (ClassNotFoundException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (SQLException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    }
-        
+private void startServerConnection(ActionEvent event) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+            Database.dbConnect();
+            Database.changeAllStatus();
             listPlayers();
             myServer=new Server(3003);
     }
@@ -111,33 +100,6 @@ private void stopServerConnection(ActionEvent event) throws SQLException {
 
     }
 
-    
-//@FXML
-//private void startServerConnection(ActionEvent event) {
-//    try {
-//        Database.dbConnect();
-//    } catch (ClassNotFoundException ex) {
-//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//    } catch (InstantiationException ex) {
-//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//    } catch (IllegalAccessException ex) {
-//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//    } catch (SQLException ex) {
-//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//    }
-//            myServer=new Server(5005);
-//    }
-
-//@FXML
-//private void stopServerConnection(ActionEvent event) {
-//    try {
-//        Database.dbDisconnect();
-//    } catch (SQLException ex) {
-//        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//    }
-//         myServer.closeServer();
-//         Platform.exit();
-//    }
 
     public void resetTable(){
         for( int i = 0; i<dataTable.getItems().size(); i++) {
