@@ -31,7 +31,7 @@ public class Database {
     
     //this function created to connect to the database
     public static void dbConnect() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        //Class.forName("com.mysql.jdbc.Driver").newInstance();
         con= DriverManager.getConnection(url, username, password); 
     }
     
