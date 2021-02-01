@@ -17,6 +17,7 @@ import javafx.stage.Stage;
  */
 public class ServerGui extends Application {
 
+
      public static FXMLDocumentController test;
     @Override
     public void start(Stage stage) throws Exception {

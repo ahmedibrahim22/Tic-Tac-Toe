@@ -82,4 +82,8 @@ After you open the server and run the game you will be asked to login with your 
 - Ahmed Maher
 - Ibrahim Magdy
 - Nagy Adel
+<<<<<<< HEAD
 - Noura Houssien
+=======
+- Noura Houssien
+>>>>>>> c5379c09c26d6fb2594f486fb08a98c11473b6f6

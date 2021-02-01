@@ -222,7 +222,8 @@ class ServerThread extends Thread
             case RecordedMessages.NEW_PLAYER_LOGGEDIN_POPUP:
                 handelPopUpMessage(msgObject);
                 break;
-        }
+            
+         }
     }
     
     
@@ -290,7 +291,10 @@ class ServerThread extends Thread
           objMsg.setTypeOfOperation(RecordedMessages.SIGN_UP_REJECTED);
        }
        ps.println(g.toJson(objMsg));
-   }    private void handelPlayingSingleModeRequest(InsideXOGame objMsg) throws SQLException {
+   }
+  
+
+      private void handelPlayingSingleModeRequest(InsideXOGame objMsg) throws SQLException {
         
        Gson g=new Gson();
        Player player;
@@ -513,8 +517,8 @@ class ServerThread extends Thread
                 System.out.println(g.toJson(msgObject));
             }  
         }
-    }
 
+    }
 
     private void handelChatRequest(InsideXOGame msgObject) {
         if(onlinePlayers.containsKey(newPlayer.getOpponentId()) && onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().getStatus()){
@@ -564,7 +568,16 @@ class ServerThread extends Thread
     }
 
     private void handelLogoutRequest(InsideXOGame msgObject) {
-             
+
+             try {
+           socket.close();
+           dis.close();
+           ps.close();
+          
+       } catch (IOException ex) {
+           Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+       }
+               
                newPlayer.setStatus(false);
                onlinePlayers.remove(newPlayer.getPlayerId());
                usernameToId.remove(newPlayer.getUserName());
@@ -577,7 +590,8 @@ class ServerThread extends Thread
                }
               
                System.out.println("player is leaved and become offline");
-    }
+    }                 
+    
 
         public void refreshList(){
             System.out.println("hello world");
@@ -587,6 +601,7 @@ class ServerThread extends Thread
 
         }
     
+
 
 
     private void handelPopUpMessage(InsideXOGame msgObject) {
