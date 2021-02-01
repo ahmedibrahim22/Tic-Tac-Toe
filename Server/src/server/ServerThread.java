@@ -1,4 +1,3 @@
-
 package server;
 
 import Helper_Package.InsideXOGame;
@@ -18,6 +17,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
@@ -47,7 +47,6 @@ class ServerThread extends Thread
            newPlayer=new Player();
 //           playersVector.add(this);
            String message;
- 
             while(true) {
                 message = dis.readLine();
                 System.out.println("message:"+message);
@@ -68,10 +67,15 @@ class ServerThread extends Thread
                socket.close();
                dis.close();
                ps.close();
-//               playersVector.remove(this);
                
-//               newPlayer.setStatus(false);
-//               Database.updatePlayerStatus(newPlayer.getUserName(),0); //update status of player to be offline
+               newPlayer.setStatus(false);
+               onlinePlayers.remove(newPlayer.getPlayerId());
+               usernameToId.remove(newPlayer.getUserName());
+               try {
+                   Database.updatePlayerStatus(newPlayer.getUserName(),0); //update status of player to be offline
+               } catch (SQLException ex1) {
+                   Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex1);
+               }
                System.out.println("player is leaved and become offline");
            } catch (IOException e) {
                System.out.println("Error while closing socket connection from server");
@@ -210,15 +214,14 @@ class ServerThread extends Thread
                 break; 
  
             case RecordedMessages.LOGOUT:
-             {
-                 try {
-                     handelLogoutRequest(msgObject);
-                 } catch (SQLException ex) {
-                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
-                 }
-             }
-                break; 
- 
+                {
+                    handelLogoutRequest(msgObject);
+                }
+                break;               
+               
+            case RecordedMessages.NEW_PLAYER_LOGGEDIN_POPUP:
+                handelPopUpMessage(msgObject);
+                break;
         }
     }
     
@@ -238,6 +241,7 @@ class ServerThread extends Thread
        playerId=Database.login(userName,password); //this function will return -1 if login faild
        if(playerId!=-1)
        {
+           refreshList();
            Database.updatePlayerStatus(playerId,1);
            newPlayer.setPlayerId(playerId);
            newPlayer.setStatus(true);
@@ -246,13 +250,15 @@ class ServerThread extends Thread
            newPlayer.setIsPlaying(false);
            newPlayer.setScore(Database.getPoints(playerId));
            System.out.println(newPlayer.getScore());
-           //set player id here
            ServerThread.onlinePlayers.put(playerId,this);
            ServerThread.usernameToId.put(userName,playerId);
            objMsg.getPlayer().setScore(newPlayer.getScore());
+           objMsg.getPlayer().setStatus(true);
+           
            objMsg.setOperationResult(true);
            objMsg.setTypeOfOperation(RecordedMessages.LOG_IN_ACCEPTED);
            ps.println(g.toJson(objMsg));
+           handelPopUpMessage(objMsg);//to notify all online users with new player loged in 
           
        }
        else{
@@ -284,17 +290,7 @@ class ServerThread extends Thread
           objMsg.setTypeOfOperation(RecordedMessages.SIGN_UP_REJECTED);
        }
        ps.println(g.toJson(objMsg));
-   }
-   private void broatCast(String msg)
-   {
-     for(ServerThread ch : ServerThread.playersVector)
-     {
-        ch.ps.println("Server: " +msg);
-     }
-   }
-
-
-      private void handelPlayingSingleModeRequest(InsideXOGame objMsg) throws SQLException {
+   }    private void handelPlayingSingleModeRequest(InsideXOGame objMsg) throws SQLException {
         
        Gson g=new Gson();
        Player player;
@@ -517,8 +513,8 @@ class ServerThread extends Thread
                 System.out.println(g.toJson(msgObject));
             }  
         }
-        
     }
+
 
     private void handelChatRequest(InsideXOGame msgObject) {
         if(onlinePlayers.containsKey(newPlayer.getOpponentId()) && onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().getStatus()){
@@ -544,12 +540,6 @@ class ServerThread extends Thread
         this.ps = ps;
     }
 
-    private void handelLogoutRequest(InsideXOGame msgObject) throws SQLException {
-        newPlayer.setStatus(false);
-        onlinePlayers.remove(newPlayer.getPlayerId());
-        Database.updatePlayerStatus(newPlayer.getPlayerId(), 0);
-    }
-
     private void handelBackFromOnlineRequest(InsideXOGame msgObject) throws SQLException, IndexOutOfBoundsException, IllegalAccessException {
         newPlayer.setIsPlaying(false);
         System.out.println(g.toJson(msgObject));
@@ -572,7 +562,39 @@ class ServerThread extends Thread
         }
         ps.println(g.toJson(msgObject));
     }
-    
-    
-}
 
+    private void handelLogoutRequest(InsideXOGame msgObject) {
+             
+               newPlayer.setStatus(false);
+               onlinePlayers.remove(newPlayer.getPlayerId());
+               usernameToId.remove(newPlayer.getUserName());
+               try {
+                   Database.logout(newPlayer.getPlayerId());
+                   //Database.updatePlayerStatus(newPlayer.getUserName(),0); //update status of player to be offline
+                   refreshList();
+               } catch (SQLException ex1) {
+                   Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex1);
+               }
+              
+               System.out.println("player is leaved and become offline");
+    }
+
+    private void handelPopUpMessage(InsideXOGame msgObject) {
+        
+        for(Map.Entry<Integer, ServerThread> onlinePlayer : onlinePlayers.entrySet()){
+            if(onlinePlayer.getKey()!=msgObject.getPlayer().getPlayerId())
+            {
+            msgObject.setTypeOfOperation(RecordedMessages.NEW_PLAYER_LOGGEDIN_POPUP);
+            
+            onlinePlayer.getValue().getPs().println(g.toJson(msgObject));
+
+            }
+        }
+     }
+    public void refreshList(){
+         System.out.println("hello world");
+         Platform.runLater( () -> {
+            ServerGui.test.listPlayers();
+       });
+     }
+    }

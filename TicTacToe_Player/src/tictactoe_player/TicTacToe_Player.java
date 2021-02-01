@@ -52,7 +52,7 @@ public class TicTacToe_Player extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try{
-            mySocket = new Socket("127.0.0.1", 5005);
+            mySocket = new Socket("127.0.0.1", 3003);
             dis = new DataInputStream(mySocket.getInputStream());
             ps = new PrintStream(mySocket.getOutputStream());
             new Thread(()->{
@@ -249,7 +249,7 @@ public class TicTacToe_Player extends Application {
         stage.setScene(scene);
         stage.setTitle("Tic Tac Toe Game");
         stage.setResizable(false);
-       // stage.getIcons().add(new Image("logo.png"));
+        stage.getIcons().add(new Image("logo.png"));
         stage.show();
     }
       
@@ -406,12 +406,12 @@ public class TicTacToe_Player extends Application {
     {
         pwp.printMessage(xoMessage);
         //I will handle it later -for fun-
-        /*
-        String path = "sound.mp3";
+        
+        String path = "message.mp3";
         Media media = new Media(new File(path).toURI().toString());
         MediaPlayer mediaplayer = new MediaPlayer(media);
         mediaplayer.play();
-        */
+        
     }
     
     //function to display XO signs moves in the screen

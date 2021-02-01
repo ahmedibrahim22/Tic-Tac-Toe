@@ -57,8 +57,22 @@ public void initialize(URL url, ResourceBundle rb) {
     
 @FXML
 private void startServerConnection(ActionEvent event) {
+    try {
+        Database.dbConnect();
+        Database.changeAllStatus();
+
+    } catch (ClassNotFoundException ex) {
+        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (SQLException ex) {
+        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        
             listPlayers();
-            myServer=new Server(5005);
+            myServer=new Server(3003);
     }
 
 @FXML
@@ -72,7 +86,6 @@ private void stopServerConnection(ActionEvent event) throws SQLException {
     }
     public void listPlayers(){
         try {
-            Database.dbConnect();
             ObservableList players=Database.getPlayers();
             dataTable.setItems(players);
             userName.setCellValueFactory(new PropertyValueFactory<Player, String>("userName"));
