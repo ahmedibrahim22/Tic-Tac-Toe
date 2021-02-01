@@ -112,6 +112,8 @@ public class Database {
                     maze[i]=rs.getString("value"+(i+1)).charAt(0);
                 }
             }
+            
+            
         }
         return maze;
     }
