@@ -444,8 +444,8 @@ class ServerThread extends Thread
         onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().setIsPlaying(false);
         onlinePlayers.get(newPlayer.getOpponentId()).getNewPlayer().setOpponentId(0);
         newPlayer.setOpponentId(0);
-        newPlayer.setScore(newPlayer.getScore() + 10);
         Database.updatePlayerScore(newPlayer.getPlayerId(), 10);
+        newPlayer.setScore(Database.getPoints(newPlayer.getPlayerId()));
         msgObject.setPlayer(newPlayer);
         ps.println(g.toJson(msgObject));
     }
@@ -579,6 +579,16 @@ class ServerThread extends Thread
                System.out.println("player is leaved and become offline");
     }
 
+        public void refreshList(){
+            System.out.println("hello world");
+            Platform.runLater( () -> {
+               ServerGui.test.listPlayers();
+          });
+
+        }
+    
+
+
     private void handelPopUpMessage(InsideXOGame msgObject) {
         
         for(Map.Entry<Integer, ServerThread> onlinePlayer : onlinePlayers.entrySet()){
@@ -591,10 +601,5 @@ class ServerThread extends Thread
             }
         }
      }
-    public void refreshList(){
-         System.out.println("hello world");
-         Platform.runLater( () -> {
-            ServerGui.test.listPlayers();
-       });
-     }
+    
     }

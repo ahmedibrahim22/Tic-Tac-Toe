@@ -95,21 +95,28 @@ public class Database {
     
     
     //this function take a paused game id and return the game states in as an array[9] of strings 
-    public static String[] loadGame(int gameId, int player1_id , int player2_id) throws SQLException, IndexOutOfBoundsException{
-        String[] maze = new String[9];
-        PreparedStatement statement;
-        statement = con.prepareStatement("select * from game_info where game_id = ? and player1_id= ? and player2_id = ?");
-        statement.setInt(1, gameId);
-        statement.setInt(2, player1_id);
-        statement.setInt(3, player2_id);
-        ResultSet rs = statement.executeQuery();
-        if(rs.next()){
-            for(int i=0;i<9;i++){
-                maze[i]=rs.getString("value"+(i+1));
-            }
-        }
-        return maze;
-    }
+//    public static char[] loadGame(int player1_id , int player2_id) throws SQLException, IndexOutOfBoundsException{
+//        char[] maze = new char[9];
+//        PreparedStatement statement;
+//        statement = con.prepareStatement("select * from game_info where  player1_id= ? and player2_id = ? limit 1");
+//        statement.setInt(1, player1_id);
+//        statement.setInt(2, player2_id);
+//        ResultSet rs = statement.executeQuery();
+//        if(rs.next()){
+//            for(int i=0;i<9;i++){
+//                String v = rs.getString("value"+(i+1));
+//                if(isNullOrEmpty(v)){
+//                    maze[i]=' ';
+//                }
+//                else{
+//                    maze[i]=rs.getString("value"+(i+1)).charAt(0);
+//                }
+//            }
+//            
+//            
+//        }
+//        return maze;
+//    }
     
 
     //this function take player id and return the status of this player
@@ -141,7 +148,7 @@ public class Database {
     public static ObservableList<Player> getPlayers() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         ObservableList<Player> players = FXCollections.observableArrayList();
         Statement stmt = con.createStatement();
-        String queryString = new String("select * from player order by  player_status desc");
+        String queryString = new String("select * from player order by  player_points desc");
         ResultSet rs = stmt.executeQuery(queryString);
         while (rs.next()) {
            int id = rs.getInt(1);
