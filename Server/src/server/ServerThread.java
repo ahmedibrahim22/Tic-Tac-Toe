@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
@@ -209,6 +210,7 @@ class ServerThread extends Thread
        playerId=Database.login(userName,password); //this function will return -1 if login faild
        if(playerId!=-1)
        {
+           refreshList();
            Database.updatePlayerStatus(playerId,1);
            newPlayer.setPlayerId(playerId);
            newPlayer.setStatus(true);
@@ -437,7 +439,13 @@ class ServerThread extends Thread
     private void handelLogoutRequest(InsideXOGame msgObject) {
         
     }
-    
+     public void refreshList(){
+         System.out.println("hello world");
+         Platform.runLater( () -> {
+            ServerGui.test.listPlayers();
+       });
+       
+}
     
 }
 
