@@ -14,6 +14,7 @@ import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import Helper_Package.Player;
+import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
 
 
 /**
@@ -94,17 +95,22 @@ public class Database {
     
     
     //this function take a paused game id and return the game states in as an array[9] of strings 
-    public static String[] loadGame(int gameId, int player1_id , int player2_id) throws SQLException, IndexOutOfBoundsException{
-        String[] maze = new String[9];
+    public static char[] loadGame(int player1_id , int player2_id) throws SQLException, IndexOutOfBoundsException{
+        char[] maze = new char[9];
         PreparedStatement statement;
-        statement = con.prepareStatement("select * from game_info where game_id = ? and player1_id= ? and player2_id = ?");
-        statement.setInt(1, gameId);
-        statement.setInt(2, player1_id);
-        statement.setInt(3, player2_id);
+        statement = con.prepareStatement("select * from game_info where  player1_id= ? and player2_id = ? limit 1");
+        statement.setInt(1, player1_id);
+        statement.setInt(2, player2_id);
         ResultSet rs = statement.executeQuery();
         if(rs.next()){
             for(int i=0;i<9;i++){
-                maze[i]=rs.getString("value"+(i+1));
+                String v = rs.getString("value"+(i+1));
+                if(isNullOrEmpty(v)){
+                    maze[i]=' ';
+                }
+                else{
+                    maze[i]=rs.getString("value"+(i+1)).charAt(0);
+                }
             }
         }
         return maze;
