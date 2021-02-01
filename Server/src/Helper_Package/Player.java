@@ -22,6 +22,7 @@ public class Player {
     private boolean isPlaying;
     private boolean status;
     private String statusString;
+    private boolean isMyTurn;
 
     //player constructors
     public Player(){};
@@ -162,4 +163,13 @@ public class Player {
         return statusString;
     }
 
+    public boolean isIsMyTurn() {
+        return isMyTurn;
+    }
+
+    public void setIsMyTurn(boolean isMyTurn) {
+        this.isMyTurn = isMyTurn;
+    }
+
+    
 }

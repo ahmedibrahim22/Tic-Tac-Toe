@@ -168,10 +168,13 @@ public class PlayerWithPlayerController implements Initializable {
     void playMove(ActionEvent event) {
         if (myturn)
         {
+            System.out.println("is myturn");
             if (!gameEnded) {
                 // Player move
+                System.out.println("game not ended");
                 playerPos = Integer.parseInt(((Control) event.getSource()).getId());
                 if (!movesPool.isEmpty() && movesPool.contains(playerPos)) {
+                    System.out.println("I can play here");
                     displayMove(playerPos, playerSymbol);
                     movesPool.remove(playerPos);
                     playerMoves.add(playerPos);
@@ -192,7 +195,7 @@ public class PlayerWithPlayerController implements Initializable {
                     gameResult.setText("It's a Draw! ");
                     gameEnded = true;
                     myturn = false;
-                    reportGameEnding(false);                    
+                    //reportGameEnding(false);                    
                 }
             }            
         }
@@ -301,6 +304,7 @@ public class PlayerWithPlayerController implements Initializable {
         
         InsideXOGame xoMsg = new InsideXOGame(RecordedMessages.BACK_FROM_ONLINE,new Player(myUserName),new Game(myUserName, opponentUserName));
         xoMsg.getGame().setIsFinished(gameEnded);
+        xoMsg.getPlayer().setIsMyTurn(myturn);
         Gson g = new Gson();
         PSFromController.println(g.toJson(xoMsg));
         turnOffNotification = false;
@@ -328,26 +332,28 @@ public class PlayerWithPlayerController implements Initializable {
         PSFromController.println(g.toJson(xoMsg));
     }
     
-    public void displayMovesOnBoard (char[] savedGame, String homePlayer, int gameID)
+    public void displayMovesOnBoard (char[] savedGame, String homePlayer, int gameID, boolean  myturn)
     {
+        
         clearAll();
         init();
+        this.myturn = myturn;
         int countHome = 0;
         int countOpponent = 0;
         this.gameID = gameID;
         if(myUserName.equals(homePlayer))
         {
             playerSymbol = 'X';
-            playerSign.setText(Character.toString(playerSymbol));
+        //    playerSign.setText(Character.toString(playerSymbol));
             opponentSymbol = 'O';
-            opponenPlayerSign.setText(Character.toString(opponentSymbol));
+        //    opponenPlayerSign.setText(Character.toString(opponentSymbol));
         }
         else
         {
             playerSymbol = 'O';
-            playerSign.setText(Character.toString(playerSymbol));            
+        //    playerSign.setText(Character.toString(playerSymbol) + "hiiii");            
             opponentSymbol = 'X';
-            opponenPlayerSign.setText(Character.toString(opponentSymbol));
+        //    opponenPlayerSign.setText(Character.toString(opponentSymbol));
         }
         char s = ' ';
         for(int i=0;i<9;i++)
@@ -361,23 +367,31 @@ public class PlayerWithPlayerController implements Initializable {
                 playerMoves.add(move);
                 movesPool.remove(move);
                 countHome++;
+                numOfMoves++;
             }
-            else{
+            else if(savedGame[i] == opponentSymbol){
                 opponentMoves.add(move);
                 movesPool.remove(move);
                 countOpponent++;
+                numOfMoves++;
             }
         }
         
-        if(countHome <= countOpponent)
-        {
-            myturn = true;
-            gameResult.setText("Your Turn");            
-        }
-        else
-        {
-            myturn = false;
-            gameResult.setText("Their Turn");              
+//        if(countHome <= countOpponent)
+//        {
+//            myturn = true;
+//            gameResult.setText("Your Turn");            
+//        }
+//        else
+//        {
+//            myturn = false;
+//            gameResult.setText("Their Turn");              
+//        }
+            
+        if(myturn){
+            gameResult.setText("Your Turn"); 
+        }else{
+            gameResult.setText("Their Turn");
         }
         
         pos1.setText(Character.toString(savedGame[0]));

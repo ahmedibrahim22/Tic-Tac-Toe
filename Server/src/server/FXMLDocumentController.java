@@ -56,11 +56,12 @@ public void initialize(URL url, ResourceBundle rb) {
         }
     
 @FXML
+
 private void startServerConnection(ActionEvent event) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
             Database.dbConnect();
             Database.changeAllStatus();
             listPlayers();
-            myServer=new Server(3000);
+            myServer=new Server(3003);
     }
 
 @FXML

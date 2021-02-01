@@ -298,9 +298,56 @@ public class Database {
         statement.setInt(1, 0);
         statement.executeUpdate();
     }
-
     
-        
+    public static void removeGame(int gameId) throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("delete from game where id = ?");
+        statement.setInt(1, gameId);
+        statement.executeUpdate();
+    }
+    
+    public static void removeSavedGame(int gameId) throws SQLException{
+        PreparedStatement statement;
+        statement = con.prepareStatement("delete from game_info where id = ?");
+        statement.setInt(1, gameId);
+        statement.executeUpdate();
+    }
+
+    public static int getSavedGameId(int player1_id , int player2_id) throws SQLException, IndexOutOfBoundsException{
+        int id = 0;
+        PreparedStatement statement;
+        statement = con.prepareStatement("select game_id from game_info where player1_id= ? and player2_id = ? limit 1");
+        statement.setInt(1, player1_id);
+        statement.setInt(2, player2_id);
+        ResultSet rs = statement.executeQuery();
+        if(rs.next()){
+            id = rs.getInt("game_id");
+        }
+        return id;
+    }    
+    
+    public static char[] loadGame(int player1_id , int player2_id) throws SQLException, IndexOutOfBoundsException{
+        char[] maze = new char[9];
+        PreparedStatement statement;
+        statement = con.prepareStatement("select * from game_info where player1_id= ? and player2_id = ? limit 1");
+        statement.setInt(1, player1_id);
+        statement.setInt(2, player2_id);
+        ResultSet rs = statement.executeQuery();
+        if(rs.next()){
+            for(int i=0;i<9;i++){
+                String v = rs.getString("value"+(i+1));
+                if(isNullOrEmpty(v)){
+                    maze[i]=' ';
+                }
+                else{
+                    maze[i]=rs.getString("value"+(i+1)).charAt(0);
+                }
+            }
+        }else{
+            maze = null;
+        }
+        return maze;
+    }    
     
     
     
