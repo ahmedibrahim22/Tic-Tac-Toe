@@ -257,6 +257,7 @@ public class TicTacToe_Player extends Application {
     //1st function to move to selection mode scene
     void moveToSelectionScene(Stage stage, InsideXOGame xoMessage) throws IOException{
         score = xoMessage.getPlayer().getScore();
+        System.out.println(xoMessage.getPlayer().getScore());
         FXMLLoader selectionModeLoader=new FXMLLoader();
         selectionModeLoader.setLocation(getClass().getResource("/selectionmode/SelectionMode.fxml"));
         Parent selectionModeRoot = selectionModeLoader.load();

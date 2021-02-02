@@ -19,7 +19,7 @@ There are two ways to run the project.
 -First way by using the avaiable jar files as following
   open the terminal and cd to the Server jar file directory and run:
 ```
-java -jar ./ServerGui.jar
+java -jar ./Server.jar
 ```
 then you will find the server scene and you will be asked to open the server. After opening the server it will 
 listen all the requests on the localhost port 5005 
@@ -82,8 +82,4 @@ After you open the server and run the game you will be asked to login with your 
 - Ahmed Maher
 - Ibrahim Magdy
 - Nagy Adel
-<<<<<<< HEAD
 - Noura Houssien
-=======
-- Noura Houssien
->>>>>>> c5379c09c26d6fb2594f486fb08a98c11473b6f6

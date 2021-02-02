@@ -320,11 +320,10 @@ class ServerThread extends Thread
        Database.updatePlayerScore(userName,5);
        newPlayer.setScore(newPlayer.getScore() + 5);
        msgObject.setOperationResult(true);
-       
-       msgObject.getPlayer().setScore(5);
+       msgObject.getPlayer().setScore(newPlayer.getScore());
        msgObject.setTypeOfOperation(RecordedMessages.SINGLE_MODE_PLAYER_SCORE_UPDATED);
        ps.println(g.toJson(msgObject));
-      
+       System.out.print(msgObject.getPlayer().getScore());
     }
 
     private void handelRetrivePlayersRequest(InsideXOGame msgObject) {
@@ -450,8 +449,10 @@ class ServerThread extends Thread
         newPlayer.setOpponentId(0);
         Database.updatePlayerScore(newPlayer.getPlayerId(), 10);
         newPlayer.setScore(Database.getPoints(newPlayer.getPlayerId()));
+        msgObject.getPlayer().setScore(Database.getPoints(newPlayer.getPlayerId()));
         msgObject.setPlayer(newPlayer);
         ps.println(g.toJson(msgObject));
+        System.out.print(msgObject.getPlayer().getScore());
     }
 
     private void handelResumeRequest(InsideXOGame msgObject) throws SQLException {

@@ -36,9 +36,6 @@ public class SelectionModeController implements Initializable {
     PrintStream PSFromController;
     @FXML
     private Text logedInUserName;
-    @FXML
-    private Text logedInUserScore;
-    
     
 
     
@@ -49,7 +46,7 @@ public class SelectionModeController implements Initializable {
         
         //why Integer.toString?
         //because setText required text not integer
-        logedInUserScore.setText(Integer.toString(TicTacToe_Player.score));
+       // logedInUserScore.setText(Integer.toString(TicTacToe_Player.score));
     }    
 
     //if the user press single player it will move to the select level scene
@@ -109,12 +106,10 @@ public class SelectionModeController implements Initializable {
         }
     }
     
-        @FXML
     private void minimize(ActionEvent event) {
         ((Stage)((Button)event.getSource()).getScene().getWindow()).setIconified(true);
     }
 
-    @FXML
     private void exit(ActionEvent event) {
         Player player=new Player();
         player.setUserName(loginController.username);

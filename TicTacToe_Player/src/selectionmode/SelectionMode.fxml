@@ -26,11 +26,6 @@
             </ImageView>
          </graphic>
       </Button>
-      <Text fill="WHITE" layoutY="110.0" strokeType="INSIDE" strokeWidth="0.0" text="Score :" textAlignment="CENTER" wrappingWidth="130.9999977350235">
-         <font>
-            <Font name="System Bold" size="40.0" />
-         </font>
-      </Text>
       <Button layoutX="381.0" layoutY="345.0" mnemonicParsing="false" onAction="#multiplayer" prefHeight="86.0" prefWidth="358.0" style="-fx-background-color: rgba(142, 213, 87, 0.0);" text="Multi Players" textFill="#f5f5f5">
          <font>
             <Font name="System Bold" size="33.0" />
@@ -63,11 +58,6 @@
       <Text fill="#fcf9f9" layoutY="50.0" strokeType="INSIDE" strokeWidth="0.0" text="Hello :" textAlignment="CENTER" wrappingWidth="130.99999570846558">
          <font>
             <Font name="System Bold" size="40.0" />
-         </font>
-      </Text>
-      <Text fx:id="logedInUserScore" fill="WHITE" layoutX="136.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="194.00000643730164">
-         <font>
-            <Font name="Andalus" size="40.0" />
          </font>
       </Text>
    </children>
