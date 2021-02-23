@@ -486,6 +486,7 @@ class ServerThread extends Thread
         if(get){
             System.out.println("ok");
             Database.removeGame(game.getGameId());
+            Database.removeSavedGame(id);
             game.setGameId(id);
             game.setSavedGame(maz);
             onlinePlayers.get(newPlayer.getOpponentId()).getGame().setGameId(id);

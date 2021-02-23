@@ -23,11 +23,11 @@ import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
  * 
  */
 public class Database {
-    static Connection con =null;
+    static Connection con = null;
     static String db_name="xo_netwok_game";
     static String url="jdbc:mysql://localhost:3306/"+db_name;
-    static String username="root";//////your name
-    static String password="12345";//////your password
+    static String username="Ibrahim";//////your name
+    static String password="jesus01203952089";//////your password
     
     //this function created to connect to the database
     public static void dbConnect() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
@@ -307,7 +307,7 @@ public class Database {
     
     public static void removeSavedGame(int gameId) throws SQLException{
         PreparedStatement statement;
-        statement = con.prepareStatement("delete from game_info where id = ?");
+        statement = con.prepareStatement("delete from game_info where game_id = ?");
         statement.setInt(1, gameId);
         statement.executeUpdate();
     }
