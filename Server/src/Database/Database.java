@@ -26,8 +26,8 @@ public class Database {
     static Connection con = null;
     static String db_name="xo_netwok_game";
     static String url="jdbc:mysql://localhost:3306/"+db_name;
-    static String username="";//////your name
-    static String password="";//////your password
+    static String username="root";//////your name
+    static String password="12345";//////your password
     
     //this function created to connect to the database
     public static void dbConnect() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {

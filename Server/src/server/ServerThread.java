@@ -571,14 +571,14 @@ class ServerThread extends Thread
 
     private void handelLogoutRequest(InsideXOGame msgObject) {
 
-             try {
-           socket.close();
-           dis.close();
-           ps.close();
-          
-       } catch (IOException ex) {
-           Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
-       }
+//             try {
+//           socket.close();
+//           dis.close();
+//          ps.close();
+//          
+//       } catch (IOException ex) {
+//           Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+//       }
                
                newPlayer.setStatus(false);
                onlinePlayers.remove(newPlayer.getPlayerId());
